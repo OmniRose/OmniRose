@@ -1,10 +1,10 @@
 ```
 virtualenv .venv
 . .venv/bin/activate
-pip install -r tmc_rose/requirements.txt
+pip install -r omnirose/requirements.txt
 
-createdb tmc_rose
+createdb omnirose
 
-cd tmc_rose
+cd omnirose
 ./manage.py migrate
 ```

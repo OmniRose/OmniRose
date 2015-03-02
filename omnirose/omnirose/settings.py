@@ -1,5 +1,5 @@
 """
-Django settings for tmc_rose project.
+Django settings for omnirose project.
 
 For more information on this file, see
 https://docs.djangoproject.com/en/1.7/topics/settings/
@@ -48,9 +48,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'tmc_rose.urls'
+ROOT_URLCONF = 'omnirose.urls'
 
-WSGI_APPLICATION = 'tmc_rose.wsgi.application'
+WSGI_APPLICATION = 'omnirose.wsgi.application'
 
 
 # Database
@@ -59,7 +59,7 @@ WSGI_APPLICATION = 'tmc_rose.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'tmc_rose',
+        'NAME': 'omnirose',
     }
 }
 
