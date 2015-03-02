@@ -23,7 +23,8 @@ training_almanac_readings = {
     337.5: -5,
 }
 
-class AnimalTestCase(TestCase):
+class DeviationTestCase(TestCase):
+
     def setUp(self):
         self.curve = Curve.objects.create()
         for ships_head, deviation in training_almanac_readings.items():
@@ -37,3 +38,15 @@ class AnimalTestCase(TestCase):
             actual[reading.ships_head] = reading.deviation
 
         self.assertEqual(actual, training_almanac_readings)
+
+
+    def test_curve_calculation(self):
+        self.assertFalse(self.curve.curve_has_been_calculated())
+        self.curve.calculate_curve()
+        self.assertTrue(self.curve.curve_has_been_calculated())
+
+
+    def test_calculated_deviation_as_expected(self):
+        """Test that a deviation is calculated correctly"""
+        self.assertEqual(self.curve.deviation_at(0), -3.964)
+        self.assertEqual(self.curve.deviation_at(100), 4.593)
