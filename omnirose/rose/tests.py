@@ -1,15 +1,15 @@
 from django.test import TestCase
 from .models import Rose
+import os
 
-import cairocffi as cairo
+from deviation.samples import create_curve_from_sample, rya_training_almanac
 
 # Create your tests here.
 
-surface = cairo.PDFSurface('rose_test.pdf', 500, 500)
-
-
-
-context = cairo.Context(surface)
-
-rose = Rose(context, 6)
-rose.draw_rose()
+class RoseTestCase(TestCase):
+    def test_rose_creation(self):
+        curve = create_curve_from_sample(rya_training_almanac)
+        rose = Rose(variation=-6, deviation=curve)
+        rose.draw_rose()
+        os.rename(rose.filename, "rose_test.pdf")
+        self.assertTrue(True)

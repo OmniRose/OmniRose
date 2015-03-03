@@ -1,26 +1,37 @@
 # coding=utf-8
 
+import tempfile
+import os
 from math import sin, cos, radians, pi
+
+import cairocffi as cairo
 
 # This model does not persist to the database
 
 
 class Rose:
 
-    SURFACE_SIZE = 500
-    rose_width = 30
-    inter_rose_gap = 1
-    edge_indent = 10
 
-    width_cardinal = 3 # N, S, E, W
-    # width_ordinal  = 0.1 # NE, SW, SE, NE
-    width_major    = 1
-    width_minor    = 0.5
-    width_tick     = 0.1
+    def __init__(self, variation, deviation=None):
+        self.SURFACE_SIZE = 500
+        self.rose_width = 30
+        self.inter_rose_gap = 1
+        self.edge_indent = 10
 
-    def __init__(self, context, variation):
-        self.context = context
+        self.width_cardinal = 3 # N, S, E, W
+        # self.width_ordinal  = 0.1 # NE, SW, SE, NE
+        self.width_major    = 1
+        self.width_minor    = 0.5
+        self.width_tick     = 0.1
+
+        (handle, cairo_tmp) = tempfile.mkstemp('.pdf', 'omnirose-rose')
+        os.close(handle)
+        self.filename = cairo_tmp
+
+        self.surface = cairo.PDFSurface(self.filename, self.SURFACE_SIZE, self.SURFACE_SIZE)
+        self.context = cairo.Context(self.surface)
         self.variation = variation
+        self.deviation = deviation
 
 
     def x_for_deg(self, deg, r):
@@ -39,10 +50,10 @@ class Rose:
         self.draw_ring(outer_rose_radius, self.rose_width, 0)
 
         # Draw the adjusted inner rose
-        self.draw_ring(inner_rose_radius, self.rose_width, self.variation)
+        self.draw_ring(inner_rose_radius, self.rose_width, self.variation, self.deviation)
 
 
-    def draw_ring(self, outer_radius, dist, variation=0):
+    def draw_ring(self, outer_radius, dist, variation=0, deviation=None):
         context = self.context
 
         inner_radius = outer_radius - dist
@@ -52,8 +63,8 @@ class Rose:
         for true_degree in range(0, 360):
 
             plot_degree = true_degree + variation
-
-            rose_width = dist
+            if deviation:
+                plot_degree = plot_degree + deviation.deviation_at(plot_degree)
 
             with context:
                 if not true_degree % 90:
@@ -64,15 +75,21 @@ class Rose:
                     context.set_line_width(self.width_minor)
                 else:
                     context.set_line_width(self.width_tick)
-                    # rose_width = dist - 1
 
-                context.move_to(self.x_for_deg(plot_degree,inner_radius),self.y_for_deg(plot_degree,inner_radius))
-                context.line_to(self.x_for_deg(plot_degree,outer_radius),self.y_for_deg(plot_degree,outer_radius))
+                start_x = self.x_for_deg(plot_degree, inner_radius)
+                start_y = self.y_for_deg(plot_degree, inner_radius)
+                end_x   = self.x_for_deg(plot_degree, outer_radius)
+                end_y   = self.y_for_deg(plot_degree, outer_radius)
+
+                context.move_to(start_x, start_y)
+                context.line_to(end_x, end_y)
                 context.stroke()
 
         for true_degree in range(0, 360):
 
             plot_degree = true_degree + variation
+            if deviation:
+                plot_degree = plot_degree + deviation.deviation_at(plot_degree)
 
             if not true_degree % 10:
                 with context:
