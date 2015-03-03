@@ -25,6 +25,8 @@ class Table:
         self.width_minor    = 0.1
         self.width_tick     = 0
 
+        self.reading_point_radius = 1.5
+
         (handle, cairo_tmp) = tempfile.mkstemp('.pdf', 'omnirose-table')
         os.close(handle)
         self.filename = cairo_tmp
@@ -85,7 +87,7 @@ class Table:
     def draw_table(self):
         self.draw_degrees_grid()
         self.draw_deviation_grid()
-        # self.draw_readings()
+        self.draw_readings()
         # self.draw_deviation_curve()
 
     def draw_degrees_grid(self):
@@ -159,3 +161,21 @@ class Table:
                 for y in (y_start - height, y_end + height + 2):
                     context.move_to(x,y)
                     context.show_text(text)
+
+    def draw_readings(self):
+        for reading in self.deviation.reading_set.all():
+            self.draw_reading(reading.ships_head, reading.deviation)
+
+    def draw_reading(self, heading, deviation):
+        context = self.context
+        with context:
+            context.set_source_rgb(1,0,0)
+            context.arc(self.grid_x(deviation), self.grid_y(heading), self.reading_point_radius, 0, 2*pi)
+            context.fill()
+        # Handle 0 == 360 so that we get two entries
+        if heading == 0:
+            self.draw_reading(360, deviation)
+
+
+
+
