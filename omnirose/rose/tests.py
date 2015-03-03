@@ -6,8 +6,10 @@ import cairocffi as cairo
 # Create your tests here.
 
 surface = cairo.PDFSurface('rose_test.pdf', 500, 500)
+
+
+
 context = cairo.Context(surface)
 
-rose = Rose(context, 42)
+rose = Rose(context, 6)
 rose.draw_rose()
-

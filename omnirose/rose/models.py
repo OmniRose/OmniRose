@@ -4,59 +4,87 @@ from math import sin, cos, radians, pi
 
 # This model does not persist to the database
 
-def x_for_deg(deg, r):
-    return 250 + r * sin(radians(deg))
-
-def y_for_deg(deg, r):
-    return 250 - r * cos(radians(deg))
 
 class Rose:
+
+    SURFACE_SIZE = 500
+    rose_width = 30
+    inter_rose_gap = 1
+    edge_indent = 10
+
+    width_cardinal = 3 # N, S, E, W
+    # width_ordinal  = 0.1 # NE, SW, SE, NE
+    width_major    = 1
+    width_minor    = 0.5
+    width_tick     = 0.1
+
     def __init__(self, context, variation):
         self.context = context
         self.variation = variation
 
 
+    def x_for_deg(self, deg, r):
+        return self.SURFACE_SIZE / 2 + r * sin(radians(deg))
+
+    def y_for_deg(self, deg, r):
+        return self.SURFACE_SIZE / 2 - r * cos(radians(deg))
+
+
     def draw_rose(self):
-        self.draw_one_rose(200, 20, 0)
-        self.draw_one_rose(158, 20, self.variation)
+
+        outer_rose_radius = self.SURFACE_SIZE / 2 - self.edge_indent
+        inner_rose_radius = outer_rose_radius - self.rose_width - self.inter_rose_gap
+
+        # Draw the true outer rose
+        self.draw_ring(outer_rose_radius, self.rose_width, 0)
+
+        # Draw the adjusted inner rose
+        self.draw_ring(inner_rose_radius, self.rose_width, self.variation)
 
 
-    def draw_one_rose(self, r, dist, deg_adjust=0):
+    def draw_ring(self, outer_radius, dist, variation=0):
         context = self.context
 
+        inner_radius = outer_radius - dist
+        mid_radius = (inner_radius + outer_radius) / 2
 
-        for deg in range(0, 360):
+
+        for true_degree in range(0, 360):
+
+            plot_degree = true_degree + variation
 
             rose_width = dist
 
             with context:
-                if not deg % 90:
-                    context.set_line_width(2.5)
-                elif not deg % 10:
-                    context.set_line_width(1)
-                elif not deg % 5:
-                    context.set_line_width(0.5)
+                if not true_degree % 90:
+                    context.set_line_width(self.width_cardinal)
+                elif not true_degree % 10:
+                    context.set_line_width(self.width_major)
+                elif not true_degree % 5:
+                    context.set_line_width(self.width_minor)
                 else:
-                    context.set_line_width(0.1)
+                    context.set_line_width(self.width_tick)
                     # rose_width = dist - 1
 
-                context.move_to(x_for_deg(deg+deg_adjust,r-rose_width),y_for_deg(deg+deg_adjust,r-rose_width))
-                context.line_to(x_for_deg(deg+deg_adjust,r+rose_width),y_for_deg(deg+deg_adjust,r+rose_width))
+                context.move_to(self.x_for_deg(plot_degree,inner_radius),self.y_for_deg(plot_degree,inner_radius))
+                context.line_to(self.x_for_deg(plot_degree,outer_radius),self.y_for_deg(plot_degree,outer_radius))
                 context.stroke()
 
-        for deg in range(0, 360):
-            if not deg % 10:
+        for true_degree in range(0, 360):
+
+            plot_degree = true_degree + variation
+
+            if not true_degree % 10:
                 with context:
-                    text = unicode(deg) + u'°'
+                    text = unicode(true_degree) + u'°'
 
                     context.set_font_size(8)
                     # context.rotate(rad - 0.5 * pi)
 
                     (x_bearing, y_bearing, width, height, x_advance, y_advance) = context.text_extents(text)
-                    print x_bearing, y_bearing, width, height, x_advance, y_advance
 
-                    x = x_for_deg(deg+deg_adjust,r) - 0.5 * width
-                    y = y_for_deg(deg+deg_adjust,r) + 0.5 * height
+                    x = self.x_for_deg(plot_degree,mid_radius) - 0.5 * width
+                    y = self.y_for_deg(plot_degree,mid_radius) + 0.5 * height
 
                     # Put a white rectangle behind the text to mask out lines
                     with context:
