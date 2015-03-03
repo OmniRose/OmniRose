@@ -18,6 +18,7 @@ class Table:
         self.grid_top    = 120.
         self.grid_height = 360.
         self.grid_width  = 200.
+        self.grid_bleed  = 2.
 
         self.width_cardinal = 1 # N, S, E, W
         self.width_major    = 0.1
@@ -34,21 +35,52 @@ class Table:
 
 
     @property
+    def grid_content_height(self):
+        return self.grid_height - self.grid_bleed * 2
+
+    @property
+    def grid_bottom(self):
+        return self.grid_top + self.grid_height
+
+    @property
+    def grid_content_top(self):
+        return self.grid_top + self.grid_bleed
+
+    @property
+    def grid_content_bottom(self):
+        return self.grid_content_top + self.grid_content_height
+
+    @property
+    def grid_left(self):
+        return self.SURFACE_SIZE / 2 - self.grid_width / 2
+
+    @property
+    def grid_right(self):
+        return self.SURFACE_SIZE / 2 + self.grid_width / 2
+
+    @property
+    def grid_content_left(self):
+        return self.grid_left + self.grid_bleed
+
+    @property
+    def grid_content_right(self):
+        return self.grid_right - self.grid_bleed
+
+
+    @property
     def grid_height_increment(self):
-        return self.grid_height / 360
+        return self.grid_content_height / 360
 
     def grid_y(self, degree):
-        return self.grid_top + self.grid_height_increment * degree
+        return self.grid_content_top + self.grid_height_increment * degree
 
     def grid_x(self, deviation):
         min_dev = self.deviation.min_deviation
         max_dev = self.deviation.max_deviation
         spread = max_dev - min_dev
-        dev_interval = self.grid_width / spread
+        dev_interval = (self.grid_content_right - self.grid_content_left) / spread
 
-        midpoint = self.SURFACE_SIZE / 2
-        x_rightmost = midpoint + self.grid_width / 2
-        return x_rightmost - dev_interval * (max_dev - deviation)
+        return self.grid_content_right - dev_interval * (max_dev - deviation)
 
     def draw_table(self):
         self.draw_degrees_grid()
@@ -104,8 +136,8 @@ class Table:
 
             x = self.grid_x(dev)
 
-            y_start = self.grid_y(0)
-            y_end   = self.grid_y(360)
+            y_start = self.grid_top
+            y_end   = self.grid_bottom
 
 
             with context:
