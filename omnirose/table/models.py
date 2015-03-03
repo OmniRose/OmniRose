@@ -40,12 +40,19 @@ class Table:
     def grid_y(self, degree):
         return self.grid_top + self.grid_height_increment * degree
 
-    # def grid_x(self, deviation):
-    #     return ????
+    def grid_x(self, deviation):
+        min_dev = self.deviation.min_deviation
+        max_dev = self.deviation.max_deviation
+        spread = max_dev - min_dev
+        dev_interval = self.grid_width / spread
+
+        midpoint = self.SURFACE_SIZE / 2
+        x_rightmost = midpoint + self.grid_width / 2
+        return x_rightmost - dev_interval * (max_dev - deviation)
 
     def draw_table(self):
         self.draw_degrees_grid()
-        # self.draw_deviation_grid()
+        self.draw_deviation_grid()
         # self.draw_readings()
         # self.draw_deviation_curve()
 
@@ -86,3 +93,37 @@ class Table:
 
 
 
+
+    def draw_deviation_grid(self):
+        context = self.context
+
+        min_dev = self.deviation.min_deviation
+        max_dev = self.deviation.max_deviation
+
+        for dev in range(min_dev, max_dev + 1):
+
+            x = self.grid_x(dev)
+
+            y_start = self.grid_y(0)
+            y_end   = self.grid_y(360)
+
+
+            with context:
+                if dev == 0:
+                    context.set_line_width(self.width_cardinal)
+                else:
+                    context.set_line_width(self.width_major)
+                context.move_to(x, y_start)
+                context.line_to(x, y_end)
+                context.stroke()
+
+                text = unicode(dev) + u'°'
+                context.set_font_size(6)
+
+                (x_bearing, y_bearing, width, height, x_advance, y_advance) = context.text_extents(text)
+
+                x = x - width/2
+
+                for y in (y_start - height, y_end + height + 2):
+                    context.move_to(x,y)
+                    context.show_text(text)
