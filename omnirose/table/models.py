@@ -13,11 +13,11 @@ class Table:
 
 
     def __init__(self, deviation=None):
-        self.SURFACE_SIZE = 500
+        self.SURFACE_SIZE = 500.
 
-        self.grid_top    = 120
-        self.grid_height = 360
-        self.grid_width  = 200
+        self.grid_top    = 120.
+        self.grid_height = 360.
+        self.grid_width  = 200.
 
         self.width_cardinal = 1 # N, S, E, W
         self.width_major    = 0.1

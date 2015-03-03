@@ -13,10 +13,10 @@ class Rose:
 
 
     def __init__(self, variation, deviation=None):
-        self.SURFACE_SIZE = 500
-        self.rose_width = 30
-        self.inter_rose_gap = 1
-        self.edge_indent = 10
+        self.SURFACE_SIZE = 500.
+        self.rose_width = 30.
+        self.inter_rose_gap = 1.
+        self.edge_indent = 10.
 
         self.width_cardinal = 3 # N, S, E, W
         # self.width_ordinal  = 0.1 # NE, SW, SE, NE
