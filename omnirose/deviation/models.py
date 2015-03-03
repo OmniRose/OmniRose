@@ -60,6 +60,17 @@ class Curve(models.Model):
         return round(accurate, 3)
 
 
+    def compass_to_true(self, compass, variation=0):
+        magnetic = compass + self.deviation_at(compass)
+        true = magnetic + variation
+        return true
+
+
+    # true_to_compass:
+    #   note that this might be tricky to implement as second error correction
+    #   will be needed.
+
+
     def calculate_curve_if_needed(self):
         if not self.curve_has_been_calculated():
             return self.calculate_curve()

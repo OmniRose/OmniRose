@@ -32,3 +32,7 @@ class DeviationTestCase(TestCase):
     def test_max_and_and_min_deviation_as_expected(self):
         self.assertEqual(self.curve.max_deviation, 6)
         self.assertEqual(self.curve.min_deviation, -6)
+
+    def test_compass_to_true(self):
+        self.assertEqual( self.curve.compass_to_true(90), 93.964)
+        self.assertEqual( self.curve.compass_to_true(90, 10), 103.964)

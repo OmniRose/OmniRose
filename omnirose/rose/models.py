@@ -62,10 +62,10 @@ class Rose:
 
         for display_degree in range(0, 360):
 
-
-            plot_degree = display_degree + variation
             if curve:
-                plot_degree = plot_degree + curve.deviation_at(plot_degree)
+                plot_degree = curve.compass_to_true(display_degree, variation)
+            else:
+                plot_degree = display_degree + variation
 
             with context:
                 if not display_degree % 90:
@@ -88,9 +88,10 @@ class Rose:
 
         for display_degree in range(0, 360):
 
-            plot_degree = display_degree + variation
             if curve:
-                plot_degree = plot_degree + curve.deviation_at(plot_degree)
+                plot_degree = curve.compass_to_true(display_degree, variation)
+            else:
+                plot_degree = display_degree + variation
 
             if not display_degree % 10:
                 with context:
