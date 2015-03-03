@@ -28,3 +28,7 @@ class DeviationTestCase(TestCase):
         """Test that a deviation is calculated correctly"""
         self.assertEqual(self.curve.deviation_at(0), -3.964)
         self.assertEqual(self.curve.deviation_at(100), 4.593)
+
+    def test_max_and_and_min_deviation_as_expected(self):
+        self.assertEqual(self.curve.max_deviation, 6)
+        self.assertEqual(self.curve.min_deviation, -6)
