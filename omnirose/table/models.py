@@ -12,7 +12,7 @@ import cairocffi as cairo
 class Table:
 
 
-    def __init__(self, deviation=None):
+    def __init__(self, curve=None):
         self.SURFACE_SIZE = 500.
 
         self.grid_top    = 120.
@@ -35,7 +35,7 @@ class Table:
 
         self.surface = cairo.PDFSurface(self.filename, self.SURFACE_SIZE, self.SURFACE_SIZE)
         self.context = cairo.Context(self.surface)
-        self.deviation = deviation
+        self.curve = curve
 
 
     @property
@@ -79,8 +79,8 @@ class Table:
         return self.grid_content_top + self.grid_height_increment * degree
 
     def grid_x(self, deviation):
-        min_dev = self.deviation.min_deviation
-        max_dev = self.deviation.max_deviation
+        min_dev = self.curve.min_deviation
+        max_dev = self.curve.max_deviation
         spread = max_dev - min_dev
         dev_interval = (self.grid_content_right - self.grid_content_left) / spread
 
@@ -133,8 +133,8 @@ class Table:
     def draw_deviation_grid(self):
         context = self.context
 
-        min_dev = self.deviation.min_deviation
-        max_dev = self.deviation.max_deviation
+        min_dev = self.curve.min_deviation
+        max_dev = self.curve.max_deviation
 
         for dev in range(min_dev, max_dev + 1):
 
@@ -167,21 +167,21 @@ class Table:
 
     def draw_deviation_curve(self):
         context = self.context
-        dev = self.deviation
+        curve = self.curve
 
         with context:
             context.set_line_width(self.width_deviation_curve)
 
-            context.move_to(self.grid_x(dev.deviation_at(0)), self.grid_y(0))
+            context.move_to(self.grid_x(curve.deviation_at(0)), self.grid_y(0))
 
             for heading in range(1, 361):
-                context.line_to(self.grid_x(dev.deviation_at(heading)), self.grid_y(heading))
+                context.line_to(self.grid_x(curve.deviation_at(heading)), self.grid_y(heading))
 
             context.stroke()
 
 
     def draw_readings(self):
-        for reading in self.deviation.reading_set.all():
+        for reading in self.curve.reading_set.all():
             self.draw_reading(reading.ships_head, reading.deviation)
 
     def draw_reading(self, heading, deviation):

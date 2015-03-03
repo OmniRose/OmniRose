@@ -12,7 +12,7 @@ import cairocffi as cairo
 class Rose:
 
 
-    def __init__(self, variation, deviation=None):
+    def __init__(self, variation, curve=None):
         self.SURFACE_SIZE = 500.
         self.rose_width = 30.
         self.inter_rose_gap = 1.
@@ -31,7 +31,7 @@ class Rose:
         self.surface = cairo.PDFSurface(self.filename, self.SURFACE_SIZE, self.SURFACE_SIZE)
         self.context = cairo.Context(self.surface)
         self.variation = variation
-        self.deviation = deviation
+        self.curve = curve
 
 
     def x_for_deg(self, deg, r):
@@ -50,28 +50,29 @@ class Rose:
         self.draw_ring(outer_rose_radius, self.rose_width, 0)
 
         # Draw the adjusted inner rose
-        self.draw_ring(inner_rose_radius, self.rose_width, self.variation, self.deviation)
+        self.draw_ring(inner_rose_radius, self.rose_width, self.variation, self.curve)
 
 
-    def draw_ring(self, outer_radius, dist, variation=0, deviation=None):
+    def draw_ring(self, outer_radius, dist, variation=0, curve=None):
         context = self.context
 
         inner_radius = outer_radius - dist
         mid_radius = (inner_radius + outer_radius) / 2
 
 
-        for true_degree in range(0, 360):
+        for display_degree in range(0, 360):
 
-            plot_degree = true_degree + variation
-            if deviation:
-                plot_degree = plot_degree + deviation.deviation_at(plot_degree)
+
+            plot_degree = display_degree + variation
+            if curve:
+                plot_degree = plot_degree + curve.deviation_at(plot_degree)
 
             with context:
-                if not true_degree % 90:
+                if not display_degree % 90:
                     context.set_line_width(self.width_cardinal)
-                elif not true_degree % 10:
+                elif not display_degree % 10:
                     context.set_line_width(self.width_major)
-                elif not true_degree % 5:
+                elif not display_degree % 5:
                     context.set_line_width(self.width_minor)
                 else:
                     context.set_line_width(self.width_tick)
@@ -85,15 +86,15 @@ class Rose:
                 context.line_to(end_x, end_y)
                 context.stroke()
 
-        for true_degree in range(0, 360):
+        for display_degree in range(0, 360):
 
-            plot_degree = true_degree + variation
-            if deviation:
-                plot_degree = plot_degree + deviation.deviation_at(plot_degree)
+            plot_degree = display_degree + variation
+            if curve:
+                plot_degree = plot_degree + curve.deviation_at(plot_degree)
 
-            if not true_degree % 10:
+            if not display_degree % 10:
                 with context:
-                    text = unicode(true_degree) + u'°'
+                    text = unicode(display_degree) + u'°'
 
                     context.set_font_size(8)
                     # context.rotate(rad - 0.5 * pi)
