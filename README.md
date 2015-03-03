@@ -8,3 +8,8 @@ createdb omnirose
 cd omnirose
 ./manage.py migrate
 ```
+
+# Useful notes
+
+http://www.compassadjuster.com.au/diy.htm
+
