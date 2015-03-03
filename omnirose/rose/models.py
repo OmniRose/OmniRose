@@ -52,6 +52,9 @@ class Rose:
         # Draw the adjusted inner rose
         self.draw_ring(inner_rose_radius, self.rose_width, self.variation, self.curve)
 
+        # Draw the variation
+        self.draw_variation()
+
 
     def draw_ring(self, outer_radius, dist, variation=0, curve=None):
         context = self.context
@@ -124,4 +127,28 @@ class Rose:
                         # context.rotate(radians(deg))
                         context.show_text(text)
 
+    def draw_variation(self):
+        var = self.variation
+
+        if var > 0:
+            direction = 'E'
+        elif var < 0:
+            direction = 'W'
+        else:
+            direction = ''
+
+        text = u'%u°%s' % (abs(var), direction)
+
+        with self.context as context:
+
+            context.set_source_rgb(0.6, 0.6, 0.6)  # gray
+            context.set_font_size(80)
+
+            (x_bearing, y_bearing, width, height, x_advance, y_advance) = context.text_extents(text)
+
+            x = self.SURFACE_SIZE / 2 - 0.5 * width
+            y = self.SURFACE_SIZE / 2 + 0.5 * height
+
+            context.move_to(x,y)
+            context.show_text(text)
 
