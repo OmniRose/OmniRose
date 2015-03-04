@@ -10,6 +10,6 @@ class TableTestCase(TestCase):
     def test_table_creation(self):
         curve = create_curve_from_sample(rya_training_almanac)
         table = Table(curve=curve)
-        table.draw_table()
+        table.draw()
         os.rename(table.filename, "table_test.pdf")
         self.assertTrue(True)

@@ -41,7 +41,7 @@ class Rose:
         return self.SURFACE_SIZE / 2 - r * cos(radians(deg))
 
 
-    def draw_rose(self):
+    def draw(self):
 
         outer_rose_radius = self.SURFACE_SIZE / 2 - self.edge_indent
         inner_rose_radius = outer_rose_radius - self.rose_width - self.inter_rose_gap

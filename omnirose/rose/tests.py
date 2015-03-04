@@ -10,6 +10,6 @@ class RoseTestCase(TestCase):
     def test_rose_creation(self):
         curve = create_curve_from_sample(rya_training_almanac)
         rose = Rose(variation=-6, curve=curve)
-        rose.draw_rose()
+        rose.draw()
         os.rename(rose.filename, "rose_test.pdf")
         self.assertTrue(True)

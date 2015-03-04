@@ -86,7 +86,7 @@ class Table:
 
         return self.grid_content_right - dev_interval * (max_dev - deviation)
 
-    def draw_table(self):
+    def draw(self):
         self.draw_degrees_grid()
         self.draw_deviation_grid()
         self.draw_deviation_curve()
