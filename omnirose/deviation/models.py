@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models import Max, Min
+
 
 import numpy
 from scipy.optimize import curve_fit
@@ -39,7 +41,12 @@ class Curve(models.Model):
         if self._min_deviation is not None and self._max_deviation is not None:
             return
 
-        min_dev = max_dev = self.deviation_at(0)
+        # Get the highest and lowest values from the readings as a starting
+        # point
+        aggregates = self.reading_set.aggregate(min_dev=Min('deviation'), max_dev=Max('deviation'))
+
+        min_dev = aggregates['min_dev']
+        max_dev = aggregates['max_dev']
 
         # Would be nice to do this a little less brute forcish
         for degree in range(1, 360):
