@@ -26,3 +26,136 @@ rya_training_almanac = {
     315  : -6,
     337.5: -5,
 }
+
+# From http://opencpn.org/ocpn/node/178
+opencpn_sample = {
+    0:    1,
+    30:   3,
+    60:   4,
+    90:   4,
+    120:  3,
+    150:  2,
+    180: -1,
+    210: -3,
+    240: -5,
+    270: -6,
+    300: -4,
+    330: -2,
+}
+
+# From http://www.globalsecurity.org/military/library/policy/army/fm/55-501/fig6-6-2.gif
+global_security = {
+    0  : -4,
+    15 : -4,
+    30 : -3.5,
+    45 : -3.2,
+    60 : -3,
+    75 : -2.5,
+    90 : -2,
+    105: -1.8,
+    120: -1.2,
+    135: -0.8,
+    150: -0.5,
+    165: 1.5,
+    180: 2,
+    195: 2.5,
+    210: 3,
+    225: 3.5,
+    240: 4,
+    255: 3.5,
+    270: 3,
+    285: 2,
+    300: 1.5,
+    315: 1,
+    330: 0.5,
+    345: -1,
+}
+
+# From http://www.collectors-edition.de/FokkerTeam/Steuertabelle.JPG
+# cardinals  = np.arange(0, 331, 30)
+# deviations = np.array([3, 1, -1, 0, 3, 5, 6, 5, 4, 2, 3, 3])
+fokker_team = {
+    0:    3,
+    30:   1,
+    60:  -1,
+    90:   0,
+    120:  3,
+    150:  5,
+    180:  6,
+    210:  5,
+    240:  4,
+    270:  2,
+    300:  3,
+    330:  3,
+}
+
+# From http://code7700.com/direction.html
+code7700_direction = {
+    0  :  1,
+    15 :  1,
+    30 :  1,
+    45 :  1,
+    60 :  2,
+    75 :  2,
+    90 :  2,
+    105:  2,
+    120:  2,
+    135:  0,
+    150: -1,
+    165: -1,
+    180: -1,
+    195: -1,
+    210: -1,
+    225: -1,
+    240: -2,
+    255: -2,
+    270: -2,
+    285: -2,
+    300: -2,
+    315: -1,
+    330:  0,
+    345:  1,
+}
+
+
+# # From http://www.americanflyers.net/aviationlibrary/instrument_flying_handbook/chapter_3.htm
+# cardinals  = np.arange(0, 331, 30)
+# deviations = np.array([1, 2, 2, 5, 3, 5, -4, 0, 3, 1, -4, -5])
+instrument_flying_handbook = {
+    0:    1,
+    30:   2,
+    60:   2,
+    90:   5,
+    120:  3,
+    150:  5,
+    180: -4,
+    210:  0,
+    240:  3,
+    270:  1,
+    300: -4,
+    330: -5,
+}
+
+
+# cardinals  = np.arange(0,  361, 45)
+# deviations = np.array([-2, -4, -3, -1,  2,   4,   3,   0,   -2])
+
+# cardinals  = np.arange(0,  360, 45)
+# deviations = np.array([-2, -2, -1, 0, 1, 1, 0.5, -1])
+
+
+
+# From http://threesheetsnw.com/svselah/2011/06/23/that-took-an-adjustment/
+# cardinals  = np.arange(0, 361, 45)
+# deviations = np.array([1, 1, 0, 0, -1, -1, 0, 0, 1])
+
+
+# From https://www.flickr.com/photos/seadog-images/3591881376/
+# cardinals  = np.arange(0, 361, 45)
+# deviations = np.array([1, 1.5, 1, 1, 1, 1.5, 1, 0, 1])
+
+
+
+# From http://code7700.com/images/compass_correction_card_afm_51-37_figure_1-15.png
+# cardinals  = np.arange(0, 361, 15)
+# deviations = np.array([1, 1, 1, 1, 2, 2, 2, 2, 2, 0, -1, -1, -1, -1, -1, -1,-2, -2, -2, -2, -2, -1, 0, 1, 1])
