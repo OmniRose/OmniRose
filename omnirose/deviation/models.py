@@ -1,9 +1,10 @@
 from django.db import models
 from django.db.models import Max, Min
 
+import warnings
 
 import numpy
-from scipy.optimize import curve_fit
+from scipy.optimize import curve_fit, OptimizeWarning
 
 
 def _raw_curve_equation(heading, A, B, C, D, E):
@@ -99,7 +100,10 @@ class Curve(models.Model):
             headings.append(reading.ships_head)
             deviations.append(reading.deviation)
 
-        popt, pcov = curve_fit(_raw_curve_equation, numpy.array(headings), numpy.array(deviations))
+        with warnings.catch_warnings():
+            # We might get an "OptimizeWarning" that we want to ignore
+            warnings.simplefilter("ignore", category=OptimizeWarning)
+            popt, pcov = curve_fit(_raw_curve_equation, numpy.array(headings), numpy.array(deviations))
 
         self.curve_opt = popt
         self.curve_cov = pcov

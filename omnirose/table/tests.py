@@ -8,8 +8,9 @@ from deviation.samples import samples, create_curve_from_sample
 
 class TableTestCase(TestCase):
     def test_table_creation(self):
-        curve = create_curve_from_sample(samples['rya_training_almanac'])
-        table = Table(curve=curve)
-        table.draw()
-        os.rename(table.filename, "table_test.pdf")
-        self.assertTrue(True)
+        for name, sample in samples.items():
+            curve = create_curve_from_sample(sample)
+            table = Table(curve=curve)
+            table.draw()
+            os.rename(table.filename, "test_output/table_%s.pdf" % name)
+            self.assertTrue(True)

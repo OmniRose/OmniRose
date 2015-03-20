@@ -8,8 +8,9 @@ from deviation.samples import create_curve_from_sample, samples
 
 class RoseTestCase(TestCase):
     def test_rose_creation(self):
-        curve = create_curve_from_sample(samples['rya_training_almanac'])
-        rose = Rose(variation=-6, curve=curve)
-        rose.draw()
-        os.rename(rose.filename, "rose_test.pdf")
-        self.assertTrue(True)
+        for name, sample in samples.items():
+            curve = create_curve_from_sample(sample)
+            rose = Rose(variation=0, curve=curve)
+            rose.draw()
+            os.rename(rose.filename, "test_output/rose_%s.pdf" % name)
+            self.assertTrue(True)
