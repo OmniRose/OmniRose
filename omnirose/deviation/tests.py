@@ -2,12 +2,12 @@ from django.test import TestCase
 
 # Create your tests here.
 from .models import Curve, Reading
-from .samples import create_curve_from_sample, rya_training_almanac, instrument_flying_handbook
+from .samples import create_curve_from_sample, samples
 
 class DeviationTestCase(TestCase):
 
     def setUp(self):
-        self.curve = create_curve_from_sample(rya_training_almanac)
+        self.curve = create_curve_from_sample(samples['rya_training_almanac'])
 
     def test_readings_as_expected(self):
         """All reading included and correct accuracy"""
@@ -15,7 +15,7 @@ class DeviationTestCase(TestCase):
         for reading in self.curve.reading_set.all():
             actual[reading.ships_head] = reading.deviation
 
-        self.assertEqual(actual, rya_training_almanac)
+        self.assertEqual(actual, samples['rya_training_almanac'])
 
 
     def test_curve_calculation(self):
@@ -33,7 +33,7 @@ class DeviationTestCase(TestCase):
         self.assertEqual(self.curve.min_deviation, -6)
         self.assertEqual(self.curve.max_deviation, 6)
 
-        handbook_curve = create_curve_from_sample(instrument_flying_handbook)
+        handbook_curve = create_curve_from_sample(samples['instrument_flying_handbook'])
         self.assertEqual(handbook_curve.min_deviation, -5)
         self.assertEqual(handbook_curve.max_deviation, 6)
 

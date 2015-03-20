@@ -8,7 +8,10 @@ def create_curve_from_sample(sample):
         curve.reading_set.create(ships_head=ships_head, deviation=deviation)
     return curve
 
-rya_training_almanac = {
+
+samples = {}
+
+samples['rya_training_almanac'] = {
     0    : -4,
     22.5 : -2,
     45   :  0,
@@ -28,7 +31,7 @@ rya_training_almanac = {
 }
 
 # Astrid 1974
-astrid_1974 = {
+samples['astrid_1974'] = {
     0  : 2,
     15 : 2,
     30 : 1,
@@ -56,7 +59,7 @@ astrid_1974 = {
 }
 
 # From http://opencpn.org/ocpn/node/178
-opencpn_sample = {
+samples['opencpn_sample'] = {
     0:    1,
     30:   3,
     60:   4,
@@ -72,7 +75,7 @@ opencpn_sample = {
 }
 
 # From http://www.globalsecurity.org/military/library/policy/army/fm/55-501/fig6-6-2.gif
-global_security = {
+samples['global_security'] = {
     0  : -4,
     15 : -4,
     30 : -3.5,
@@ -102,7 +105,7 @@ global_security = {
 # From http://www.collectors-edition.de/FokkerTeam/Steuertabelle.JPG
 # cardinals  = np.arange(0, 331, 30)
 # deviations = np.array([3, 1, -1, 0, 3, 5, 6, 5, 4, 2, 3, 3])
-fokker_team = {
+samples['fokker_team'] = {
     0:    3,
     30:   1,
     60:  -1,
@@ -118,7 +121,7 @@ fokker_team = {
 }
 
 # From http://code7700.com/direction.html
-code7700_direction = {
+samples['code7700_direction'] = {
     0  :  1,
     15 :  1,
     30 :  1,
@@ -149,7 +152,7 @@ code7700_direction = {
 # # From http://www.americanflyers.net/aviationlibrary/instrument_flying_handbook/chapter_3.htm
 # cardinals  = np.arange(0, 331, 30)
 # deviations = np.array([1, 2, 2, 5, 3, 5, -4, 0, 3, 1, -4, -5])
-instrument_flying_handbook = {
+samples['instrument_flying_handbook'] = {
     0:    1,
     30:   2,
     60:   2,
