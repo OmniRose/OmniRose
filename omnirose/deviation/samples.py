@@ -30,6 +30,24 @@ samples['rya_training_almanac'] = {
     337.5: -5,
 }
 
+samples['rya_training_almanac_every_45'] = {
+    0    : -4,
+    45   :  0,
+    90   :  4,
+    135  :  6,
+    180  :  4,
+    225  :  0,
+    270  : -4,
+    315  : -6,
+}
+
+samples['rya_training_almanac_every_90'] = {
+    0    : -4,
+    90   :  4,
+    180  :  4,
+    270  : -4,
+}
+
 # Astrid 1974
 samples['astrid_1974'] = {
     0  : 2,

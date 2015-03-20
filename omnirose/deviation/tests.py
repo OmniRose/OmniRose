@@ -26,18 +26,18 @@ class DeviationTestCase(TestCase):
 
     def test_calculated_deviation_as_expected(self):
         """Test that a deviation is calculated correctly"""
-        self.assertEqual(self.curve.deviation_at(0), -3.964)
-        self.assertEqual(self.curve.deviation_at(100), 4.593)
+        self.assertEqual(self.curve.deviation_at(0), -3.843)
+        self.assertEqual(self.curve.deviation_at(100), 4.509)
 
     def test_max_and_and_min_deviation_as_expected(self):
         self.assertEqual(self.curve.min_deviation, -6)
         self.assertEqual(self.curve.max_deviation, 6)
 
         handbook_curve = create_curve_from_sample(samples['instrument_flying_handbook'])
-        self.assertEqual(handbook_curve.min_deviation, -5)
+        self.assertEqual(handbook_curve.min_deviation, -7)
         self.assertEqual(handbook_curve.max_deviation, 6)
 
 
     def test_compass_to_true(self):
-        self.assertEqual( self.curve.compass_to_true(90), 93.964)
-        self.assertEqual( self.curve.compass_to_true(90, 10), 103.964)
+        self.assertEqual( self.curve.compass_to_true(90), 93.843)
+        self.assertEqual( self.curve.compass_to_true(90, 10), 103.843)

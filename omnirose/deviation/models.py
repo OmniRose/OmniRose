@@ -6,18 +6,55 @@ import warnings
 import numpy
 from scipy.optimize import curve_fit, OptimizeWarning
 
+def _raw_curve_equation_3(heading, A, B, C):
+    return _raw_curve_equation_generic(heading, A, B, C)
 
-def _raw_curve_equation(heading, A, B, C, D, E):
+def _raw_curve_equation_5(heading, A, B, C, D, E):
+    return _raw_curve_equation_generic(heading, A, B, C, D, E)
+
+def _raw_curve_equation_7(heading, A, B, C, D, E, F, G):
+    return _raw_curve_equation_generic(heading, A, B, C, D, E, F, G)
+
+def _raw_curve_equation_9(heading, A, B, C, D, E, F, G, H, I):
+    return _raw_curve_equation_generic(heading, A, B, C, D, E, F, G, H, I)
+
+def _raw_curve_equation_11(heading, A, B, C, D, E, F, G, H, I, J, K):
+    return _raw_curve_equation_generic(heading, A, B, C, D, E, F, G, H, I, J, K)
+
+def _raw_curve_equation_13(heading, A, B, C, D, E, F, G, H, I, J, K, L, M):
+    return _raw_curve_equation_generic(heading, A, B, C, D, E, F, G, H, I, J, K, L, M)
+
+def _raw_curve_equation_generic(heading, A, *args):
     heading_in_radians = numpy.radians(heading)
 
-    B_result = B * numpy.sin(heading_in_radians)
-    C_result = C * numpy.cos(heading_in_radians)
-    D_result = D * numpy.sin(2 * heading_in_radians)
-    E_result = E * numpy.cos(2 * heading_in_radians)
+    result = A
 
-    return A + B_result + C_result + D_result + E_result
+    multiplier = 1
+
+    while len(args):
+        result = result + args[0] * numpy.sin(multiplier * heading_in_radians)
+        result = result + args[1] * numpy.cos(multiplier * heading_in_radians)
+
+        args = numpy.delete(args, [0,1])
+        multiplier = multiplier + 1
+
+    return result
+
+_raw_curve_equations = (
+    (13, _raw_curve_equation_13),
+    (11, _raw_curve_equation_11),
+    (9,  _raw_curve_equation_9),
+    (7,  _raw_curve_equation_7),
+    (5,  _raw_curve_equation_5),
+    (3,  _raw_curve_equation_3),
+)
+
+
+
 
 class Curve(models.Model):
+
+    curve_equation = None
 
     curve_opt = None
     curve_cov = None
@@ -64,7 +101,7 @@ class Curve(models.Model):
         self.calculate_curve_if_needed()
 
         popt = self.curve_opt
-        accurate = _raw_curve_equation(heading, *popt)
+        accurate = self.curve_equation(heading, *popt)
         return round(accurate, 3)
 
 
@@ -100,11 +137,17 @@ class Curve(models.Model):
             headings.append(reading.ships_head)
             deviations.append(reading.deviation)
 
+        # Work out which equation to use
+        for arg_count, equation in _raw_curve_equations:
+            if len(readings) >= arg_count:
+                break
+
         with warnings.catch_warnings():
             # We might get an "OptimizeWarning" that we want to ignore
             warnings.simplefilter("ignore", category=OptimizeWarning)
-            popt, pcov = curve_fit(_raw_curve_equation, numpy.array(headings), numpy.array(deviations))
+            popt, pcov = curve_fit(equation, numpy.array(headings), numpy.array(deviations))
 
+        self.curve_equation = equation
         self.curve_opt = popt
         self.curve_cov = pcov
 
