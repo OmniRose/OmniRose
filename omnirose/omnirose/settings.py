@@ -32,17 +32,20 @@ LOGIN_REDIRECT_URL = '/'
 # Application definition
 
 INSTALLED_APPS = (
-    'accounts',
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'omnirose',
+    'accounts',
     'deviation',
     'rose',
     'table',
+
+    # Last so that the registration templates don't override those in accounts
+    'django.contrib.admin',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -88,3 +91,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+

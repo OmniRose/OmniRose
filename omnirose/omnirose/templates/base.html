@@ -61,7 +61,7 @@
                         <span class="caret"></span>
                       </a>
                       <ul class="dropdown-menu">
-                        <li><a href="{% url 'logout' %}">logout</a></li>
+                        <li><a href="{% url 'logout' %}?next={% url 'home' %}">logout</a></li>
                       </ul>
                     <li>
                   {% else %}

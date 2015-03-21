@@ -1,4 +1,7 @@
 {% extends "base.html" %}
+{% load firstof from future %}
+
+{% block title %}Log in{% endblock %}
 
 {% block content %}
 
@@ -65,6 +68,10 @@
 
       <p class="text-info">
         <a href="{% url 'register' %}">Create an account</a>
+      </p>
+
+      <p class="text-info">
+        <a href="{% url 'password_reset' %}">Forgotten your password?</a>
       </p>
 
 

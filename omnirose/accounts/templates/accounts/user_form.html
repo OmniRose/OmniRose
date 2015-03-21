@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load firstof from future %}
 
 {% block title %}Create account{% endblock %}
 {% block content %}
@@ -27,7 +28,7 @@
 
 
         <label for="id_email" class="sr-only">Email address</label>
-        <input type="email" id="id_email" name="email" class="form-control" placeholder="Email address" required autofocus value="{{ form.email.value }}">
+        <input type="email" id="id_email" name="email" class="form-control" placeholder="Email address" required autofocus value="{% firstof form.email.value '' %}">
 
         <br>
         <p class="text-info">We'll email you your password after we've created your account.</p>
@@ -35,6 +36,11 @@
 
         <button class="btn btn-lg btn-primary btn-block" type="submit">Create account</button>
       </form>
+
+      <p class="text-info">
+        <a href="{% url 'login' %}">Log in instead</a>
+      </p>
+
     </div>
 </div>
 

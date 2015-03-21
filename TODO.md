@@ -1,7 +1,5 @@
 # Todo items
 
-* Reset password page
-
 * Capture readings from form into database
 
 * produce sample table image from inital data points
@@ -21,3 +19,7 @@
 * switch text rendering to be pango based (http://cairographics.org/pycairo_pango/)
 
 * Make niceties of login work - eg pass the email address across from login to create account or forgot password.
+
+* configure email sending correctly
+
+* extract some things into a local_settings.py
