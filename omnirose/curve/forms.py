@@ -1,16 +1,11 @@
 from django import forms
-from django.forms.models import modelformset_factory
+from django.forms.models import formset_factory, BaseModelFormSet
+from django.forms.widgets import NumberInput
 
 from .models import Reading
 
-class ReadingForm(forms.ModelForm):
-    class Meta:
-        model = Reading
-        fields = ['ships_head', 'deviation']
+class ReadingForm(forms.Form):
+    ships_head = forms.IntegerField(required=False, widget=NumberInput(attrs={'style': "width: 5em;"}))
+    deviation  = forms.FloatField(required=False,   widget=NumberInput(attrs={'style': "width: 5em;"}))
 
-# class BaseReadingFormSet(BaseModelFormSet):
-#     def __init__(self, *args, **kwargs):
-#         super(BaseAuthorFormSet, self).__init__(*args, **kwargs)
-#         self.queryset = Author.objects.filter(name__startswith='O')
-
-# ReadingFormSet = modelformset_factory(Reading, form=ReadingForm)
+ReadingFormSet = formset_factory(form=ReadingForm)

@@ -7,8 +7,8 @@ from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 
-from .models import Curve
-from .forms import ReadingForm
+from .models import Curve, Reading
+from .forms import ReadingForm, ReadingFormSet
 
 class CurveView(DetailView):
 
@@ -49,32 +49,66 @@ class CurveCreateView(CreateView):
 
         return redirect( self.get_success_url() )
 
-
 class CurveReadingEditView(SingleObjectMixin, FormView):
     model = Curve
     template_name = "curve/readings_edit.html"
-    form_class = ReadingForm
+
+    def get_form_class(self):
+        return ReadingFormSet
+
+    def get_form_kwargs(self):
+        kwargs = super(CurveReadingEditView, self).get_form_kwargs()
+
+        if self.request.method == 'GET':
+
+            # Get all the existing readings
+            readings_dict = self.object.readings_as_dict
+
+            # Add in every 15 degrees
+            for angle in range(0, 360, 15):
+                if angle not in readings_dict:
+                    readings_dict[angle] = ''
+
+            # Load up the formset with the inital values
+            initial = []
+            for ships_head, deviation in readings_dict.items():
+                initial.append({'ships_head': ships_head, 'deviation': deviation})
+
+            # Sort the entries
+            def sort_key(x): return x['ships_head']
+            initial = sorted(initial, key=sort_key)
+
+            kwargs['initial'] = initial
+
+        return kwargs
 
     def get(self, request, *args, **kwargs):
-        # if not request.user.is_authenticated():
-        #     return HttpResponseForbidden()
         self.object = self.get_object()
         return super(CurveReadingEditView, self).get(request, *args, **kwargs)
 
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super(CurveReadingEditView, self).post(request, *args, **kwargs)
 
     def get_success_url(self):
         return self.get_object().get_absolute_url()
 
-    # def get_context_data(self, **kwargs):
-    #     context = super(CurveReadingEditView, self).get_context_data(**kwargs)
-    #     context['form'] = AuthorInterestForm()
-    #     return context
+    def get_context_data(self, **kwargs):
+        context = super(CurveReadingEditView, self).get_context_data(**kwargs)
+        return context
 
-    def form_valid(self, form):
-        # This method is called when valid form data has been POSTed.
-        # It should return an HttpResponse.
-        print "Form Valid"
-        reading = form.save(commit=False)
-        reading.curve = self.get_object()
-        reading.save()
+    def form_valid(self, formset):
+
+        curve = self.object
+
+        # Delete all the existing readings
+        curve.reading_set.all().delete()
+
+        for form in formset:
+            ships_head = form['ships_head'].value()
+            deviation  = form['deviation'].value()
+            if ships_head == '' or deviation == '':
+                continue
+            curve.reading_set.create(ships_head=ships_head, deviation=deviation)
+
         return super(CurveReadingEditView, self).form_valid(form)

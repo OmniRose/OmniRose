@@ -14,7 +14,7 @@
     {% empty %}
       <li>No readings yet</li>
     {% endfor %}
-    <li><a href="{% url 'curve_readings' pk=object.id %}">Add reading</a></li>
+    <li><a href="{% url 'curve_readings' pk=object.id %}">Edit readings</a></li>
   </ul>
 
 {% endblock %}
