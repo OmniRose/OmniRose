@@ -1,6 +1,6 @@
 # Todo items
 
-* Add logins etc
+* Reset password page
 
 * Capture readings from form into database
 
@@ -19,3 +19,5 @@
 * create a mailchimp list for people to subscribe to
 
 * switch text rendering to be pango based (http://cairographics.org/pycairo_pango/)
+
+* Make niceties of login work - eg pass the email address across from login to create account or forgot password.

@@ -44,14 +44,34 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">OmniRose</a>
+                <a class="navbar-brand" href="{% url 'home' %}">OmniRose</a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
+                  <li><a href="{% url 'home' %}">Foo</a></li>
+                  <li><a href="{% url 'home' %}">Bar</a></li>
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                  {% if user.is_authenticated %}
+                    <li class="dropdown">
+                      <a class="dropdown-toggle" data-toggle="dropdown" href="{% url 'home' %}">
+                        {{ user.get_full_name }}
+                        <span class="caret"></span>
+                      </a>
+                      <ul class="dropdown-menu">
+                        <li><a href="{% url 'logout' %}">logout</a></li>
+                      </ul>
                     <li>
-                        <a href="/">Home</a>
+                  {% else %}
+                    <li>
+                        <a href="{% url 'login' %}">log in</a>
                     </li>
+                    <li>
+                        <a href="{% url 'register' %}">create account</a>
+                    </li>
+                  {% endif %}
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
