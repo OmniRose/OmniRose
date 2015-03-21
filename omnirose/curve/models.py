@@ -183,7 +183,7 @@ class Curve(CurveCalculations, models.Model):
 
 class Reading(models.Model):
     curve = models.ForeignKey(Curve)
-    ships_head = models.IntegerField()
+    ships_head = models.FloatField()
     deviation = models.FloatField()
 
     class Meta():
