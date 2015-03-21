@@ -2,6 +2,8 @@ from django.shortcuts import redirect
 from django.views.generic import CreateView
 from django.contrib.auth import authenticate, login
 
+from template_email import TemplateEmail
+
 from .forms import RegistrationForm
 from .models import User
 
@@ -25,8 +27,12 @@ class RegistrationView(CreateView):
         else:
             raise Exception("Could not auth recently created user")
 
-
-        # FIXME - send password in email here and tell user that on screen.
-        print user.email, password
+        # send password in email
+        email = TemplateEmail(
+            to=[user.email],
+            template='accounts/new_user_email.txt',
+            context={ 'user': user, 'password': password }
+        )
+        email.send()
 
         return redirect('home')

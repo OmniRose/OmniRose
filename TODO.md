@@ -20,6 +20,9 @@
 
 * Make niceties of login work - eg pass the email address across from login to create account or forgot password.
 
-* configure email sending correctly
+
+## production
+
+* configure email sending
 
 * extract some things into a local_settings.py

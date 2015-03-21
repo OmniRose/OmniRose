@@ -1,0 +1,19 @@
+{% load email %}
+{% subject %}OmniRose.com account details{% endsubject %}
+{% body %}
+Dear {{ user.email }}.
+
+Thank you for signing up.
+
+Your account details are:
+
+username: {{ user.email }}
+password: {{ password }}
+
+You can log in at http://www.omnirose.com{% url 'login' %}
+
+Any problems please let us know.
+
+Sincerely,
+  The Team
+{% endbody %}
