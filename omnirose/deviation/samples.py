@@ -127,8 +127,6 @@ samples['global_security'] = {
 }
 
 # From http://www.collectors-edition.de/FokkerTeam/Steuertabelle.JPG
-# cardinals  = np.arange(0, 331, 30)
-# deviations = np.array([3, 1, -1, 0, 3, 5, 6, 5, 4, 2, 3, 3])
 samples['fokker_team'] = {
     0:    3,
     30:   1,
@@ -174,8 +172,6 @@ samples['code7700_direction'] = {
 
 
 # # From http://www.americanflyers.net/aviationlibrary/instrument_flying_handbook/chapter_3.htm
-# cardinals  = np.arange(0, 331, 30)
-# deviations = np.array([1, 2, 2, 5, 3, 5, -4, 0, 3, 1, -4, -5])
 samples['instrument_flying_handbook'] = {
     0:    1,
     30:   2,
@@ -192,25 +188,80 @@ samples['instrument_flying_handbook'] = {
 }
 
 
-# cardinals  = np.arange(0,  361, 45)
-# deviations = np.array([-2, -4, -3, -1,  2,   4,   3,   0,   -2])
+samples['anonymous_1'] = {
+    0    : -2,
+    45   : -4,
+    90   : -3,
+    135  : -1,
+    180  :  2,
+    225  :  4,
+    270  :  3,
+    315  :  0,
+}
 
-# cardinals  = np.arange(0,  360, 45)
-# deviations = np.array([-2, -2, -1, 0, 1, 1, 0.5, -1])
-
+samples['anonymous_2'] = {
+    0    : -2,
+    45   : -2,
+    90   : -1,
+    135  :  0,
+    180  :  1,
+    225  :  1,
+    270  :  0.5,
+    315  : -1,
+}
 
 
 # From http://threesheetsnw.com/svselah/2011/06/23/that-took-an-adjustment/
-# cardinals  = np.arange(0, 361, 45)
-# deviations = np.array([1, 1, 0, 0, -1, -1, 0, 0, 1])
+samples['sv_selah'] = {
+    0    :  1,
+    45   :  1,
+    90   :  0,
+    135  :  0,
+    180  : -1,
+    225  : -1,
+    270  :  0,
+    315  :  0,
+}
 
 
 # From https://www.flickr.com/photos/seadog-images/3591881376/
-# cardinals  = np.arange(0, 361, 45)
-# deviations = np.array([1, 1.5, 1, 1, 1, 1.5, 1, 0, 1])
+samples['seadog'] = {
+    0    : 1,
+    45   : 1.5,
+    90   : 1,
+    135  : 1,
+    180  : 1,
+    225  : 1.5,
+    270  : 0,
+    315  : 1,
+}
 
 
 
 # From http://code7700.com/images/compass_correction_card_afm_51-37_figure_1-15.png
-# cardinals  = np.arange(0, 361, 15)
-# deviations = np.array([1, 1, 1, 1, 2, 2, 2, 2, 2, 0, -1, -1, -1, -1, -1, -1,-2, -2, -2, -2, -2, -1, 0, 1, 1])
+samples['afm_51_37'] = {
+    0  : 1,
+    15 : 1,
+    30 : 1,
+    45 : 1,
+    60 : 2,
+    75 : 2,
+    90 : 2,
+    105: 2,
+    120: 2,
+    135: 0,
+    150: -1,
+    165: -1,
+    180: -1,
+    195: -1,
+    210: -1,
+    225: -1,
+    240: -2,
+    255: -2,
+    270: -2,
+    285: -2,
+    300: -2,
+    315: -1,
+    330: 0,
+    345: 1,
+}
