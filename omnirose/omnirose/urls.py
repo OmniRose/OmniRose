@@ -8,6 +8,7 @@ urlpatterns = patterns('',
     url(r'^$', HomePageView.as_view(), name='home'),
 
     url(r'^accounts/', include('accounts.urls')),
+    url(r'^curves/', include('curve.urls')),
 
     url(r'^admin/', include(admin.site.urls)),
 )

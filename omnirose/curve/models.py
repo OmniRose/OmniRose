@@ -1,12 +1,13 @@
 from django.db import models
 from django.db.models import Max, Min
+from django.core.urlresolvers import reverse
 
 import warnings
 
 import numpy
 from scipy.optimize import curve_fit, OptimizeWarning
 
-
+from accounts.models import User
 
 
 
@@ -159,8 +160,17 @@ class CurveCalculations(object):
 
 class Curve(CurveCalculations, models.Model):
 
+    user   = models.ForeignKey(User, blank=True, null=True)
+    vessel = models.CharField(max_length=80)
+    note   = models.CharField(max_length=80)
+
+    created = models.DateTimeField(auto_now_add=True)
+
     def __unicode__(self):
-        return unicode(self.id)
+        return u"%s (%s)" % (self.vessel, self.note)
+
+    def get_absolute_url(self):
+        return reverse('curve_view', args=[str(self.id)])
 
     @property
     def readings_as_dict(self):
