@@ -3,6 +3,7 @@ from django.views.generic.edit import CreateView, FormView
 from django.views.generic.detail import DetailView, SingleObjectMixin
 
 from django.shortcuts import redirect
+from django.core.urlresolvers import reverse
 
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -47,7 +48,7 @@ class CurveCreateView(CreateView):
 
         self.object = obj
 
-        return redirect( self.get_success_url() )
+        return redirect( reverse('curve_readings', kwargs={'pk': obj.id}) )
 
 class CurveReadingEditView(SingleObjectMixin, FormView):
     model = Curve

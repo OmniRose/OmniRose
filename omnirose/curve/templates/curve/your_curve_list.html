@@ -10,7 +10,7 @@
 
   <ul>
   {% for curve in object_list %}
-      <li>{{ curve.vessel_name }}</li>
+      <li><a href="{% url 'curve_detail' pk=curve.id %}">{{ curve }}</a></li>
   {% empty %}
       <li>No curves yet.</li>
   {% endfor %}

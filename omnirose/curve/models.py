@@ -170,7 +170,7 @@ class Curve(CurveCalculations, models.Model):
         return u"%s (%s)" % (self.vessel, self.note)
 
     def get_absolute_url(self):
-        return reverse('curve_view', args=[str(self.id)])
+        return reverse('curve_detail', args=[str(self.id)])
 
     @property
     def readings_as_dict(self):
