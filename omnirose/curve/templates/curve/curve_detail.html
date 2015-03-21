@@ -6,5 +6,15 @@
 
   <h1>{{ object }}</h1>
 
+  <h2>Readings</h2>
+
+  <ul>
+    {% for reading in object.reading_set.all %}
+      <li>{{ reading }}</li>
+    {% empty %}
+      <li>No readings yet</li>
+    {% endfor %}
+    <li><a href="{% url 'curve_readings' pk=object.id %}">Add reading</a></li>
+  </ul>
 
 {% endblock %}

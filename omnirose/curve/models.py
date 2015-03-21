@@ -183,11 +183,14 @@ class Curve(CurveCalculations, models.Model):
 
 class Reading(models.Model):
     curve = models.ForeignKey(Curve)
-    ships_head = models.FloatField()
+    ships_head = models.IntegerField()
     deviation = models.FloatField()
 
+    class Meta():
+        ordering = ['ships_head']
+
     def __unicode__(self):
-        return "(%.1f, %.1f)" % (self.ships_head, self.deviation)
+        return "(%g, %g)" % (self.ships_head, self.deviation)
 
 
 
