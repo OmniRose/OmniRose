@@ -2,7 +2,7 @@ from django.test import TestCase
 from .models import Rose
 import os
 
-from deviation.samples import create_database_curve_from_sample, samples
+from curve.samples import create_database_curve_from_sample, samples
 
 # Create your tests here.
 

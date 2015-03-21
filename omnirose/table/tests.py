@@ -2,7 +2,7 @@ from django.test import TestCase
 from .models import Table
 import os
 
-from deviation.samples import samples, create_database_curve_from_sample
+from curve.samples import samples, create_database_curve_from_sample
 
 # Create your tests here.
 

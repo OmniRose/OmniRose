@@ -42,7 +42,7 @@ INSTALLED_APPS = (
 
     'omnirose',
     'accounts',
-    'deviation',
+    'curve',
     'rose',
     'table',
 

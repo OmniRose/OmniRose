@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('ships_head', models.FloatField()),
                 ('deviation', models.FloatField()),
-                ('curve', models.ForeignKey(to='deviation.Curve')),
+                ('curve', models.ForeignKey(to='curve.Curve')),
             ],
             options={
             },
