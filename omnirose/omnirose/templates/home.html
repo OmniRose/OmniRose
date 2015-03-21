@@ -1,14 +1,29 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 
 {% block title %}Home{% endblock %}
 
 {% block content %}
-    <div class="row">
-        <div class="col-lg-12 text-center">
-            <h1>Custom compass roses for your boat's deviation.</h1>
-            <p class="lead">Simplify converting from true to magnetic, and vice versa.</p>
 
-            <p>Normal paragraph. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <h1>True ↔︎ Compass, simply.</h1>
+            <p class="lead">A compass rose adjusted to your boat's deviation table and your local variation.</p>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-sm-4 text-center">
+            <p>Converting between True, magnetic and compass can get really confusing.</p>
+        </div>
+        <div class="col-sm-4 text-center">
+            <img class="img-responsive" style="border: 1px solid #eee" src="{% static 'table.svg' %}">
+            <p>A curve is fitted to your deviations using a mathematical model.</p>
+        </div>
+        <div class="col-sm-4 text-center">
+            <img class="img-responsive" style="border: 1px solid #eee" src="{% static 'rose.svg' %}">
+            <p>This computed curve is then used to create a custom rose that has true on the outer ring and your compass on the inner ring. Variation is also applied making converting true into compass a simple lookup.</p>
+        </div>
+    </div>
+
 {% endblock %}
