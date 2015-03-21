@@ -6,6 +6,12 @@ import warnings
 import numpy
 from scipy.optimize import curve_fit, OptimizeWarning
 
+
+
+
+
+# Curve equations - which one is used depends on the number of points available
+# to plot to. There must be more points than there are variables.
 def _raw_curve_equation_3(heading, A, B, C):
     return _raw_curve_equation_generic(heading, A, B, C)
 
@@ -50,9 +56,7 @@ _raw_curve_equations = (
 )
 
 
-
-
-class Curve(models.Model):
+class CurveCalculations(object):
 
     curve_equation = None
 
@@ -62,8 +66,7 @@ class Curve(models.Model):
     _min_deviation = None
     _max_deviation = None
 
-    def __unicode__(self):
-        return unicode(self.id)
+    _readings_as_dict = None
 
     @property
     def min_deviation(self):
@@ -75,16 +78,16 @@ class Curve(models.Model):
         self._find_max_and_min_deviation_if_needed()
         return self._max_deviation
 
+
     def _find_max_and_min_deviation_if_needed(self):
         if self._min_deviation is not None and self._max_deviation is not None:
             return
 
         # Get the highest and lowest values from the readings as a starting
         # point
-        aggregates = self.reading_set.aggregate(min_dev=Min('deviation'), max_dev=Max('deviation'))
-
-        min_dev = aggregates['min_dev']
-        max_dev = aggregates['max_dev']
+        deviations = self.readings_as_dict.values()
+        min_dev = min(deviations)
+        max_dev = max(deviations)
 
         # Would be nice to do this a little less brute forcish
         for degree in range(1, 360):
@@ -123,6 +126,9 @@ class Curve(models.Model):
     def curve_has_been_calculated(self):
         return bool(self.curve_opt is not None)
 
+    @property
+    def readings_as_dict(self):
+        return self._readings_as_dict
 
     def calculate_curve(self):
 
@@ -132,14 +138,13 @@ class Curve(models.Model):
         headings   = []
         deviations = []
 
-        readings = self.reading_set.all().order_by('ships_head')
-        for reading in readings:
-            headings.append(reading.ships_head)
-            deviations.append(reading.deviation)
+        for ships_head, deviation in self.readings_as_dict.items():
+            headings.append(ships_head)
+            deviations.append(deviation)
 
         # Work out which equation to use
         for arg_count, equation in _raw_curve_equations:
-            if len(readings) >= arg_count:
+            if len(headings) >= arg_count:
                 break
 
         with warnings.catch_warnings():
@@ -152,6 +157,20 @@ class Curve(models.Model):
         self.curve_cov = pcov
 
 
+class Curve(CurveCalculations, models.Model):
+
+    def __unicode__(self):
+        return unicode(self.id)
+
+    @property
+    def readings_as_dict(self):
+        readings = self.reading_set.all().order_by('ships_head')
+        as_dict = {}
+        for reading in readings:
+            as_dict[reading.ships_head] = reading.deviation
+        return as_dict
+
+
 class Reading(models.Model):
     curve = models.ForeignKey(Curve)
     ships_head = models.FloatField()
@@ -159,3 +178,6 @@ class Reading(models.Model):
 
     def __unicode__(self):
         return "(%.1f, %.1f)" % (self.ships_head, self.deviation)
+
+
+

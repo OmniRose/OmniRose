@@ -1,13 +1,19 @@
+import copy
+
 # samples of various deviation tables
 
-from .models import Curve
+from .models import Curve, CurveCalculations
 
-def create_curve_from_sample(sample):
+def create_database_curve_from_sample(sample):
     curve = Curve.objects.create()
     for ships_head, deviation in sample.items():
         curve.reading_set.create(ships_head=ships_head, deviation=deviation)
     return curve
 
+def create_curve_calculation_from_sample(sample):
+    curve = CurveCalculations()
+    curve._readings_as_dict = copy.deepcopy(sample)
+    return curve
 
 samples = {}
 
