@@ -23,14 +23,14 @@ class Table:
         self.grid_width  = 300.
         self.grid_bleed  = 2.
 
-        self.width_cardinal = 1 # N, S, E, W
+        self.width_cardinal = 0.5 # N, S, E, W
         self.width_major    = 0.1
         self.width_minor    = 0.1
         self.width_tick     = 0
 
-        self.width_deviation_curve = 0.5
+        self.width_deviation_curve = 1
 
-        self.reading_point_radius = 1.5
+        self.reading_point_radius = 3
 
         file_suffix = '.' + file_type
         (handle, cairo_tmp) = tempfile.mkstemp(file_suffix, 'omnirose-table')
