@@ -47,9 +47,7 @@
 <div class="col-sm-4 text-center">
   <h3>Deviation Table</h3>
 
-  <p>Low-res sample table.</p>
-
-  <p>Select the <a href="{% url 'curve_equation' pk=object.pk %}">equation</a> to use.</p>
+  <p><a href="{% url 'curve_equation' pk=object.pk %}">Choose a different curve</a></p>
 
   {% if object.can_calculate_curve %}
     <img class="img-responsive" style="border: 1px solid #eee" src="{% url 'curve_table_png' pk=object.id %}">

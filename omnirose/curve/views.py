@@ -77,7 +77,6 @@ class CurveTableView(CurveVisualisationBaseView):
     def alter_curve(self, curve):
         equation_slug = self.request.GET.get('equation', None)
         if equation_slug:
-            print 'equation_slug:' + repr(equation_slug)
             curve.equation_slug = equation_slug
 
 
