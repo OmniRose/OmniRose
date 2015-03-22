@@ -1,7 +1,7 @@
 from django.test import TestCase
 
 # Create your tests here.
-from .models import Curve, Reading
+from .models import Curve, Reading, ErrorNoSuitableEquationAvailable
 from .samples import create_database_curve_from_sample, create_curve_calculation_from_sample, samples
 
 class DeviationTestBase(object):
@@ -38,6 +38,31 @@ class DeviationTestBase(object):
 
         too_few_points_curve = self.create_curve('too_few_points')
         self.assertFalse(too_few_points_curve.can_calculate_curve)
+
+    def test_choose_equation(self):
+        self.assertTrue(self.curve.choose_equation())
+
+        too_few_points_curve = self.create_curve('too_few_points')
+        self.assertRaises(ErrorNoSuitableEquationAvailable, too_few_points_curve.choose_equation)
+
+    def test_suitable_equations_as_choices(self):
+        self.assertEqual(
+            self.curve.suitable_equations_as_choices(),
+            [
+                ('trig_13', '13 variable trig curve'),
+                ('trig_13', '11 variable trig curve'),
+                ('trig_13', '9 variable trig curve'),
+                ('trig_13', '7 variable trig curve'),
+                ('trig_13', '5 variable trig curve'),
+                ('trig_13', '3 variable trig curve'),
+            ]
+        )
+
+        too_few_points_curve = self.create_curve('too_few_points')
+        self.assertEqual(
+            too_few_points_curve.suitable_equations_as_choices(),
+            []
+        )
 
 
 class DeviationDatabaseTestCase(DeviationTestBase, TestCase):

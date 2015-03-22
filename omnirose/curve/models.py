@@ -10,52 +10,11 @@ from scipy.optimize import curve_fit, OptimizeWarning
 
 from accounts.models import User
 
+from .equations import all_equations
 
+class ErrorNoSuitableEquationAvailable(Exception):
+    pass
 
-# Curve equations - which one is used depends on the number of points available
-# to plot to. There must be more points than there are variables.
-def _raw_curve_equation_3(heading, A, B, C):
-    return _raw_curve_equation_generic(heading, A, B, C)
-
-def _raw_curve_equation_5(heading, A, B, C, D, E):
-    return _raw_curve_equation_generic(heading, A, B, C, D, E)
-
-def _raw_curve_equation_7(heading, A, B, C, D, E, F, G):
-    return _raw_curve_equation_generic(heading, A, B, C, D, E, F, G)
-
-def _raw_curve_equation_9(heading, A, B, C, D, E, F, G, H, I):
-    return _raw_curve_equation_generic(heading, A, B, C, D, E, F, G, H, I)
-
-def _raw_curve_equation_11(heading, A, B, C, D, E, F, G, H, I, J, K):
-    return _raw_curve_equation_generic(heading, A, B, C, D, E, F, G, H, I, J, K)
-
-def _raw_curve_equation_13(heading, A, B, C, D, E, F, G, H, I, J, K, L, M):
-    return _raw_curve_equation_generic(heading, A, B, C, D, E, F, G, H, I, J, K, L, M)
-
-def _raw_curve_equation_generic(heading, A, *args):
-    heading_in_radians = numpy.radians(heading)
-
-    result = A
-
-    multiplier = 1
-
-    while len(args):
-        result = result + args[0] * numpy.sin(multiplier * heading_in_radians)
-        result = result + args[1] * numpy.cos(multiplier * heading_in_radians)
-
-        args = numpy.delete(args, [0,1])
-        multiplier = multiplier + 1
-
-    return result
-
-_raw_curve_equations = (
-    (13, _raw_curve_equation_13),
-    (11, _raw_curve_equation_11),
-    (9,  _raw_curve_equation_9),
-    (7,  _raw_curve_equation_7),
-    (5,  _raw_curve_equation_5),
-    (3,  _raw_curve_equation_3),
-)
 
 
 class CurveCalculations(object):
@@ -138,6 +97,29 @@ class CurveCalculations(object):
     def readings_as_dict(self):
         return self._readings_as_dict
 
+
+    def suitable_equations(self):
+        point_count = len( self.readings_as_dict.values() )
+
+        suitable = []
+        for data in all_equations:
+            if data['points_needed'] <= point_count:
+                suitable.append(data)
+        return suitable
+
+
+    def choose_equation(self):
+        try:
+            return self.suitable_equations()[0]['equation']
+        except IndexError:
+            raise ErrorNoSuitableEquationAvailable("No suitable equation could be found for this curve")
+
+    def suitable_equations_as_choices(self):
+        choices = []
+        for data in self.suitable_equations():
+            choices.append(( data['slug'], data['name']))
+        return choices
+
     def calculate_curve(self):
 
         self._min_deviation = None
@@ -151,9 +133,7 @@ class CurveCalculations(object):
             deviations.append(deviation)
 
         # Work out which equation to use
-        for arg_count, equation in _raw_curve_equations:
-            if len(headings) >= arg_count:
-                break
+        equation = self.choose_equation()
 
         with warnings.catch_warnings():
             # We might get an "OptimizeWarning" that we want to ignore
