@@ -204,3 +204,11 @@ class CurveReadingEditView(CurvePermissionMixin, CurveSetObjectMixin, FormView):
             curve.reading_set.create(ships_head=ships_head, deviation=deviation)
 
         return super(CurveReadingEditView, self).form_valid(form)
+
+    def get_success_url(self):
+        curve = self.get_object()
+        if curve.can_calculate_curve:
+            return reverse('curve_equation', kwargs={'pk': self.get_object().id } )
+        else:
+            return super(CurveReadingEditView, self).get_success_url()
+
