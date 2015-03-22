@@ -16,17 +16,21 @@ class DegreeInput(NumberInput):
 
     """Strip decimal points if not needed"""
     def _format_value(self, value):
-        return u"%g" % value
+        return u"%g" % float(value)
 
 
 class ReadingForm(forms.Form):
     ships_head = forms.FloatField(
         required=False,
+        min_value=0,
+        max_value=359,
         widget=DegreeInput(attrs={'tabindex': 0})
     )
 
     deviation = forms.FloatField(
         required=False,
+        min_value=-180,
+        max_value=180,
         widget=DegreeInput(attrs={'tabindex': 1, "autofocus": 1})
     )
 

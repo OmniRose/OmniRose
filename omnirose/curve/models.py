@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models import Max, Min
 from django.core.urlresolvers import reverse
+from  django.core.validators import MinValueValidator, MaxValueValidator
 
 import warnings
 
@@ -189,8 +190,8 @@ class Curve(CurveCalculations, models.Model):
 
 class Reading(models.Model):
     curve = models.ForeignKey(Curve)
-    ships_head = models.FloatField()
-    deviation = models.FloatField()
+    ships_head = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(359)])
+    deviation = models.FloatField(validators=[MinValueValidator(-180), MaxValueValidator(180)])
 
     class Meta():
         ordering = ['ships_head']

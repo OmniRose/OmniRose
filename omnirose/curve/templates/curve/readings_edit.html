@@ -4,11 +4,39 @@
 
 {% block content %}
 
-  <h1>{{ object.vessel }} Readings</h1>
+  <div class="row">
+    <div class="col-sm-6 col-sm-offset-3 text-center">
+      <h1>Edit Readings</h1>
+    </div>
+  </div>
+
+
+  <div class="row">
+  <div class="col-sm-6 col-sm-offset-3 text-center">
 
   {% with form as formset %}
 
-  <div class="col-sm-6 col-sm-offset-3 text-center">
+    {% if formset.errors %}
+      <div class="bg-danger">
+        <p>
+          <strong>Error:</strong> There are errors below, marked by the <span class="text-danger glyphicon glyphicon-asterisk"></span>. Please check the values.
+        </p>
+      </div>
+    {% endif %}
+
+    <div class="text-info">
+      <p>
+        <span class="glyphicon glyphicon-info-sign"></span>
+        Any rows where the deviation is empty will be ignored.
+      </p>
+
+      <p>
+        <span class="glyphicon glyphicon-info-sign"></span>
+        Westerly deviations are negative, eastery positive.<br>
+        So <code>1°W</code> should be entered as <code>-1</code>.
+      </p>
+    </div>
+
     <form method="post" action="">
       {% csrf_token %}
       {{ formset.management_form }}
@@ -17,8 +45,14 @@
 
         <thead>
           <tr>
-            <th class="text-center">Ship's Head</th>
-            <th class="text-center">Deviation</th>
+            <th class="text-center">
+              Ship's Head<br>
+              <span class="small">0 to 359</span>
+            </th>
+            <th class="text-center">
+              Deviation<br>
+              <span class="small">-180 to 180</span>
+            </th>
           </tr>
         </thead>
 
@@ -27,10 +61,16 @@
           {% for reading_form in formset %}
             <tr>
               <td>
+                {% if reading_form.ships_head.errors %}
+                  <span class="text-danger glyphicon glyphicon-asterisk"></span>
+                {% endif %}
                 {{ reading_form.ships_head }}°
               </td>
 
               <td>
+                {% if reading_form.deviation.errors %}
+                  <span class="text-danger glyphicon glyphicon-asterisk"></span>
+                {% endif %}
                 {{ reading_form.deviation }}°
               </td>
             </tr>
@@ -39,12 +79,14 @@
         </tbody>
       </table>
 
-      <button type="submit" class="btn btn-default">Save</button>
+      <button type="submit" class="btn btn-default" tabindex=2>Save</button>
 
     </form>
 
+  {% endwith %}
+
+  </div>
   </div>
 
-  {% endwith %}
 
 {% endblock %}

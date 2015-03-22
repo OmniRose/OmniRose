@@ -1,7 +1,5 @@
 # Todo items
 
-* validate reading entries so that they are reasonable (ie 0 <= head < 360, -180 < dev < 180)
-
 * Allow people to choose the equation used to match the curve to the readings
 
 * generate several roses into one pdf
