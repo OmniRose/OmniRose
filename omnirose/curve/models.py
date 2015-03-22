@@ -156,8 +156,18 @@ class CurveCalculations(object):
 class Curve(CurveCalculations, models.Model):
 
     user   = models.ForeignKey(User, blank=True, null=True)
-    vessel = models.CharField(max_length=80)
-    note   = models.CharField(max_length=80, blank=True)
+
+    vessel = models.CharField(
+        max_length=80,
+        verbose_name="Vessel's Name",
+        help_text='e.g. "SV Gypsy Moth"',
+    )
+    note = models.CharField(
+        max_length=80,
+        blank=True,
+        verbose_name="Note",
+        help_text='e.g. "Steering compass" or "with radio mounted on binnacle"',
+    )
     equation_slug = models.CharField(
         max_length=80,
         choices=CurveCalculations.all_equations_as_choices(),
