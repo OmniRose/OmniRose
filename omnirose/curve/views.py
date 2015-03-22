@@ -8,7 +8,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 
 from .models import Curve, Reading
 from .forms import ReadingForm, ReadingFormSet
@@ -44,6 +44,11 @@ class CurveVisualisationBaseView(CurvePermissionMixin, DetailView):
 
     def get(self, request, *args, **kwargs):
         curve = self.get_object()
+
+        # Check that the curve can be calculated, otherwise bail here
+        if not curve.can_calculate_curve:
+            raise Http404("Cannot calculate curve, too few points perhaps?")
+
         kwargs = self.visualisation_args
         vis = self.visualisation_class(curve=curve, **kwargs)
         vis.draw()

@@ -4,7 +4,11 @@
 
 {% block content %}
 
-<h1>{{ object.vessel }} <small>{{ object.note }}</small></h1>
+<div class="row">
+  <div class="col-sm-12 text-center">
+    <h1>{{ object.vessel }} <small>{{ object.note }}</small></h1>
+  </div>
+</div>
 
 <div class="row">
 <div class="col-sm-4 text-center">
@@ -43,16 +47,30 @@
 <div class="col-sm-4 text-center">
   <h2>Deviation Table</h2>
 
-  <img class="img-responsive" style="border: 1px solid #eee" src="{% url 'curve_table_png' pk=object.id %}">
+  <p>Low-res sample table.</p>
+
+  {% if object.can_calculate_curve %}
+    <img class="img-responsive" style="border: 1px solid #eee" src="{% url 'curve_table_png' pk=object.id %}">
+  {% else %}
+    <p class="text-warning">Preview cannot be generated as there are too few deviation readings.</p>
+    <p class="text-warning">Please <a href="{% url 'curve_readings' pk=object.id %}">enter some</a>.</p>
+  {% endif %}
+
 </div>
 
 
 <div class="col-sm-4 text-center">
-  <h2>Conversion Rose</h2>
+  <h2>OmniRose</h2>
 
-  <img class="img-responsive" style="border: 1px solid #eee" src="{% url 'curve_rose_png' pk=object.id %}">
+  <p>Low-res sample for 7°W variation.</p>
+
+  {% if object.can_calculate_curve %}
+    <img class="img-responsive" style="border: 1px solid #eee" src="{% url 'curve_rose_png' pk=object.id %}">
+  {% else %}
+    <p class="text-warning">Preview cannot be generated as there are too few deviation readings.</p>
+    <p class="text-warning">Please <a href="{% url 'curve_readings' pk=object.id %}">enter some</a>.</p>
+  {% endif %}
 </div>
-
 
 </div>
 {% endblock %}

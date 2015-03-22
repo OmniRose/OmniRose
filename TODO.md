@@ -18,6 +18,7 @@
 
 * Make niceties of login work - eg pass the email address across from login to create account or forgot password.
 
+* 404 page
 
 ## production
 
