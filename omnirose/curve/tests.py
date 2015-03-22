@@ -21,8 +21,8 @@ class DeviationTestBase(object):
         self.assertEqual(self.curve.deviation_at(100), 4.509)
 
     def test_max_and_and_min_deviation_as_expected(self):
-        self.assertEqual(self.curve.min_deviation, -6)
-        self.assertEqual(self.curve.max_deviation, 6)
+        self.assertEqual(self.curve.min_deviation, -7)
+        self.assertEqual(self.curve.max_deviation, 7)
 
         handbook_curve = self.create_curve('instrument_flying_handbook')
         self.assertEqual(handbook_curve.min_deviation, -7)

@@ -96,8 +96,9 @@ class CurveCalculations(object):
             if dev < min_dev: min_dev = dev
             if dev > max_dev: max_dev = dev
 
-        self._min_deviation = int(numpy.floor(min_dev))
-        self._max_deviation = int(numpy.ceil(max_dev))
+        padding = 0.05
+        self._min_deviation = int(numpy.floor(min_dev - padding))
+        self._max_deviation = int(numpy.ceil(max_dev + padding))
 
 
     def deviation_at(self, heading):
