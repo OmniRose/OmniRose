@@ -22,12 +22,12 @@ class DegreeInput(NumberInput):
 class ReadingForm(forms.Form):
     ships_head = forms.FloatField(
         required=False,
-        widget=DegreeInput()
+        widget=DegreeInput(attrs={'tabindex': 0})
     )
 
     deviation = forms.FloatField(
         required=False,
-        widget=DegreeInput()
+        widget=DegreeInput(attrs={'tabindex': 1, "autofocus": 1})
     )
 
 ReadingFormSet = formset_factory(form=ReadingForm)
