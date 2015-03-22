@@ -157,7 +157,7 @@ class Curve(CurveCalculations, models.Model):
 
     user   = models.ForeignKey(User, blank=True, null=True)
     vessel = models.CharField(max_length=80)
-    note   = models.CharField(max_length=80)
+    note   = models.CharField(max_length=80, blank=True)
     equation_slug = models.CharField(
         max_length=80,
         choices=CurveCalculations.all_equations_as_choices(),
