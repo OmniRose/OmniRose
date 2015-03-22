@@ -15,25 +15,28 @@
 
       <table class="table table-striped table-bordered table-condensed">
 
-        <tr>
-          <th class="text-center">Ship's Head</th>
-          <th class="text-center">Deviation</th>
-        </tr>
+        <thead>
+          <tr>
+            <th class="text-center">Ship's Head</th>
+            <th class="text-center">Deviation</th>
+          </tr>
+        </thead>
 
+        <tbody>
 
           {% for reading_form in formset %}
-          <tr>
-            <td>
-              {{ reading_form.ships_head }}°
-            </td>
+            <tr>
+              <td>
+                {{ reading_form.ships_head }}°
+              </td>
 
-            <td>
-              {{ reading_form.deviation }}
-            </td>
-          </tr>
-
-
+              <td>
+                {{ reading_form.deviation }}°
+              </td>
+            </tr>
           {% endfor %}
+
+        </tbody>
       </table>
 
       <button type="submit" class="btn btn-default">Save</button>
