@@ -1,7 +1,5 @@
 # Todo items
 
-* Capture readings from form into database
-
 * produce sample table image from inital data points
 
 * Allow people to choose the equation used to match the curve to the readings

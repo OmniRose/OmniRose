@@ -10,9 +10,7 @@ import cairocffi as cairo
 
 
 class Table:
-
-
-    def __init__(self, curve=None):
+    def __init__(self, curve=None, file_type='pdf'):
         self.SURFACE_SIZE = 500.
 
         self.grid_top    = 120.
@@ -29,11 +27,19 @@ class Table:
 
         self.reading_point_radius = 1.5
 
-        (handle, cairo_tmp) = tempfile.mkstemp('.pdf', 'omnirose-table')
+        file_suffix = '.' + file_type
+        (handle, cairo_tmp) = tempfile.mkstemp(file_suffix, 'omnirose-table')
         os.close(handle)
         self.filename = cairo_tmp
 
-        self.surface = cairo.PDFSurface(self.filename, self.SURFACE_SIZE, self.SURFACE_SIZE)
+        if file_type == 'pdf':
+            surface_class = cairo.PDFSurface
+        elif file_type == 'svg':
+            surface_class = cairo.SVGSurface
+        else:
+            raise Exception("Unknown file type '%s'" % file_type)
+
+        self.surface = surface_class(self.filename, self.SURFACE_SIZE, self.SURFACE_SIZE)
         self.context = cairo.Context(self.surface)
         self.curve = curve
 
