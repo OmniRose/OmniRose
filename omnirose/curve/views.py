@@ -8,8 +8,13 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 
+from django.http import HttpResponse
+
 from .models import Curve, Reading
 from .forms import ReadingForm, ReadingFormSet
+
+from table.models import Table
+from rose.models import Rose
 
 
 class CurvePermissionMixin(object):
@@ -31,6 +36,31 @@ class CurveView(CurvePermissionMixin, DetailView):
     # FIXME - add logic to check that user owns this curve or it is public
 
     model = Curve
+
+
+class CurveVisualisationBaseView(CurvePermissionMixin, DetailView):
+    model = Curve
+    visualisation_args = {}
+
+    def get(self, request, *args, **kwargs):
+        curve = self.get_object()
+        kwargs = self.visualisation_args
+        vis = self.visualisation_class(curve=curve, **kwargs)
+        vis.draw()
+
+        # Create a response and write the png data to it
+        response = HttpResponse(content_type='image/png')
+        vis.surface.write_to_png(response)
+        return response
+
+
+class CurveTableView(CurveVisualisationBaseView):
+    visualisation_class = Table
+
+
+class CurveRoseView(CurveVisualisationBaseView):
+    visualisation_class = Rose
+    visualisation_args = {'variation': -7}
 
 
 class YourCurveListView(ListView):
