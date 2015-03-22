@@ -40,7 +40,9 @@ class CurveView(CurvePermissionMixin, DetailView):
 
 class CurveVisualisationBaseView(CurvePermissionMixin, DetailView):
     model = Curve
-    visualisation_args = {}
+
+    def get_visualisation_args(self):
+        return {}
 
     def alter_curve(self, curve):
         pass
@@ -53,7 +55,7 @@ class CurveVisualisationBaseView(CurvePermissionMixin, DetailView):
         if not curve.can_calculate_curve:
             raise Http404("Cannot calculate curve, too few points perhaps?")
 
-        kwargs = self.visualisation_args
+        kwargs = self.get_visualisation_args()
         vis = self.visualisation_class(curve=curve, **kwargs)
         vis.draw()
 
@@ -66,6 +68,12 @@ class CurveVisualisationBaseView(CurvePermissionMixin, DetailView):
 class CurveTableView(CurveVisualisationBaseView):
     visualisation_class = Table
 
+    def get_visualisation_args(self):
+        if self.request.GET.get('crop', None):
+            return { 'crop': True }
+        else:
+            return {}
+
     def alter_curve(self, curve):
         equation_slug = self.request.GET.get('equation', None)
         if equation_slug:
@@ -75,7 +83,9 @@ class CurveTableView(CurveVisualisationBaseView):
 
 class CurveRoseView(CurveVisualisationBaseView):
     visualisation_class = Rose
-    visualisation_args = {'variation': -7}
+
+    def get_visualisation_args(self):
+        return {'variation': -7}
 
 
 class YourCurveListView(ListView):

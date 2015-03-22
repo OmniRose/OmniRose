@@ -14,11 +14,17 @@ import cairocffi as cairo
 # Which approximates to 590 x 790 (shrunk a bit for safety)
 
 class Table:
-    def __init__(self, curve=None, file_type='pdf'):
-        self.SURFACE_HEIGHT = 790.
-        self.SURFACE_WIDTH  = 590.
+    def __init__(self, curve=None, file_type='pdf', crop=False):
 
-        self.grid_top    = 220.
+        if crop:
+            self.SURFACE_HEIGHT = 540.
+            self.SURFACE_WIDTH  = 350.
+            self.grid_top       = 20.
+        else:
+            self.SURFACE_HEIGHT = 790.
+            self.SURFACE_WIDTH  = 590.
+            self.grid_top       = 220.
+
         self.grid_height = 500.
         self.grid_width  = 300.
         self.grid_bleed  = 2.

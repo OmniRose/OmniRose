@@ -37,7 +37,11 @@
 
 
   {% if object.can_calculate_curve %}
-    <img id="table_preview" style="border: 1px solid #eee; max-width: 100%" src="{% url 'curve_table_png' pk=object.id %}">
+    <img
+      id="table_preview"
+      style="border: 1px solid #eee; max-width: 100%"
+      src="{% url 'curve_table_png' pk=object.id %}?crop=1"
+    >
   {% else %}
     <p class="text-warning">Preview cannot be generated as there are too few deviation readings.</p>
     <p class="text-warning">Please <a href="{% url 'curve_readings' pk=object.id %}">enter some</a>.</p>
@@ -66,7 +70,7 @@
       $select_box.on('change', function () {
         var selected_equation = $(this).val();
         console.debug(selected_equation);
-        var new_src = base_src_url + "?equation=" + selected_equation;
+        var new_src = base_src_url + "&equation=" + selected_equation;
         console.debug(new_src);
         $table_preview.attr('src', new_src);
       });
