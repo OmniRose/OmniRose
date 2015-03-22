@@ -1,6 +1,26 @@
 # Todo items
 
+* Compress the number of readings shown - provide another page just with the readings on.
+
+* Show name, notes and dates more clearly
+
+* Allow user to edit vessel, notes etc
+
+* Improve flow from home page to create a new curve.
+
+* store date that the deviations were collected on (can be free form text).
+
+* add text on the table
+
+* add text on the rose
+
+* breadcrumbs?
+
+* Safari issue - autofocussed input is the last deviation
+
 * generate several roses into one pdf
+
+* change rose so that the ticks are staggered away from the join
 
 * Allow some tables to be marked as public (and give them a memorable slug)
 
