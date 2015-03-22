@@ -1,7 +1,5 @@
 # Todo items
 
-* Allow people to choose the equation used to match the curve to the readings
-
 * generate several roses into one pdf
 
 * Allow some tables to be marked as public (and give them a memorable slug)

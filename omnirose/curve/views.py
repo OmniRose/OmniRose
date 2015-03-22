@@ -1,5 +1,5 @@
 from django.views.generic.list import ListView
-from django.views.generic.edit import CreateView, FormView
+from django.views.generic.edit import CreateView, FormView, UpdateView
 from django.views.generic.detail import DetailView, SingleObjectMixin
 
 from django.shortcuts import redirect
@@ -11,7 +11,7 @@ from django.utils.decorators import method_decorator
 from django.http import HttpResponse, Http404
 
 from .models import Curve, Reading
-from .forms import ReadingForm, ReadingFormSet
+from .forms import ReadingForm, ReadingFormSet, EquationChoiceForm
 
 from table.models import Table
 from rose.models import Rose
@@ -42,8 +42,12 @@ class CurveVisualisationBaseView(CurvePermissionMixin, DetailView):
     model = Curve
     visualisation_args = {}
 
+    def alter_curve(self, curve):
+        pass
+
     def get(self, request, *args, **kwargs):
         curve = self.get_object()
+        self.alter_curve(curve)
 
         # Check that the curve can be calculated, otherwise bail here
         if not curve.can_calculate_curve:
@@ -61,6 +65,12 @@ class CurveVisualisationBaseView(CurvePermissionMixin, DetailView):
 
 class CurveTableView(CurveVisualisationBaseView):
     visualisation_class = Table
+
+    def alter_curve(self, curve):
+        equation_slug = self.request.GET.get('equation', None)
+        if equation_slug:
+            print 'equation_slug:' + repr(equation_slug)
+            curve.equation_slug = equation_slug
 
 
 class CurveRoseView(CurveVisualisationBaseView):
@@ -100,7 +110,40 @@ class CurveCreateView(CreateView):
 
         return redirect( reverse('curve_readings', kwargs={'pk': obj.id}) )
 
-class CurveReadingEditView(CurvePermissionMixin, SingleObjectMixin, FormView):
+
+class CurveSetObjectMixin(SingleObjectMixin):
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super(CurveSetObjectMixin, self).get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super(CurveSetObjectMixin, self).post(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return self.get_object().get_absolute_url()
+
+
+class CurveEquationSelectView(CurvePermissionMixin, CurveSetObjectMixin, FormView):
+    model = Curve
+    template_name = "curve/equation_select.html"
+    form_class = EquationChoiceForm
+
+    def get_form_kwargs(self):
+        kwargs = super(CurveEquationSelectView, self).get_form_kwargs()
+        kwargs['equation_choices'] = self.object.suitable_equations_as_choices()
+        kwargs['equation_initial'] = self.object.equation_slug
+        return kwargs
+
+    def form_valid(self, form):
+        curve = self.object
+        curve.equation_slug = form['equation'].value()
+        curve.save()
+        return super(CurveEquationSelectView, self).form_valid(form)
+
+
+
+class CurveReadingEditView(CurvePermissionMixin, CurveSetObjectMixin, FormView):
     model = Curve
     template_name = "curve/readings_edit.html"
 
@@ -132,17 +175,6 @@ class CurveReadingEditView(CurvePermissionMixin, SingleObjectMixin, FormView):
             kwargs['initial'] = initial
 
         return kwargs
-
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        return super(CurveReadingEditView, self).get(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        return super(CurveReadingEditView, self).post(request, *args, **kwargs)
-
-    def get_success_url(self):
-        return self.get_object().get_absolute_url()
 
     def get_context_data(self, **kwargs):
         context = super(CurveReadingEditView, self).get_context_data(**kwargs)

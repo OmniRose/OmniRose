@@ -35,3 +35,12 @@ class ReadingForm(forms.Form):
     )
 
 ReadingFormSet = formset_factory(form=ReadingForm)
+
+
+class EquationChoiceForm(forms.Form):
+    def __init__(self, equation_choices, equation_initial, *args, **kwargs):
+        super(EquationChoiceForm, self).__init__(*args, **kwargs)
+
+        self.fields['equation'] = forms.ChoiceField(choices=equation_choices, initial=equation_initial)
+
+

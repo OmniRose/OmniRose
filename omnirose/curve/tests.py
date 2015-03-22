@@ -2,6 +2,7 @@ from django.test import TestCase
 
 # Create your tests here.
 from .models import Curve, Reading, ErrorNoSuitableEquationAvailable
+from .equations import all_equations
 from .samples import create_database_curve_from_sample, create_curve_calculation_from_sample, samples
 
 class DeviationTestBase(object):
@@ -40,8 +41,14 @@ class DeviationTestBase(object):
         self.assertFalse(too_few_points_curve.can_calculate_curve)
 
     def test_choose_equation(self):
-        self.assertTrue(self.curve.choose_equation())
+        # curve with lots of points
+        self.assertEqual(self.curve.choose_equation(), all_equations[0]['equation'])
 
+        # curve with fewer points
+        four_point_curve = self.create_curve('four_points')
+        self.assertEqual(four_point_curve.choose_equation(), all_equations[5]['equation'])
+
+        # No equation should match, raise exception
         too_few_points_curve = self.create_curve('too_few_points')
         self.assertRaises(ErrorNoSuitableEquationAvailable, too_few_points_curve.choose_equation)
 
@@ -50,11 +57,11 @@ class DeviationTestBase(object):
             self.curve.suitable_equations_as_choices(),
             [
                 ('trig_13', '13 variable trig curve'),
-                ('trig_13', '11 variable trig curve'),
-                ('trig_13', '9 variable trig curve'),
-                ('trig_13', '7 variable trig curve'),
-                ('trig_13', '5 variable trig curve'),
-                ('trig_13', '3 variable trig curve'),
+                ('trig_11', '11 variable trig curve'),
+                ('trig_9',  '9 variable trig curve'),
+                ('trig_7',  '7 variable trig curve'),
+                ('trig_5',  '5 variable trig curve'),
+                ('trig_3',  '3 variable trig curve'),
             ]
         )
 
@@ -79,6 +86,25 @@ class DeviationDatabaseTestCase(DeviationTestBase, TestCase):
         self.assertEqual(actual, samples['rya_training_almanac'])
         self.assertEqual(self.curve.readings_as_dict, samples['rya_training_almanac'])
 
+    def test_choose_equation_database(self):
+        expected = all_equations[0]['equation']
+        self.assertEqual(self.curve.choose_equation(), expected)
+
+        self.curve.equation_slug = 'trig_5'
+        self.assertEqual(self.curve.choose_equation(), all_equations[4]['equation'])
+
+        self.curve.equation_slug = 'does_not_exist'
+        self.assertEqual(self.curve.choose_equation(), expected)
+
+        # curve with fewer points
+        four_point_curve = self.create_curve('four_points')
+        self.assertEqual(four_point_curve.choose_equation(), all_equations[5]['equation'])
+
+        # If given invalid equation still pick one that works
+        four_point_curve.equation_slug = 'trig_5'
+        self.assertEqual(four_point_curve.choose_equation(), all_equations[5]['equation'])
+
+
 class DeviationCalculationTestCase(DeviationTestBase, TestCase):
 
     def create_curve(self, sample_name):
@@ -87,3 +113,4 @@ class DeviationCalculationTestCase(DeviationTestBase, TestCase):
     def test_readings_as_expected(self):
         """All reading included and correct accuracy"""
         self.assertEqual(self.curve.readings_as_dict, samples['rya_training_almanac'])
+

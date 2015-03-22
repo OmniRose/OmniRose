@@ -114,11 +114,19 @@ class CurveCalculations(object):
         except IndexError:
             raise ErrorNoSuitableEquationAvailable("No suitable equation could be found for this curve")
 
-    def suitable_equations_as_choices(self):
+    @classmethod
+    def equations_as_choices(cls, equations):
         choices = []
-        for data in self.suitable_equations():
+        for data in equations:
             choices.append(( data['slug'], data['name']))
         return choices
+
+    @classmethod
+    def all_equations_as_choices(cls):
+        return cls.equations_as_choices(all_equations)
+
+    def suitable_equations_as_choices(self):
+        return self.equations_as_choices(self.suitable_equations())
 
     def calculate_curve(self):
 
@@ -150,6 +158,11 @@ class Curve(CurveCalculations, models.Model):
     user   = models.ForeignKey(User, blank=True, null=True)
     vessel = models.CharField(max_length=80)
     note   = models.CharField(max_length=80)
+    equation_slug = models.CharField(
+        max_length=80,
+        choices=CurveCalculations.all_equations_as_choices(),
+        blank=True
+    )
 
     created = models.DateTimeField(auto_now_add=True)
 
@@ -166,6 +179,18 @@ class Curve(CurveCalculations, models.Model):
         for reading in readings:
             as_dict[reading.ships_head] = reading.deviation
         return as_dict
+
+    def choose_equation(self):
+        # Do we have an equation stored that we should try to use?
+        preferred_equation_slug = self.equation_slug
+        if preferred_equation_slug:
+            for choice in self.suitable_equations():
+                if preferred_equation_slug == choice['slug']:
+                    return choice['equation']
+
+        # If we could not find one then let the code find the best one
+        return super(Curve, self).choose_equation()
+
 
 
 class Reading(models.Model):

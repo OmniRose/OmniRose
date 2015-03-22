@@ -274,6 +274,13 @@ samples['flat_line'] = {
     270: 0,
 }
 
+# four points (used to test equation selection logic)
+samples['four_points'] = {
+    0: 0,
+    90: 2,
+    180: 0,
+    270: -2,
+}
 # Testing that flat lines do not give divide by zero errors
 samples['too_few_points'] = {
     0: 0,

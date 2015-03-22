@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}{{ object.vessel }} equation selection{% endblock %}
+
+{% block content %}
+
+  <div class="row">
+    <div class="col-sm-6 col-sm-offset-3 text-center">
+      <h1>Choose equation</h1>
+    </div>
+  </div>
+
+
+  <div class="row">
+  <div class="col-sm-6 col-sm-offset-3 text-center">
+
+    <form role="form" action="" method="post">
+        {% csrf_token %}
+
+        {{ form.non_field_errors }}
+
+      <div class="form-group">
+        {{ form.equation.errors }}
+        <label for="{{ form.equation.id_for_label }}">{{ form.equation.label}}:</label>
+        {{ form.equation }}
+      </div>
+
+      <button type="submit" class="btn btn-default">Select</button>
+
+    </form>
+
+  </div>
+  </div>
+
+  <div class="row">
+  <div class="col-sm-12 text-center">
+
+
+  {% if object.can_calculate_curve %}
+    <img id="table_preview" style="border: 1px solid #eee; max-width: 100%" src="{% url 'curve_table_png' pk=object.id %}">
+  {% else %}
+    <p class="text-warning">Preview cannot be generated as there are too few deviation readings.</p>
+    <p class="text-warning">Please <a href="{% url 'curve_readings' pk=object.id %}">enter some</a>.</p>
+  {% endif %}
+
+  </div>
+  </div>
+
+{% endblock %}
+
+{% block javascript %}
+  <script type="text/javascript">
+
+    console.debug('running js');
+
+    $(function () {
+
+      console.debug('in onReady');
+
+      var $table_preview = $("#table_preview");
+      var base_src_url = $table_preview.attr('src');
+      console.debug(base_src_url);
+
+      var $select_box = $('#{{ form.equation.id_for_label }}');
+      console.debug($select_box);
+      $select_box.on('change', function () {
+        var selected_equation = $(this).val();
+        console.debug(selected_equation);
+        var new_src = base_src_url + "?equation=" + selected_equation;
+        console.debug(new_src);
+        $table_preview.attr('src', new_src);
+      });
+
+    });
+  </script>
+{% endblock %}
+
+
