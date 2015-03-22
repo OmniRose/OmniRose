@@ -273,3 +273,9 @@ samples['flat_line'] = {
     180: 0,
     270: 0,
 }
+
+# Testing that flat lines do not give divide by zero errors
+samples['too_few_points'] = {
+    0: 0,
+    90: 1,
+}

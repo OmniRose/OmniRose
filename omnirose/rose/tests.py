@@ -10,6 +10,10 @@ class RoseTestCase(TestCase):
     def test_rose_creation(self):
         for name, sample in samples.items():
             curve = create_database_curve_from_sample(sample)
+
+            if not curve.can_calculate_curve:
+                continue
+
             rose = Rose(variation=0, curve=curve)
             rose.draw()
             os.rename(rose.filename, "test_output/rose_%s.pdf" % name)

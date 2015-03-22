@@ -33,6 +33,12 @@ class DeviationTestBase(object):
         self.assertEqual( self.curve.compass_to_true(90), 93.843)
         self.assertEqual( self.curve.compass_to_true(90, 10), 103.843)
 
+    def test_can_calculate_curve(self):
+        self.assertTrue(self.curve.can_calculate_curve)
+
+        too_few_points_curve = self.create_curve('too_few_points')
+        self.assertFalse(too_few_points_curve.can_calculate_curve)
+
 
 class DeviationDatabaseTestCase(DeviationTestBase, TestCase):
 

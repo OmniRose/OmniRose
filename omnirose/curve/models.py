@@ -70,6 +70,11 @@ class CurveCalculations(object):
     _readings_as_dict = None
 
     @property
+    def can_calculate_curve(self):
+        number_of_points = len(self.readings_as_dict.values())
+        return number_of_points >= 3
+
+    @property
     def min_deviation(self):
         self._find_max_and_min_deviation_if_needed()
         return self._min_deviation
