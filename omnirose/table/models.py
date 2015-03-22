@@ -8,14 +8,19 @@ import cairocffi as cairo
 
 # This model does not persist to the database
 
+# http://en.wikipedia.org/wiki/Paper_size#PA_series
+# useful compromise between A4 and letter: 210mm × 280mm
+# In points this is: 595.275591 x 793.700787
+# Which approximates to 590 x 790 (shrunk a bit for safety)
 
 class Table:
     def __init__(self, curve=None, file_type='pdf'):
-        self.SURFACE_SIZE = 500.
+        self.SURFACE_HEIGHT = 790.
+        self.SURFACE_WIDTH  = 590.
 
-        self.grid_top    = 120.
-        self.grid_height = 360.
-        self.grid_width  = 200.
+        self.grid_top    = 220.
+        self.grid_height = 500.
+        self.grid_width  = 300.
         self.grid_bleed  = 2.
 
         self.width_cardinal = 1 # N, S, E, W
@@ -39,7 +44,7 @@ class Table:
         else:
             raise Exception("Unknown file type '%s'" % file_type)
 
-        self.surface = surface_class(self.filename, self.SURFACE_SIZE, self.SURFACE_SIZE)
+        self.surface = surface_class(self.filename, self.SURFACE_WIDTH, self.SURFACE_HEIGHT)
         self.context = cairo.Context(self.surface)
         self.curve = curve
 
@@ -62,11 +67,11 @@ class Table:
 
     @property
     def grid_left(self):
-        return self.SURFACE_SIZE / 2 - self.grid_width / 2
+        return self.SURFACE_WIDTH / 2 - self.grid_width / 2
 
     @property
     def grid_right(self):
-        return self.SURFACE_SIZE / 2 + self.grid_width / 2
+        return self.SURFACE_WIDTH / 2 + self.grid_width / 2
 
     @property
     def grid_content_left(self):
@@ -101,7 +106,7 @@ class Table:
     def draw_degrees_grid(self):
         context = self.context
 
-        midpoint = self.SURFACE_SIZE / 2
+        midpoint = self.SURFACE_WIDTH / 2
         x_start = midpoint - self.grid_width / 2
         x_end   = midpoint + self.grid_width / 2
 

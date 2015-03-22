@@ -13,10 +13,12 @@ class Rose:
 
 
     def __init__(self, variation, curve=None):
-        self.SURFACE_SIZE = 500.
+        self.SURFACE_HEIGHT = 790.
+        self.SURFACE_WIDTH  = 590.
+
         self.rose_width = 30.
         self.inter_rose_gap = 1.
-        self.edge_indent = 10.
+        self.edge_indent = 30.
 
         self.width_cardinal = 3 # N, S, E, W
         # self.width_ordinal  = 0.1 # NE, SW, SE, NE
@@ -28,22 +30,22 @@ class Rose:
         os.close(handle)
         self.filename = cairo_tmp
 
-        self.surface = cairo.PDFSurface(self.filename, self.SURFACE_SIZE, self.SURFACE_SIZE)
+        self.surface = cairo.PDFSurface(self.filename, self.SURFACE_WIDTH, self.SURFACE_HEIGHT)
         self.context = cairo.Context(self.surface)
         self.variation = variation
         self.curve = curve
 
 
     def x_for_deg(self, deg, r):
-        return self.SURFACE_SIZE / 2 + r * sin(radians(deg))
+        return self.SURFACE_WIDTH / 2 + r * sin(radians(deg))
 
     def y_for_deg(self, deg, r):
-        return self.SURFACE_SIZE / 2 - r * cos(radians(deg))
+        return self.SURFACE_HEIGHT / 2 - r * cos(radians(deg))
 
 
     def draw(self):
 
-        outer_rose_radius = self.SURFACE_SIZE / 2 - self.edge_indent
+        outer_rose_radius = self.SURFACE_WIDTH / 2 - self.edge_indent
         inner_rose_radius = outer_rose_radius - self.rose_width - self.inter_rose_gap
 
         # Draw the true outer rose
@@ -146,8 +148,8 @@ class Rose:
 
             (x_bearing, y_bearing, width, height, x_advance, y_advance) = context.text_extents(text)
 
-            x = self.SURFACE_SIZE / 2 - 0.5 * width
-            y = self.SURFACE_SIZE / 2 + 0.5 * height
+            x = self.SURFACE_WIDTH / 2 - 0.5 * width
+            y = self.SURFACE_HEIGHT / 2 + 0.5 * height
 
             context.move_to(x,y)
             context.show_text(text)
