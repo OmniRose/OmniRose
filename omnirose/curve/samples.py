@@ -265,3 +265,11 @@ samples['afm_51_37'] = {
     330: 0,
     345: 1,
 }
+
+# Testing that flat lines do not give divide by zero errors
+samples['flat_line'] = {
+    0: 0,
+    90: 0,
+    180: 0,
+    270: 0,
+}
