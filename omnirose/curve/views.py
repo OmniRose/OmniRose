@@ -11,7 +11,22 @@ from django.utils.decorators import method_decorator
 from .models import Curve, Reading
 from .forms import ReadingForm, ReadingFormSet
 
-class CurveView(DetailView):
+
+class CurvePermissionMixin(object):
+
+    def dispatch(self, *args, **kwargs):
+
+        curve = self.get_object()
+        user = self.request.user
+
+        # TODO - will need to add smarts about public curves here
+        if curve.user != user:
+            return redirect('login')
+
+        return super(CurvePermissionMixin, self).dispatch(*args, **kwargs)
+
+
+class CurveView(CurvePermissionMixin, DetailView):
 
     # FIXME - add logic to check that user owns this curve or it is public
 
@@ -50,7 +65,7 @@ class CurveCreateView(CreateView):
 
         return redirect( reverse('curve_readings', kwargs={'pk': obj.id}) )
 
-class CurveReadingEditView(SingleObjectMixin, FormView):
+class CurveReadingEditView(CurvePermissionMixin, SingleObjectMixin, FormView):
     model = Curve
     template_name = "curve/readings_edit.html"
 
