@@ -83,8 +83,8 @@ class DeviationDatabaseTestCase(DeviationTestBase, TestCase):
         for reading in self.curve.reading_set.all():
             actual[reading.ships_head] = reading.deviation
 
-        self.assertEqual(actual, samples['rya_training_almanac'])
-        self.assertEqual(self.curve.readings_as_dict, samples['rya_training_almanac'])
+        self.assertEqual(actual, samples['rya_training_almanac']['readings'])
+        self.assertEqual(self.curve.readings_as_dict, samples['rya_training_almanac']['readings'])
 
     def test_choose_equation_database(self):
         expected = all_equations[0]['equation']
@@ -112,5 +112,5 @@ class DeviationCalculationTestCase(DeviationTestBase, TestCase):
 
     def test_readings_as_expected(self):
         """All reading included and correct accuracy"""
-        self.assertEqual(self.curve.readings_as_dict, samples['rya_training_almanac'])
+        self.assertEqual(self.curve.readings_as_dict, samples['rya_training_almanac']['readings'])
 

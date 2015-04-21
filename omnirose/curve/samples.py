@@ -6,18 +6,19 @@ from .models import Curve, CurveCalculations
 
 def create_database_curve_from_sample(sample):
     curve = Curve.objects.create()
-    for ships_head, deviation in sample.items():
+    for ships_head, deviation in sample['readings'].items():
         curve.reading_set.create(ships_head=ships_head, deviation=deviation)
     return curve
 
 def create_curve_calculation_from_sample(sample):
     curve = CurveCalculations()
-    curve._readings_as_dict = copy.deepcopy(sample)
+    curve._readings_as_dict = copy.deepcopy(sample['readings'])
     return curve
 
 samples = {}
 
-samples['rya_training_almanac'] = {
+samples['rya_training_almanac'] = {}
+samples['rya_training_almanac']['readings'] = {
     0    : -4,
     22.5 : -2,
     45   :  0,
@@ -36,7 +37,8 @@ samples['rya_training_almanac'] = {
     337.5: -5,
 }
 
-samples['rya_training_almanac_every_45'] = {
+samples['rya_training_almanac_every_45'] = {}
+samples['rya_training_almanac_every_45']['readings'] = {
     0    : -4,
     45   :  0,
     90   :  4,
@@ -47,7 +49,8 @@ samples['rya_training_almanac_every_45'] = {
     315  : -6,
 }
 
-samples['rya_training_almanac_every_90'] = {
+samples['rya_training_almanac_every_90'] = {}
+samples['rya_training_almanac_every_90']['readings'] = {
     0    : -4,
     90   :  4,
     180  :  4,
@@ -55,7 +58,8 @@ samples['rya_training_almanac_every_90'] = {
 }
 
 # Astrid 1974
-samples['astrid_1974'] = {
+samples['astrid_1974'] = {}
+samples['astrid_1974']['readings'] = {
     0  : 2,
     15 : 2,
     30 : 1,
@@ -83,7 +87,8 @@ samples['astrid_1974'] = {
 }
 
 # From http://opencpn.org/ocpn/node/178
-samples['opencpn_sample'] = {
+samples['opencpn_sample'] = {}
+samples['opencpn_sample']['readings'] = {
     0:    1,
     30:   3,
     60:   4,
@@ -99,7 +104,8 @@ samples['opencpn_sample'] = {
 }
 
 # From http://www.globalsecurity.org/military/library/policy/army/fm/55-501/fig6-6-2.gif
-samples['global_security'] = {
+samples['global_security'] = {}
+samples['global_security']['readings'] = {
     0  : -4,
     15 : -4,
     30 : -3.5,
@@ -127,7 +133,8 @@ samples['global_security'] = {
 }
 
 # From http://www.collectors-edition.de/FokkerTeam/Steuertabelle.JPG
-samples['fokker_team'] = {
+samples['fokker_team'] = {}
+samples['fokker_team']['readings'] = {
     0:    3,
     30:   1,
     60:  -1,
@@ -143,7 +150,8 @@ samples['fokker_team'] = {
 }
 
 # From http://code7700.com/direction.html
-samples['code7700_direction'] = {
+samples['code7700_direction'] = {}
+samples['code7700_direction']['readings'] = {
     0  :  1,
     15 :  1,
     30 :  1,
@@ -172,7 +180,8 @@ samples['code7700_direction'] = {
 
 
 # # From http://www.americanflyers.net/aviationlibrary/instrument_flying_handbook/chapter_3.htm
-samples['instrument_flying_handbook'] = {
+samples['instrument_flying_handbook'] = {}
+samples['instrument_flying_handbook']['readings'] = {
     0:    1,
     30:   2,
     60:   2,
@@ -188,7 +197,8 @@ samples['instrument_flying_handbook'] = {
 }
 
 
-samples['anonymous_1'] = {
+samples['anonymous_1'] = {}
+samples['anonymous_1']['readings'] = {
     0    : -2,
     45   : -4,
     90   : -3,
@@ -199,7 +209,8 @@ samples['anonymous_1'] = {
     315  :  0,
 }
 
-samples['anonymous_2'] = {
+samples['anonymous_2'] = {}
+samples['anonymous_2']['readings'] = {
     0    : -2,
     45   : -2,
     90   : -1,
@@ -212,7 +223,8 @@ samples['anonymous_2'] = {
 
 
 # From http://threesheetsnw.com/svselah/2011/06/23/that-took-an-adjustment/
-samples['sv_selah'] = {
+samples['sv_selah'] = {}
+samples['sv_selah']['readings'] = {
     0    :  1,
     45   :  1,
     90   :  0,
@@ -225,7 +237,8 @@ samples['sv_selah'] = {
 
 
 # From https://www.flickr.com/photos/seadog-images/3591881376/
-samples['seadog'] = {
+samples['seadog'] = {}
+samples['seadog']['readings'] = {
     0    : 1,
     45   : 1.5,
     90   : 1,
@@ -238,7 +251,8 @@ samples['seadog'] = {
 
 
 # From Pembrokeshire Cruising Training Boat
-samples['otter'] = {
+samples['otter'] = {}
+samples['otter']['readings'] = {
     0    : -4,
     45   : -7,
     90   : -5,
@@ -252,7 +266,8 @@ samples['otter'] = {
 
 
 # From http://code7700.com/images/compass_correction_card_afm_51-37_figure_1-15.png
-samples['afm_51_37'] = {
+samples['afm_51_37'] = {}
+samples['afm_51_37']['readings'] = {
     0  : 1,
     15 : 1,
     30 : 1,
@@ -280,7 +295,8 @@ samples['afm_51_37'] = {
 }
 
 # Testing that flat lines do not give divide by zero errors
-samples['flat_line'] = {
+samples['flat_line'] = {}
+samples['flat_line']['readings'] = {
     0: 0,
     90: 0,
     180: 0,
@@ -288,14 +304,16 @@ samples['flat_line'] = {
 }
 
 # four points (used to test equation selection logic)
-samples['four_points'] = {
+samples['four_points'] = {}
+samples['four_points']['readings'] = {
     0: 0,
     90: 2,
     180: 0,
     270: -2,
 }
 # Testing that flat lines do not give divide by zero errors
-samples['too_few_points'] = {
+samples['too_few_points'] = {}
+samples['too_few_points']['readings'] = {
     0: 0,
     90: 1,
 }
