@@ -7,8 +7,7 @@ from math import sin, cos, radians, pi
 import cairocffi as cairo
 
 from omnirose.templatetags.omnirose_tags import east_west
-
-# This model does not persist to the database
+from .helpers import split_into_lines
 
 # http://en.wikipedia.org/wiki/Paper_size#PA_series
 # useful compromise between A4 and letter: 210mm × 280mm
@@ -278,23 +277,3 @@ class Table:
         return y
 
 
-def split_into_lines(text, line_count):
-
-    lines = []
-    line_length = len(text) / line_count
-
-    words = text.split()
-    line = []
-
-    for word in words:
-        line.append(word)
-        line_as_text = " ".join(line)
-        if len(line_as_text) >= line_length:
-            lines.append(line_as_text)
-            line = []
-
-    line_as_text = " ".join(line)
-    if len(line_as_text):
-        lines.append(line_as_text)
-
-    return lines

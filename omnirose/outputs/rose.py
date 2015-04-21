@@ -8,8 +8,6 @@ import cairocffi as cairo
 
 from omnirose.templatetags.omnirose_tags import east_west
 
-# This model does not persist to the database
-
 
 class Rose:
 

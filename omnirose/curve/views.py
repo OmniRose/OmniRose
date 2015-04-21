@@ -13,8 +13,7 @@ from django.http import HttpResponse, Http404
 from .models import Curve, Reading
 from .forms import ReadingForm, ReadingFormSet, EquationChoiceForm
 
-from table.models import Table
-from rose.models import Rose
+from outputs.models import Rose, Table
 
 
 class CurvePermissionMixin(object):

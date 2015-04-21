@@ -44,8 +44,7 @@ INSTALLED_APPS = (
     'omnirose',
     'accounts',
     'curve',
-    'rose',
-    'table',
+    'outputs',
 
     # Last so that the registration templates don't override those in accounts
     'django.contrib.admin',
