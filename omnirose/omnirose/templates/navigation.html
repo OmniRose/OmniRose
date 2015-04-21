@@ -15,22 +15,53 @@
         {# Collect the nav links, forms, and other content for toggling #}
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-              <li><a href="{% url 'home' %}">Foo</a></li>
-              <li><a href="{% url 'home' %}">Bar</a></li>
+
+              {% if user.is_authenticated %}
+                <li class="dropdown">
+                  <a class="dropdown-toggle" data-toggle="dropdown" href="{% url 'curve_list' %}">
+                    Your Curves
+                    <span class="caret"></span>
+                  </a>
+                  <ul class="dropdown-menu">
+
+                    {% for curve in user.curve_set.all %}
+                      <li>
+                        <a href="{% url 'curve_detail' pk=curve.id %}">
+                          {{ curve }}
+                        </a>
+                      </li>
+                    {% endfor %}
+
+                    <li><a href="{% url 'curve_create' %}">
+                      <span class="glyphicon glyphicon-plus"></span>
+                      Create a new curve
+                    </a></li>
+
+                    <li><a href="{% url 'curve_list' %}">All Curves</a></li>
+
+
+                  </ul>
+                <li>
+
+              {% else %}
+                <li><a href="{% url 'home' %}">Foo</a></li>
+                <li><a href="{% url 'home' %}">Bar</a></li>
+              {% endif %}
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
               {% if user.is_authenticated %}
+
                 <li class="dropdown">
                   <a class="dropdown-toggle" data-toggle="dropdown" href="{% url 'home' %}">
                     {{ user.get_full_name }}
                     <span class="caret"></span>
                   </a>
                   <ul class="dropdown-menu">
-                    <li><a href="{% url 'curve_list' %}">Curves</a></li>
                     <li><a href="{% url 'logout' %}?next={% url 'home' %}">logout</a></li>
                   </ul>
                 <li>
+
               {% else %}
                 <li>
                     <a href="{% url 'login' %}">log in</a>
