@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load omnirose_tags %}
 
 {% block title %}{{ object.vessel }}{% endblock %}
 
@@ -34,7 +35,7 @@
           </td>
 
           <td>
-            {{ reading.deviation|floatformat }}°
+            {{ reading.deviation|east_west }}
           </td>
         </tr>
       {% endfor %}
@@ -62,7 +63,7 @@
 <div class="col-sm-4 text-center">
   <h3>OmniRose</h3>
 
-  <p>Low-res sample for 7°W variation.</p>
+  <p>Low-res sample for {{ -7|east_west }} variation.</p>
 
   {% if object.can_calculate_curve %}
     <img class="img-responsive" style="border: 1px solid #eee" src="{% url 'curve_rose_png' pk=object.id %}">

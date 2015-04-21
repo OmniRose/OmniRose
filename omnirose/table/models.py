@@ -6,6 +6,8 @@ from math import sin, cos, radians, pi
 
 import cairocffi as cairo
 
+from omnirose.templatetags.omnirose_tags import east_west
+
 # This model does not persist to the database
 
 # http://en.wikipedia.org/wiki/Paper_size#PA_series
@@ -170,7 +172,7 @@ class Table:
                 context.line_to(x, y_end)
                 context.stroke()
 
-                text = unicode(dev) + u'°'
+                text = east_west(dev)
                 context.set_font_size(6)
 
                 (x_bearing, y_bearing, width, height, x_advance, y_advance) = context.text_extents(text)

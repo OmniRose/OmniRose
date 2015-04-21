@@ -6,6 +6,8 @@ from math import sin, cos, radians, pi
 
 import cairocffi as cairo
 
+from omnirose.templatetags.omnirose_tags import east_west
+
 # This model does not persist to the database
 
 
@@ -132,14 +134,7 @@ class Rose:
     def draw_variation(self):
         var = self.variation
 
-        if var > 0:
-            direction = 'E'
-        elif var < 0:
-            direction = 'W'
-        else:
-            direction = ''
-
-        text = u'%u°%s' % (abs(var), direction)
+        text = east_west(var)
 
         with self.context as context:
 
