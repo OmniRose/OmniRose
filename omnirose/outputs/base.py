@@ -2,11 +2,21 @@
 from .helpers import split_into_lines
 
 class OutputsTextMixin:
+
+    def draw_text(self):
+
+        curve = self.curve
+
+        y = 100
+        y = self.draw_text_block(curve.vessel, 32, y)
+        y = self.draw_text_block(curve.note, 18, y)
+
+
     def draw_text_block(self, text, font_size, y, max_lines=2):
         context = self.context
         curve = self.curve
 
-        available_width = self.SURFACE_WIDTH - self.text_padding
+        available_width = self.SURFACE_WIDTH - self.edge_indent
 
         with context:
 

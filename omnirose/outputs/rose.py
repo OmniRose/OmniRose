@@ -7,18 +7,26 @@ from math import sin, cos, radians, pi
 import cairocffi as cairo
 
 from omnirose.templatetags.omnirose_tags import east_west
+from .base import OutputsTextMixin
 
 
-class Rose:
+class Rose(OutputsTextMixin):
 
 
     def __init__(self, variation, curve=None):
         self.SURFACE_HEIGHT = 790.
         self.SURFACE_WIDTH  = 590.
 
+        self.edge_indent = 30.
+
+
+        self.rose_centre_x = self.SURFACE_WIDTH / 2
+        self.rose_centre_y = self.SURFACE_HEIGHT - self.rose_centre_x
+
         self.rose_width = 30.
         self.inter_rose_gap = 1.
-        self.edge_indent = 30.
+
+        self.text_line_height = 1.2
 
         self.width_cardinal = 3 # N, S, E, W
         # self.width_ordinal  = 0.1 # NE, SW, SE, NE
@@ -37,15 +45,15 @@ class Rose:
 
 
     def x_for_deg(self, deg, r):
-        return self.SURFACE_WIDTH / 2 + r * sin(radians(deg))
+        return self.rose_centre_x + r * sin(radians(deg))
 
     def y_for_deg(self, deg, r):
-        return self.SURFACE_HEIGHT / 2 - r * cos(radians(deg))
+        return self.rose_centre_y - r * cos(radians(deg))
 
 
     def draw(self):
 
-        outer_rose_radius = self.SURFACE_WIDTH / 2 - self.edge_indent
+        outer_rose_radius = self.rose_centre_x - self.edge_indent
         inner_rose_radius = outer_rose_radius - self.rose_width - self.inter_rose_gap
 
         # Draw the true outer rose
@@ -56,6 +64,10 @@ class Rose:
 
         # Draw the variation
         self.draw_variation()
+
+        # Draw the blurb
+        self.draw_text()
+
 
 
     def draw_ring(self, outer_radius, dist, variation=0, curve=None):
@@ -141,8 +153,8 @@ class Rose:
 
             (x_bearing, y_bearing, width, height, x_advance, y_advance) = context.text_extents(text)
 
-            x = self.SURFACE_WIDTH / 2 - 0.5 * width
-            y = self.SURFACE_HEIGHT / 2 + 0.5 * height
+            x = self.rose_centre_x - 0.5 * width
+            y = self.rose_centre_y + 0.5 * height
 
             context.move_to(x,y)
             context.show_text(text)

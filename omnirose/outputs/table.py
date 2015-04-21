@@ -28,7 +28,8 @@ class Table(OutputsTextMixin):
             self.SURFACE_WIDTH  = 590.
             self.grid_top       = 220.
 
-        self.text_padding = 40.
+        self.edge_indent = 30.
+
         self.text_line_height = 1.2
 
         self.grid_height = 500.
@@ -114,7 +115,8 @@ class Table(OutputsTextMixin):
         self.draw_deviation_grid()
         self.draw_deviation_curve()
         self.draw_readings()
-        self.draw_text()
+        if not self.is_cropped:
+            self.draw_text()
 
     def draw_degrees_grid(self):
         context = self.context
@@ -217,19 +219,6 @@ class Table(OutputsTextMixin):
         # Handle 0 == 360 so that we get two entries
         if heading == 0:
             self.draw_reading(360, deviation)
-
-
-
-
-    def draw_text(self):
-        if self.is_cropped:
-            return
-
-        curve = self.curve
-
-        y = 100
-        y = self.draw_text_block(curve.vessel, 32, y)
-        y = self.draw_text_block(curve.note, 18, y)
 
 
 
