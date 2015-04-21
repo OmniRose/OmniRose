@@ -237,6 +237,19 @@ samples['seadog'] = {
 }
 
 
+# From Pembrokeshire Cruising Training Boat
+samples['otter'] = {
+    0    : -4,
+    45   : -7,
+    90   : -5,
+    135  : -4,
+    180  : -1,
+    225  : 2,
+    270  : 4,
+    315  : 1,
+}
+
+
 
 # From http://code7700.com/images/compass_correction_card_afm_51-37_figure_1-15.png
 samples['afm_51_37'] = {
