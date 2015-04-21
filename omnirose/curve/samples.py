@@ -6,6 +6,10 @@ from .models import Curve, CurveCalculations
 
 def create_database_curve_from_sample(sample):
     curve = Curve.objects.create()
+
+    curve.vessel = sample.get('vessel', "")
+    curve.note   = sample.get('note', "")
+
     for ships_head, deviation in sample['readings'].items():
         curve.reading_set.create(ships_head=ships_head, deviation=deviation)
     return curve
@@ -58,7 +62,10 @@ samples['rya_training_almanac_every_90']['readings'] = {
 }
 
 # Astrid 1974
-samples['astrid_1974'] = {}
+samples['astrid_1974'] = {
+    "vessel": "Astrid",
+    "note": "Steering compass, 1974",
+}
 samples['astrid_1974']['readings'] = {
     0  : 2,
     15 : 2,
@@ -317,3 +324,22 @@ samples['too_few_points']['readings'] = {
     0: 0,
     90: 1,
 }
+
+# Test full length names and notes
+# From Pembrokeshire Cruising Training Boat
+samples['long_name'] = {
+    "vessel": "A Really Long Vessel Name (which is a bit of a silly thing to have, realllllly)",
+    "note":   "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor",
+}
+samples['long_name']['readings'] = {
+    0    : -4,
+    45   : -7,
+    90   : -5,
+    135  : -4,
+    180  : -1,
+    225  : 2,
+    270  : 4,
+    315  : 1,
+}
+
+

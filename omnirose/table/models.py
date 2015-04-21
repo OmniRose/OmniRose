@@ -18,7 +18,9 @@ from omnirose.templatetags.omnirose_tags import east_west
 class Table:
     def __init__(self, curve=None, file_type='pdf', crop=False):
 
-        if crop:
+        self.is_cropped = crop
+
+        if self.is_cropped:
             self.SURFACE_HEIGHT = 540.
             self.SURFACE_WIDTH  = 350.
             self.grid_top       = 20.
@@ -26,6 +28,9 @@ class Table:
             self.SURFACE_HEIGHT = 790.
             self.SURFACE_WIDTH  = 590.
             self.grid_top       = 220.
+
+        self.text_padding = 40.
+        self.text_line_height = 1.2
 
         self.grid_height = 500.
         self.grid_width  = 300.
@@ -110,6 +115,7 @@ class Table:
         self.draw_deviation_grid()
         self.draw_deviation_curve()
         self.draw_readings()
+        self.draw_text()
 
     def draw_degrees_grid(self):
         context = self.context
@@ -216,3 +222,79 @@ class Table:
 
 
 
+    def draw_text(self):
+        if self.is_cropped:
+            return
+
+        curve = self.curve
+
+        y = 100
+        y = self.draw_text_block(curve.vessel, 32, y)
+        y = self.draw_text_block(curve.note, 18, y)
+
+
+    def draw_text_block(self, text, font_size, y, max_lines=2):
+        context = self.context
+        curve = self.curve
+
+        available_width = self.SURFACE_WIDTH - self.text_padding
+
+        with context:
+
+            while font_size > 0:
+
+                for line_count in range(1, max_lines+1):
+
+                    lines = split_into_lines(text, line_count)
+
+                    context.set_font_size(font_size)
+
+                    largest_width = 0
+
+                    for line in lines:
+                        (x_bearing, y_bearing, width, height, x_advance, y_advance) = context.text_extents(line)
+                        if width > largest_width:
+                            largest_width = width
+
+                    if largest_width < available_width:
+                        break
+
+                if largest_width < available_width:
+                    break
+                else:
+                    font_size = font_size - 1
+
+
+
+
+
+            for line in lines:
+                (x_bearing, y_bearing, width, height, x_advance, y_advance) = context.text_extents(line)
+                x = self.SURFACE_WIDTH/2 - width/2
+                context.move_to(x,y)
+                context.show_text(line)
+                y = y + self.text_line_height * height
+
+        return y
+
+
+def split_into_lines(text, line_count):
+
+    lines = []
+    line_length = len(text) / line_count
+
+    words = text.split()
+    line = []
+
+    for word in words:
+        line.append(word)
+        line_as_text = " ".join(line)
+        if len(line_as_text) >= line_length:
+            lines.append(line_as_text)
+            line = []
+
+    line_as_text = " ".join(line)
+    if len(line_as_text):
+        lines.append(line_as_text)
+
+    return lines
