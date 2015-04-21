@@ -45,7 +45,7 @@
 
 * Allow some tables to be marked as public (and give them a memorable slug)
 
-
+* Change rows on deviation entry table to highlight when an input has focus
 
 ## maybe someday
 
