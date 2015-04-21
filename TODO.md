@@ -4,8 +4,6 @@
 
 * Compress the number of readings shown - provide another page just with the readings on.
 
-* Show curve name, notes and dates more clearly
-
 * Allow user to edit curve details - vessel, notes etc
 
 * Improve flow from home page to create a new curve.
