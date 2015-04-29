@@ -1,9 +1,12 @@
 import re
 
+from time import sleep
+
 from omnirose.live_tests import OmniRoseSeleniumTestCase, LoginFailedException
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 from django.core import mail
+
 
 class AccountLiveTests(OmniRoseSeleniumTestCase):
 
@@ -41,3 +44,43 @@ class AccountLiveTests(OmniRoseSeleniumTestCase):
         # Test valid login (for sanity)
         with self.assertRaises(LoginFailedException):
             self.login('bob@test.com', 'wrongpassword')
+
+    def test_forgotten_password(self):
+        sel = self.selenium
+
+        # go to forgotten password page
+        self.get_home()
+        sel.find_element_by_link_text('log in').click()
+        sel.find_element_by_link_text('Forgotten your password?').click()
+
+        # enter email address
+        email = 'bob@test.com'
+        create = ActionChains(sel)
+        create.send_keys(email)
+        create.send_keys(Keys.RETURN)
+        create.perform()
+        sleep(0.5)
+
+        # get the reset url from the email
+        self.assertEqual(len(mail.outbox), 1)
+        reset_link = re.search(r'(\S+accounts/reset\S+)', mail.outbox[0].body).group(1)
+        self.assertTrue(reset_link)
+
+        # go to reset page
+        new_password = 'new_password'
+        sel.get(reset_link)
+        reset = ActionChains(sel)
+        reset.send_keys(new_password)
+        reset.send_keys(Keys.TAB)
+        reset.send_keys(new_password)
+        reset.send_keys(Keys.RETURN)
+        reset.perform()
+
+        # Try logging in with the new password
+        sel.find_element_by_link_text('Log in').click()
+        self.login('bob@test.com', new_password)
+
+        # check that old password does not work now
+        self.logout()
+        with self.assertRaises(LoginFailedException):
+            self.login('bob@test.com', 'secret')
