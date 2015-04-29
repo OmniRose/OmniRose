@@ -1,8 +1,12 @@
 from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.common.exceptions import NoSuchElementException
 
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+
+class LoginFailedException(Exception):
+    pass
 
 class OmniRoseSeleniumTestCase(StaticLiveServerTestCase):
 
@@ -39,10 +43,13 @@ class OmniRoseSeleniumTestCase(StaticLiveServerTestCase):
 
     def assertLoggedInAs(self, email):
         sel = self.selenium
-        user_menu = sel.find_element_by_link_text(email)
-        self.assertTrue(user_menu)
-        user_menu.click()
-        logout_link = sel.find_element_by_link_text('logout')
-        self.assertTrue(logout_link)
-        user_menu.click() # to close it again
 
+        try:
+            user_menu = sel.find_element_by_link_text(email)
+            self.assertTrue(user_menu)
+            user_menu.click()
+            logout_link = sel.find_element_by_link_text('logout')
+            self.assertTrue(logout_link)
+            user_menu.click() # to close it again
+        except NoSuchElementException:
+            raise LoginFailedException()

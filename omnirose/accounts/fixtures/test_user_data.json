@@ -1,0 +1,16 @@
+[
+    {
+        "fields": {
+            "email": "bob@test.com",
+            "groups": [],
+            "is_active": true,
+            "is_staff": false,
+            "is_superuser": false,
+            "last_login": "2015-04-29T12:24:06.199Z",
+            "password": "pbkdf2_sha256$15000$DUWklgiBF2Rp$qdKs1F6VJadVpsASFXCaWc3PD0c/X6i6kzUH+tmomYE=",
+            "user_permissions": []
+        },
+        "model": "accounts.user",
+        "pk": 1
+    }
+]

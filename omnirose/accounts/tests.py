@@ -1,11 +1,13 @@
 import re
 
-from omnirose.live_tests import OmniRoseSeleniumTestCase
+from omnirose.live_tests import OmniRoseSeleniumTestCase, LoginFailedException
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 from django.core import mail
 
-class AccountSeleniumTests(OmniRoseSeleniumTestCase):
+class AccountLiveTests(OmniRoseSeleniumTestCase):
+
+    fixtures = ['test_user_data']
 
     def test_account_creation(self):
         sel = self.selenium
@@ -32,5 +34,10 @@ class AccountSeleniumTests(OmniRoseSeleniumTestCase):
         self.logout()
         self.login(email, password)
 
-    # Test logging in (all details correct, bad user, bad pass, password reset)
+    def test_good_logins(self):
+        self.login('bob@test.com', 'secret')
 
+    def test_bad_logins(self):
+        # Test valid login (for sanity)
+        with self.assertRaises(LoginFailedException):
+            self.login('bob@test.com', 'wrongpassword')
