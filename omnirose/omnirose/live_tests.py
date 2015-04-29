@@ -26,7 +26,7 @@ class OmniRoseSeleniumTestCase(StaticLiveServerTestCase):
     def logout(self):
         self.selenium.get('%s%s' % (self.live_server_url, '/accounts/logout'))
 
-    def login(self, email, password):
+    def login(self, email='bob@test.com', password='secret'):
         sel = self.selenium
 
         self.get_home()

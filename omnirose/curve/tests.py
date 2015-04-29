@@ -1,4 +1,10 @@
+from time import sleep
+
 from django.test import TestCase
+from omnirose.live_tests import OmniRoseSeleniumTestCase, LoginFailedException
+
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.action_chains import ActionChains
 
 # Create your tests here.
 from .models import Curve, Reading, ErrorNoSuitableEquationAvailable
@@ -113,4 +119,81 @@ class DeviationCalculationTestCase(DeviationTestBase, TestCase):
     def test_readings_as_expected(self):
         """All reading included and correct accuracy"""
         self.assertEqual(self.curve.readings_as_dict, samples['rya_training_almanac']['readings'])
+
+import re
+
+
+
+class CurveLiveTests(OmniRoseSeleniumTestCase):
+
+    fixtures = ['test_user_data']
+
+    def test_create_curve(self):
+        sel = self.selenium
+
+        # go to the create new curve page
+        self.get_home()
+        self.login()
+        sel.find_element_by_link_text('Your Curves').click()
+        sel.find_element_by_link_text('Create a new curve').click()
+
+        # Enter details
+        vessel_input = sel.find_element_by_css_selector('input[name=vessel]')
+        details = ActionChains(sel)
+        details.move_to_element(vessel_input).click()
+        details.send_keys('S/V Test Vessel')
+        details.send_keys(Keys.TAB)
+        details.send_keys('Starboard steering compass')
+        details.send_keys(Keys.RETURN)
+        details.perform()
+
+        # Enter readings
+        sleep(0.3)
+        readings = ActionChains(sel)
+        for deviation in (0, 2, 3, 2, 0, -2, -3, -2):
+            readings.send_keys(str(deviation))
+            readings.send_keys(Keys.TAB + Keys.TAB + Keys.TAB)
+        readings.send_keys(Keys.RETURN)
+        readings.perform()
+
+        # Choose the equation
+        simpler_button = sel.find_element_by_id("simpler_button")
+        complex_button = sel.find_element_by_id("complex_button")
+        choose_button = sel.find_element_by_id("choose_button")
+        select_input = sel.find_element_by_css_selector("select")
+        preview_image = sel.find_element_by_id("table_preview")
+
+        self.assertEqual(
+            preview_image.get_attribute('src'),
+            "http://localhost:8081/curves/1/table_png/?crop=1"
+        )
+
+        simpler_button.click()
+        self.assertEqual(
+            preview_image.get_attribute('src'),
+            "http://localhost:8081/curves/1/table_png/?crop=1&equation=trig_5"
+        )
+
+        simpler_button.click()
+        self.assertEqual(
+            preview_image.get_attribute('src'),
+            "http://localhost:8081/curves/1/table_png/?crop=1&equation=trig_3"
+        )
+
+        complex_button.click()
+        self.assertEqual(
+            preview_image.get_attribute('src'),
+            "http://localhost:8081/curves/1/table_png/?crop=1&equation=trig_5"
+        )
+
+        choose_button.click()
+
+        self.assertEqual(
+            sel.current_url,
+            "http://localhost:8081/curves/1/"
+        )
+
+        # Check that the curve's equation is correct.
+        curve = Curve.objects.get(id=1)
+        self.assertEqual(curve.equation_slug, "trig_5")
 
