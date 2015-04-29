@@ -66,7 +66,7 @@ class Rose(OutputsTextMixin):
         self.draw_variation()
 
         # Draw the blurb
-        self.draw_text()
+        self.draw_titles()
 
 
 
@@ -148,8 +148,11 @@ class Rose(OutputsTextMixin):
 
         with self.context as context:
 
+            variation_font_size = 80
+            copyright_font_size = 8
+
             context.set_source_rgb(0.6, 0.6, 0.6)  # gray
-            context.set_font_size(80)
+            context.set_font_size(variation_font_size)
 
             (x_bearing, y_bearing, width, height, x_advance, y_advance) = context.text_extents(text)
 
@@ -158,4 +161,29 @@ class Rose(OutputsTextMixin):
 
             context.move_to(x,y)
             context.show_text(text)
+
+        with self.context as context:
+            context.set_source_rgb(0.4, 0.4, 0.4)  # gray
+
+            instructions = (
+                "Outer ring: True",
+                # "Middle ring: Magnetic",
+                "Inner ring: Compass",
+            )
+
+            y = y + 4 * copyright_font_size
+
+            for instruction in instructions:
+                y = self.draw_text_block(
+                    instruction,
+                    copyright_font_size,
+                    y,
+                    max_width=300,
+                    max_lines=8,
+                )
+
+        with self.context as context:
+            context.set_source_rgb(0.4, 0.4, 0.4)  # gray
+            y = y + 2 * copyright_font_size
+            y = self.draw_text_block(self.copyright_string(), copyright_font_size, y)
 

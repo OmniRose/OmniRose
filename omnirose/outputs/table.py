@@ -116,6 +116,7 @@ class Table(OutputsTextMixin):
         self.draw_deviation_curve()
         self.draw_readings()
         if not self.is_cropped:
+            self.draw_titles()
             self.draw_text()
 
     def draw_degrees_grid(self):
@@ -223,3 +224,5 @@ class Table(OutputsTextMixin):
 
 
 
+    def draw_text(self):
+        self.draw_text_block(self.copyright_string(), 8, self.SURFACE_HEIGHT - self.edge_indent)

@@ -1,9 +1,14 @@
+# coding=utf-8
 
+from datetime import datetime
 from .helpers import split_into_lines
 
 class OutputsTextMixin:
 
-    def draw_text(self):
+    def copyright_string(self):
+        return u"© %s OmniRose.com" % (datetime.now().year)
+
+    def draw_titles(self):
 
         curve = self.curve
 
@@ -12,11 +17,12 @@ class OutputsTextMixin:
         y = self.draw_text_block(curve.note, 18, y)
 
 
-    def draw_text_block(self, text, font_size, y, max_lines=2):
+    def draw_text_block(self, text, font_size, y, max_lines=2, max_width=None):
         context = self.context
         curve = self.curve
 
-        available_width = self.SURFACE_WIDTH - self.edge_indent
+        if max_width is None:
+            max_width = self.SURFACE_WIDTH - self.edge_indent
 
         with context:
 
@@ -35,10 +41,10 @@ class OutputsTextMixin:
                         if width > largest_width:
                             largest_width = width
 
-                    if largest_width < available_width:
+                    if largest_width < max_width:
                         break
 
-                if largest_width < available_width:
+                if largest_width < max_width:
                     break
                 else:
                     font_size = font_size - 1

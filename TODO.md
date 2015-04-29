@@ -10,10 +10,6 @@
 
 * store date that the deviations were collected on (can be free form text).
 
-* add text on the table
-
-* add text on the rose
-
 * Safari issue - autofocussed input is the last deviation
 
 * generate several roses into one pdf
