@@ -92,3 +92,12 @@
 
 
 {% endblock %}
+
+
+{% block javascript %}
+  <script type="text/javascript">
+    $(function () {
+      $("input[tabindex=1]:first").focus();
+    });
+  </script>
+{% endblock %}

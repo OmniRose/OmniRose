@@ -10,8 +10,6 @@
 
 * store date that the deviations were collected on (can be free form text).
 
-* Safari issue - autofocussed input is the last deviation
-
 * generate several roses into one pdf
 
 * Set up payments for producing high quality tables and roses. Should lock the table.

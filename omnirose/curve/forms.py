@@ -31,7 +31,7 @@ class ReadingForm(forms.Form):
         required=False,
         min_value=-180,
         max_value=180,
-        widget=DegreeInput(attrs={'tabindex': 1, "autofocus": 1})
+        widget=DegreeInput(attrs={'tabindex': 1})
     )
 
 ReadingFormSet = formset_factory(form=ReadingForm)
