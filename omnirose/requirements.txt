@@ -5,3 +5,4 @@ scipy
 cairocffi
 django-template-email
 django-bootstrap-form
+selenium
