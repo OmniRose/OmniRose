@@ -2,9 +2,6 @@
 
 from django.test import TestCase
 from django.template import Template, Context
-from django.contrib.staticfiles.testing import StaticLiveServerTestCase
-
-from selenium.webdriver.firefox.webdriver import WebDriver
 
 from .templatetags.omnirose_tags import east_west
 
@@ -31,21 +28,3 @@ class EastWestTagTest(TestCase):
         for degrees, expected in self.TEST_VALUES.items():
             rendered = east_west(degrees)
             self.assertEqual(expected, rendered)
-
-class OmniRoseSeleniumTestCase(StaticLiveServerTestCase):
-
-    @classmethod
-    def setUpClass(cls):
-        super(OmniRoseSeleniumTestCase, cls).setUpClass()
-        cls.selenium = WebDriver()
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.selenium.quit()
-        super(OmniRoseSeleniumTestCase, cls).tearDownClass()
-
-
-class BasicTests(OmniRoseSeleniumTestCase):
-
-    def test_homepage(self):
-        self.selenium.get('%s%s' % (self.live_server_url, '/'))
