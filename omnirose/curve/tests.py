@@ -157,43 +157,47 @@ class CurveLiveTests(OmniRoseSeleniumTestCase):
         readings.perform()
 
         # Choose the equation
+        sleep(0.3)
         simpler_button = sel.find_element_by_id("simpler_button")
         complex_button = sel.find_element_by_id("complex_button")
         choose_button = sel.find_element_by_id("choose_button")
         select_input = sel.find_element_by_css_selector("select")
         preview_image = sel.find_element_by_id("table_preview")
 
+        curve = Curve.objects.all().order_by('created').first()
+        curve_url = "http://localhost:8081/curves/" + str(curve.id) + "/"
+
         self.assertEqual(
             preview_image.get_attribute('src'),
-            "http://localhost:8081/curves/1/table_png/?crop=1"
+            curve_url + "table_png/?crop=1"
         )
 
         simpler_button.click()
         self.assertEqual(
             preview_image.get_attribute('src'),
-            "http://localhost:8081/curves/1/table_png/?crop=1&equation=trig_5"
+            curve_url + "table_png/?crop=1&equation=trig_5"
         )
 
         simpler_button.click()
         self.assertEqual(
             preview_image.get_attribute('src'),
-            "http://localhost:8081/curves/1/table_png/?crop=1&equation=trig_3"
+            curve_url + "table_png/?crop=1&equation=trig_3"
         )
 
         complex_button.click()
         self.assertEqual(
             preview_image.get_attribute('src'),
-            "http://localhost:8081/curves/1/table_png/?crop=1&equation=trig_5"
+            curve_url + "table_png/?crop=1&equation=trig_5"
         )
 
         choose_button.click()
 
         self.assertEqual(
             sel.current_url,
-            "http://localhost:8081/curves/1/"
+            curve_url
         )
 
-        # Check that the curve's equation is correct.
-        curve = Curve.objects.get(id=1)
+        # Check that the curve's equation is correct. Reload curve first.
+        curve = Curve.objects.get(id=curve.id)
         self.assertEqual(curve.equation_slug, "trig_5")
 

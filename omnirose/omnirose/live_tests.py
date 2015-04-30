@@ -4,11 +4,17 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import NoSuchElementException
 
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from django.conf import settings
 
 class LoginFailedException(Exception):
     pass
 
 class OmniRoseSeleniumTestCase(StaticLiveServerTestCase):
+
+    # def __init__(self, *args, **kwargs):
+    #     super(OmniRoseSeleniumTestCase, self).__init__(*args, **kwargs)
+    #     if settings.DEBUG == False:
+    #         settings.DEBUG = True
 
     @classmethod
     def setUpClass(cls):
