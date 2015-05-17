@@ -4,11 +4,11 @@
 
 * Compress the number of readings shown - provide another page just with the readings on.
 
-* Allow user to edit curve details - vessel, notes etc
-
 * Improve flow from home page to create a new curve. For example if not logged in gather the user's email address as part of process.
 
 * store date that the deviations were collected on (can be free form text).
+
+* serve pdf of table for download
 
 * generate several roses into one pdf
 

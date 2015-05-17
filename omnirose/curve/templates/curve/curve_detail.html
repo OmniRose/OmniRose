@@ -9,7 +9,8 @@
   <div class="col-sm-12 text-center">
     <h1>
       {{ object.vessel }}<br>
-      <small>{{ object.note }}</small>
+      <small>{{ object.note }}</small><br>
+      <small><a href="{% url 'curve_edit_details' object.id %}">edit</a></small><br>
     </h1>
   </div>
 </div>

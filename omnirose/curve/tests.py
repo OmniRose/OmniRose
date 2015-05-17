@@ -1,4 +1,5 @@
 from time import sleep
+import re
 
 from django.test import TestCase
 from omnirose.live_tests import OmniRoseSeleniumTestCase, LoginFailedException
@@ -120,13 +121,12 @@ class DeviationCalculationTestCase(DeviationTestBase, TestCase):
         """All reading included and correct accuracy"""
         self.assertEqual(self.curve.readings_as_dict, samples['rya_training_almanac']['readings'])
 
-import re
 
 
 
 class CurveLiveTests(OmniRoseSeleniumTestCase):
 
-    fixtures = ['test_user_data']
+    fixtures = ['test_user_data', 'test_curve_data']
 
     def test_create_curve(self):
         sel = self.selenium
@@ -164,7 +164,7 @@ class CurveLiveTests(OmniRoseSeleniumTestCase):
         select_input = sel.find_element_by_css_selector("select")
         preview_image = sel.find_element_by_id("table_preview")
 
-        curve = Curve.objects.all().order_by('created').first()
+        curve = Curve.objects.all().order_by('created').last()
         curve_url = "http://localhost:8081/curves/" + str(curve.id) + "/"
 
         self.assertEqual(
@@ -201,3 +201,34 @@ class CurveLiveTests(OmniRoseSeleniumTestCase):
         curve = Curve.objects.get(id=curve.id)
         self.assertEqual(curve.equation_slug, "trig_5")
 
+    def test_edit_curve_details(self):
+        sel = self.selenium
+
+        self.get_home()
+        self.login()
+
+        sel.find_element_by_link_text('Your Curves').click()
+        sel.find_element_by_partial_link_text('Gypsy Moth').click()
+        sel.find_element_by_link_text('edit').click()
+
+        # update the values
+        vessel_input = sel.find_element_by_css_selector('input[name=vessel]')
+        vessel_input.clear()
+        update = ActionChains(sel)
+        update.move_to_element(vessel_input).click()
+        update.send_keys("New Name")
+        update.send_keys(Keys.TAB)
+        update.send_keys("New Description")
+        update.send_keys(Keys.RETURN)
+        update.perform()
+
+        # check values updated correctly
+        sel.find_element_by_link_text('edit').click()
+        self.assertEqual(
+            sel.find_element_by_css_selector('input[name=vessel]').get_attribute("value"),
+            "New Name"
+        )
+        self.assertEqual(
+            sel.find_element_by_css_selector('input[name=note]').get_attribute("value"),
+            "New Description"
+        )

@@ -150,6 +150,11 @@ class CurveEquationSelectView(CurvePermissionMixin, CurveSetObjectMixin, FormVie
         return super(CurveEquationSelectView, self).form_valid(form)
 
 
+class CurveDetailEditView(CurvePermissionMixin, UpdateView):
+    model = Curve
+    template_name = "curve/details_edit.html"
+    fields = ['vessel','note']
+
 
 class CurveReadingEditView(CurvePermissionMixin, CurveSetObjectMixin, FormView):
     model = Curve
