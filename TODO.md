@@ -2,22 +2,21 @@
 
 ## launch
 
-* Compress the number of readings shown - provide another page just with the readings on.
+* Rename curve to something else. Vessel?
 
 * Improve flow from home page to create a new curve. For example if not logged in gather the user's email address as part of process.
 
-* store date that the deviations were collected on (can be free form text).
-
 * serve pdf of table for download
-
-* generate several roses into one pdf
 
 * Set up payments for producing high quality tables and roses. Should lock the table.
 
-* Let people email in photos of their deviation tables and we'll enter them in and create an account for them.
+* Test permissions for viewing and editing curves
 
 * 404 and other error pages
 
+* Improve layout of curve detail page
+
+* Create mail chimp list and solicit email addresses to be added to it.
 
 ### deployment related issues
 
@@ -27,6 +26,16 @@
 
 
 ## post launch
+
+* Delete a curve (perhaps not paid curves though?).
+
+* Compress the number of readings shown - provide another page just with the readings on.
+
+* Let people email in photos of their deviation tables and we'll enter them in and create an account for them.
+
+* generate several roses into one pdf
+
+* store date that the deviations were collected on (can be free form text).
 
 * breadcrumbs?
 
