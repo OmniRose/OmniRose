@@ -52,7 +52,14 @@
 <div class="col-sm-4 text-center">
   <h3>Deviation Table</h3>
 
-  <p><a href="{% url 'curve_equation' pk=object.pk %}">Choose a different curve</a></p>
+  <p>
+    <a href="{% url 'curve_equation' pk=object.pk %}">Choose a different curve</a>
+    <br>
+    <a href="{% url 'curve_table_pdf' pk=object.pk %}">
+      <span class="glyphicon glyphicon-download"></span>
+      Download as PDF
+    </a>
+  </p>
 
   {% if object.can_calculate_curve %}
     <img class="img-responsive" style="border: 1px solid #eee" src="{% url 'curve_table_png' pk=object.id %}">

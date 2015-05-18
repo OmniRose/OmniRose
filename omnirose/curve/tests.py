@@ -1,5 +1,6 @@
 from time import sleep
 import re
+import requests
 
 from django.test import TestCase
 from omnirose.live_tests import OmniRoseSeleniumTestCase, LoginFailedException
@@ -255,3 +256,34 @@ class CurveLiveTests(OmniRoseSeleniumTestCase):
         sel.get(curve_url)
         self.assertNotEqual(curve_url, sel.current_url)
         self.assertEqual(sel.title, "Log in :: OmniRose")
+
+    def test_table_download_as_pdf(self):
+        sel = self.selenium
+
+        self.login('bob@test.com')
+        sel.find_element_by_link_text('Your Curves').click()
+        sel.find_element_by_partial_link_text('Gypsy Moth').click()
+
+        pdf_url = sel.find_element_by_partial_link_text('Download as PDF').get_attribute("href")
+        # print pdf_url
+
+        # check that we can't get PDF without cookie
+        r = requests.get(pdf_url)
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(
+            r.url,
+            self.live_server_url + '/accounts/login/'
+        )
+
+        # check that we can get the file with cookie
+        sel_cookies = sel.get_cookie('sessionid')
+        cookies = dict(sessionid=sel_cookies['value'])
+        r = requests.get(pdf_url, cookies=cookies)
+
+        self.assertEqual(r.url, pdf_url)
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(r.headers['content-disposition'], "attachment; filename='gypsy-moth-table.pdf'")
+        self.assertEqual(r.headers['content-type'], 'application/pdf')
+
+        # Final call from selenium so that the shutdown process goes smoothly
+        self.get_home()

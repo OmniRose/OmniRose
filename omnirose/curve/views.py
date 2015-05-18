@@ -7,8 +7,10 @@ from django.core.urlresolvers import reverse
 
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.utils.text import slugify
 
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, FileResponse, Http404
+
 
 from .models import Curve, Reading
 from .forms import ReadingForm, ReadingFormSet, EquationChoiceForm
@@ -39,6 +41,7 @@ class CurveView(CurvePermissionMixin, DetailView):
 
 class CurveVisualisationBaseView(CurvePermissionMixin, DetailView):
     model = Curve
+    output = 'png'
 
     def get_visualisation_args(self):
         return {}
@@ -59,12 +62,29 @@ class CurveVisualisationBaseView(CurvePermissionMixin, DetailView):
         vis.draw()
 
         # Create a response and write the png data to it
-        response = HttpResponse(content_type='image/png')
-        vis.surface.write_to_png(response)
-        return response
+        if self.output == 'png':
+            response = HttpResponse(content_type='image/png')
+            vis.surface.write_to_png(response)
+            return response
+        elif self.output == 'pdf':
+
+            # Need to manually finish to force writing to disk
+            vis.surface.finish()
+
+            response = FileResponse(
+                open(vis.filename, 'rb'),
+                content_type='application/pdf'
+            )
+
+            downloaded_name = slugify(curve.vessel) + "-table.pdf"
+            response['Content-Disposition'] = "attachment; filename='" + downloaded_name + "'"
+
+            return response
+        else:
+            raise Exception("can't produce output '%s'" % self.output)
 
 
-class CurveTableView(CurveVisualisationBaseView):
+class CurveTablePngView(CurveVisualisationBaseView):
     visualisation_class = Table
 
     def get_visualisation_args(self):
@@ -79,7 +99,11 @@ class CurveTableView(CurveVisualisationBaseView):
             curve.equation_slug = equation_slug
 
 
-class CurveRoseView(CurveVisualisationBaseView):
+class CurveTablePdfView(CurveVisualisationBaseView):
+    visualisation_class = Table
+    output = 'pdf'
+
+class CurveRosePngView(CurveVisualisationBaseView):
     visualisation_class = Rose
 
     def get_visualisation_args(self):
