@@ -12,5 +12,19 @@
         },
         "model": "accounts.user",
         "pk": 1
+    },
+    {
+        "fields": {
+            "email": "notbob@test.com",
+            "groups": [],
+            "is_active": true,
+            "is_staff": false,
+            "is_superuser": false,
+            "last_login": "2015-05-17T14:13:12.453Z",
+            "password": "pbkdf2_sha256$15000$BbckYmP0VMAA$GicCjcXH4O9+MHeQlYfgox7F6Z15WKiAKuptltNrU24=",
+            "user_permissions": []
+        },
+        "model": "accounts.user",
+        "pk": 2
     }
 ]

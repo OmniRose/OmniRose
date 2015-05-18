@@ -10,8 +10,6 @@
 
 * Set up payments for producing high quality tables and roses. Should lock the table.
 
-* Test permissions for viewing and editing curves
-
 * 404 and other error pages
 
 * Improve layout of curve detail page

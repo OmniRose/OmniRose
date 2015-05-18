@@ -232,3 +232,26 @@ class CurveLiveTests(OmniRoseSeleniumTestCase):
             sel.find_element_by_css_selector('input[name=note]').get_attribute("value"),
             "New Description"
         )
+
+    def test_curve_permissions(self):
+        sel = self.selenium
+
+        self.get_home()
+
+        # Log in as valid user, get url to the curve
+        self.login('bob@test.com')
+        sel.find_element_by_link_text('Your Curves').click()
+        sel.find_element_by_partial_link_text('Gypsy Moth').click()
+        curve_url = sel.current_url
+
+        # Log out, test we can't see the curve page
+        self.logout()
+        sel.get(curve_url)
+        self.assertNotEqual(curve_url, sel.current_url)
+        self.assertEqual(sel.title, "Log in :: OmniRose")
+
+        # Log in as another user, test we can't see the curve page
+        self.login('notbob@test.com')
+        sel.get(curve_url)
+        self.assertNotEqual(curve_url, sel.current_url)
+        self.assertEqual(sel.title, "Log in :: OmniRose")
