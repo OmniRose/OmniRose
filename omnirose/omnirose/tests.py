@@ -1,9 +1,12 @@
 # coding=utf-8
 
+from time import sleep
+
 from django.test import TestCase
 from django.template import Template, Context
 
 from .templatetags.omnirose_tags import east_west
+from omnirose.live_tests import OmniRoseSeleniumTestCase
 
 class EastWestTagTest(TestCase):
 
@@ -28,3 +31,13 @@ class EastWestTagTest(TestCase):
         for degrees, expected in self.TEST_VALUES.items():
             rendered = east_west(degrees)
             self.assertEqual(expected, rendered)
+
+
+class ErrorPagesTest(OmniRoseSeleniumTestCase):
+    def test_404_pages(self):
+        sel = self.selenium
+
+        self.get_home()
+        sel.get(sel.current_url + "not/a/page")
+
+        self.assertEqual(sel.title, "404 Page not found :: OmniRose")

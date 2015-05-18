@@ -10,8 +10,6 @@
 
 * Set up payments for producing high quality tables and roses. Should lock the table.
 
-* 404 and other error pages
-
 * Improve layout of curve detail page
 
 * Create mail chimp list and solicit email addresses to be added to it.
