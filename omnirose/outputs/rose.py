@@ -57,10 +57,10 @@ class Rose(OutputsTextMixin):
         inner_rose_radius = outer_rose_radius - self.rose_width - self.inter_rose_gap
 
         # Draw the true outer rose
-        self.draw_ring(outer_rose_radius, self.rose_width, 0)
+        self.draw_ring(outer_rose_radius, self.rose_width, 'T', 0)
 
         # Draw the adjusted inner rose
-        self.draw_ring(inner_rose_radius, self.rose_width, self.variation, self.curve)
+        self.draw_ring(inner_rose_radius, self.rose_width, 'C', self.variation, self.curve)
 
         # Draw the variation
         self.draw_variation()
@@ -70,7 +70,7 @@ class Rose(OutputsTextMixin):
 
 
 
-    def draw_ring(self, outer_radius, dist, variation=0, curve=None):
+    def draw_ring(self, outer_radius, dist, superscript, variation=0, curve=None):
         context = self.context
 
         inner_radius = outer_radius - dist
@@ -112,12 +112,24 @@ class Rose(OutputsTextMixin):
 
             if not display_degree % 10:
                 with context:
-                    text = unicode(display_degree) + u'°'
 
-                    context.set_font_size(8)
-                    # context.rotate(rad - 0.5 * pi)
+                    degree_text = unicode(display_degree)
 
-                    (x_bearing, y_bearing, width, height, x_advance, y_advance) = context.text_extents(text)
+                    degree_font_size = 8
+                    degree_extra_spacing = 0.5 # so that the white background does not get too tight
+                    superscript_font_size = 5
+
+                    # size of degree numbers
+                    context.set_font_size(degree_font_size)
+                    (x_bearing, y_bearing, degree_width, degree_height, x_advance, y_advance) = context.text_extents(degree_text)
+
+                    # size of superscript
+                    context.set_font_size(superscript_font_size)
+                    (x_bearing, y_bearing, superscript_width, superscript_height, x_advance, y_advance) = context.text_extents(superscript)
+
+                    # size of them combined
+                    width = degree_width + degree_extra_spacing + superscript_width
+                    height = max(degree_height, superscript_height)
 
                     x = self.x_for_deg(plot_degree,mid_radius) - 0.5 * width
                     y = self.y_for_deg(plot_degree,mid_radius) + 0.5 * height
@@ -126,20 +138,24 @@ class Rose(OutputsTextMixin):
                     with context:
                         context.set_source_rgba(1, 1, 1, 1)  # White
                         context.rectangle(x-1, y+1, width+2, -height-2)
-                        # context.rectangle(x, y, width, -height)
                         context.fill()
-
-                        # dd = 0.4
-                        # for dx in (-dd, dd):
-                        #     for dy in (-dd, dd):
-                        #             context.move_to(x + dx, y + dy)
-                        #             context.show_text(text)
 
                     with context:
                         context.set_source_rgba(1, 0, 0, 1)  # Red
+
+                        # Draw the degree text
                         context.move_to(x,y)
-                        # context.rotate(radians(deg))
-                        context.show_text(text)
+                        context.set_font_size(degree_font_size)
+                        context.show_text(degree_text)
+
+                        # Move the y position so that the top of text aligns
+                        x,y = context.get_current_point()
+                        y = y - height + superscript_height
+
+                        # Draw the superscript
+                        context.move_to(x,y)
+                        context.set_font_size(superscript_font_size)
+                        context.show_text(superscript)
 
     def draw_variation(self):
         var = self.variation

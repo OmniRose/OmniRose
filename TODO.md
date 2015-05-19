@@ -14,8 +14,6 @@
 
 * add magnetic rose to the omnirose.
 
-* on the omnirose replace the ° with a superscript T, M or C to make it unambiguous what the bearing is.
-
 * Add instructions for converting between True and Compass to the deviation table print out. Also put in a sales pitch for purchasing an OmniRose.
 
 ### deployment related issues
