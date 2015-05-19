@@ -24,7 +24,7 @@ class Rose(OutputsTextMixin):
         self.rose_centre_y = self.SURFACE_HEIGHT - self.rose_centre_x
 
         self.rose_width = 30.
-        self.inter_rose_gap = 1.
+        self.inter_rose_gap = 2.
 
         self.text_line_height = 1.2
 
@@ -43,6 +43,16 @@ class Rose(OutputsTextMixin):
         self.variation = variation
         self.curve = curve
 
+        self.magnetic_background_colour_rgba  = (1, 0.95, 0.95, 1)
+        self.magnetic_text_colour_rgba = (0.2, 0, 0, 1)
+
+        self.true_background_colour_rgba = (0.95, 1, 0.95, 1)
+        self.true_text_colour_rgba = (0, 0.2, 0, 1)
+
+        self.compass_background_colour_rgba = (0.95, 0.95, 1, 1)
+        self.compass_text_colour_rgba = (0, 0, 0.2, 1)
+
+
 
     def x_for_deg(self, deg, r):
         return self.rose_centre_x + r * sin(radians(deg))
@@ -52,15 +62,35 @@ class Rose(OutputsTextMixin):
 
 
     def draw(self):
+        magnetic_rose_width = self.rose_width * 1
+        true_rose_width     = self.rose_width * 1.2
+        compass_rose_width  = self.rose_width * 1
 
-        outer_rose_radius = self.rose_centre_x - self.edge_indent
-        inner_rose_radius = outer_rose_radius - self.rose_width - self.inter_rose_gap
+        magnetic_rose_radius = self.rose_centre_x - self.edge_indent
+        true_rose_radius = magnetic_rose_radius - magnetic_rose_width - self.inter_rose_gap
+        compass_rose_radius = true_rose_radius - true_rose_width - self.inter_rose_gap
 
-        # Draw the true outer rose
-        self.draw_ring(outer_rose_radius, self.rose_width, 'T', 0)
 
-        # Draw the adjusted inner rose
-        self.draw_ring(inner_rose_radius, self.rose_width, 'C', self.variation, self.curve)
+        # Draw the magnetic rose
+        self.draw_ring(
+            magnetic_rose_radius, magnetic_rose_width, 'M', self.variation, None,
+            background_colour_rgba=self.magnetic_background_colour_rgba,
+            text_colour_rgba=self.magnetic_text_colour_rgba,
+        )
+
+        # Draw the true rose
+        self.draw_ring(
+            true_rose_radius, true_rose_width, 'T', 0, None,
+            background_colour_rgba=self.true_background_colour_rgba,
+            text_colour_rgba=self.true_text_colour_rgba,
+        )
+
+        # Draw the adjusted compass rose
+        self.draw_ring(
+            compass_rose_radius, compass_rose_width, 'C', self.variation, self.curve,
+            background_colour_rgba=self.compass_background_colour_rgba,
+            text_colour_rgba=self.compass_text_colour_rgba,
+        )
 
         # Draw the variation
         self.draw_variation()
@@ -70,12 +100,20 @@ class Rose(OutputsTextMixin):
 
 
 
-    def draw_ring(self, outer_radius, dist, superscript, variation=0, curve=None):
+    def draw_ring(self, outer_radius, dist, superscript, variation, curve, background_colour_rgba, text_colour_rgba):
         context = self.context
 
         inner_radius = outer_radius - dist
         mid_radius = (inner_radius + outer_radius) / 2
 
+
+        # draw background colour for the ring
+        with context:
+            context.new_path()
+            context.set_source_rgba(*background_colour_rgba)
+            context.set_line_width(dist)
+            context.arc(self.rose_centre_x, self.rose_centre_y, mid_radius, 0, 2*pi)
+            context.stroke()
 
         for display_degree in range(0, 360):
 
@@ -85,6 +123,9 @@ class Rose(OutputsTextMixin):
                 plot_degree = display_degree + variation
 
             with context:
+
+                context.set_source_rgba(0,0,0,1)
+
                 if not display_degree % 90:
                     context.set_line_width(self.width_cardinal)
                 elif not display_degree % 10:
@@ -115,9 +156,9 @@ class Rose(OutputsTextMixin):
 
                     degree_text = unicode(display_degree)
 
-                    degree_font_size = 8
-                    degree_extra_spacing = 0.5 # so that the white background does not get too tight
-                    superscript_font_size = 5
+                    degree_font_size = 9
+                    degree_extra_spacing = 1 # so that the white background does not get too tight
+                    superscript_font_size = 6
 
                     # size of degree numbers
                     context.set_font_size(degree_font_size)
@@ -136,12 +177,12 @@ class Rose(OutputsTextMixin):
 
                     # Put a white rectangle behind the text to mask out lines
                     with context:
-                        context.set_source_rgba(1, 1, 1, 1)  # White
+                        context.set_source_rgba(*background_colour_rgba)  # White
                         context.rectangle(x-1, y+1, width+2, -height-2)
                         context.fill()
 
                     with context:
-                        context.set_source_rgba(1, 0, 0, 1)  # Red
+                        context.set_source_rgba(*text_colour_rgba)
 
                         # Draw the degree text
                         context.move_to(x,y)
@@ -165,7 +206,8 @@ class Rose(OutputsTextMixin):
         with self.context as context:
 
             variation_font_size = 80
-            copyright_font_size = 8
+            legend_font_size = 12
+            copyright_font_size = 12
 
             context.set_source_rgb(0.6, 0.6, 0.6)  # gray
             context.set_font_size(variation_font_size)
@@ -182,20 +224,21 @@ class Rose(OutputsTextMixin):
             context.set_source_rgb(0.4, 0.4, 0.4)  # gray
 
             instructions = (
-                "Outer ring: True",
-                # "Middle ring: Magnetic",
-                "Inner ring: Compass",
+                ("Magnetic bearings",self.magnetic_background_colour_rgba),
+                ("True bearings",     self.true_background_colour_rgba),
+                ("Compass bearings",  self.compass_background_colour_rgba),
             )
 
-            y = y + 4 * copyright_font_size
+            y = y + 2 * legend_font_size
 
-            for instruction in instructions:
+            for instruction, background_colour_rgba in instructions:
                 y = self.draw_text_block(
                     instruction,
-                    copyright_font_size,
-                    y,
+                    legend_font_size,
+                    y + 4,
                     max_width=300,
-                    max_lines=8,
+                    max_lines=1,
+                    background_colour_rgba=background_colour_rgba,
                 )
 
         with self.context as context:
