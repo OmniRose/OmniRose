@@ -19,7 +19,7 @@
               {% if user.is_authenticated %}
                 <li class="dropdown">
                   <a class="dropdown-toggle" data-toggle="dropdown" href="{% url 'curve_list' %}">
-                    Your Curves
+                    Your deviation tables
                     <span class="caret"></span>
                   </a>
                   <ul class="dropdown-menu">
@@ -34,10 +34,10 @@
 
                     <li><a href="{% url 'curve_create' %}">
                       <span class="glyphicon glyphicon-plus"></span>
-                      Create a new curve
+                      Add a new deviation table
                     </a></li>
 
-                    <li><a href="{% url 'curve_list' %}">All Curves</a></li>
+                    <li><a href="{% url 'curve_list' %}">All deviation tables</a></li>
 
 
                   </ul>

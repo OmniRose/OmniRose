@@ -2,8 +2,6 @@
 
 ## launch
 
-* Rename curve to something else. Vessel?
-
 * Improve flow from home page to create a new curve. For example if not logged in gather the user's email address as part of process.
 
 * Set up payments for producing high quality tables and roses. Should lock the table.

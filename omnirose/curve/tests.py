@@ -135,8 +135,8 @@ class CurveLiveTests(OmniRoseSeleniumTestCase):
         # go to the create new curve page
         self.get_home()
         self.login()
-        sel.find_element_by_link_text('Your Curves').click()
-        sel.find_element_by_link_text('Create a new curve').click()
+        sel.find_element_by_link_text('Your deviation tables').click()
+        sel.find_element_by_link_text('Add a new deviation table').click()
 
         # Enter details
         vessel_input = sel.find_element_by_css_selector('input[name=vessel]')
@@ -166,7 +166,7 @@ class CurveLiveTests(OmniRoseSeleniumTestCase):
         preview_image = sel.find_element_by_id("table_preview")
 
         curve = Curve.objects.all().order_by('created').last()
-        curve_url = "http://localhost:8081/curves/" + str(curve.id) + "/"
+        curve_url = "http://localhost:8081/deviation_tables/" + str(curve.id) + "/"
 
         self.assertEqual(
             preview_image.get_attribute('src'),
@@ -208,7 +208,7 @@ class CurveLiveTests(OmniRoseSeleniumTestCase):
         self.get_home()
         self.login()
 
-        sel.find_element_by_link_text('Your Curves').click()
+        sel.find_element_by_link_text('Your deviation tables').click()
         sel.find_element_by_partial_link_text('Gypsy Moth').click()
         sel.find_element_by_link_text('edit').click()
 
@@ -241,7 +241,7 @@ class CurveLiveTests(OmniRoseSeleniumTestCase):
 
         # Log in as valid user, get url to the curve
         self.login('bob@test.com')
-        sel.find_element_by_link_text('Your Curves').click()
+        sel.find_element_by_link_text('Your deviation tables').click()
         sel.find_element_by_partial_link_text('Gypsy Moth').click()
         curve_url = sel.current_url
 
@@ -261,7 +261,7 @@ class CurveLiveTests(OmniRoseSeleniumTestCase):
         sel = self.selenium
 
         self.login('bob@test.com')
-        sel.find_element_by_link_text('Your Curves').click()
+        sel.find_element_by_link_text('Your deviation tables').click()
         sel.find_element_by_partial_link_text('Gypsy Moth').click()
 
         pdf_url = sel.find_element_by_partial_link_text('Download as PDF').get_attribute("href")

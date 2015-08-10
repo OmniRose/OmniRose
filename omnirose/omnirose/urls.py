@@ -11,7 +11,7 @@ urlpatterns = patterns('',
     url(r'about/', TemplateView.as_view(template_name='about.html'), name='about'),
 
     url(r'^accounts/', include('accounts.urls')),
-    url(r'^curves/', include('curve.urls')),
+    url(r'^deviation_tables/', include('curve.urls')),
 
     url(r'^admin/', include(admin.site.urls)),
 )

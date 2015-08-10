@@ -1,18 +1,18 @@
 {% extends "base.html" %}
 
-{% block title %}Curve list{% endblock %}
+{% block title %}Deviation table list{% endblock %}
 
 {% block content %}
 
-  <h1>Your Curves</h1>
+  <h1>Your deviation tables</h1>
 
-  <p><a href="{% url 'curve_create' %}">Create a new curve</a>.</p>
+  <p><a href="{% url 'curve_create' %}">Add a new deviation table</a>.</p>
 
   <ul>
   {% for curve in object_list %}
       <li><a href="{% url 'curve_detail' pk=curve.id %}">{{ curve }}</a></li>
   {% empty %}
-      <li>No curves yet.</li>
+      <li>No deviation tables yet.</li>
   {% endfor %}
   </ul>
 
