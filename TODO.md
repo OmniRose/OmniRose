@@ -10,8 +10,6 @@
 
 * Improve layout of curve detail page
 
-* Create mail chimp list and solicit email addresses to be added to it.
-
 * Add instructions for converting between True and Compass to the deviation table print out. Also put in a sales pitch for purchasing an OmniRose.
 
 ### deployment related issues
