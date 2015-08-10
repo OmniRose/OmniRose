@@ -16,6 +16,8 @@
 
 ### deployment related issues
 
+* choose where to host the code
+
 * configure email sending
 
 * extract some things into a local_settings.py
@@ -27,21 +29,19 @@
 
 * Set up automated email to people who've created tables prompting them to buy roses. Do it about one week after they create the rose.
 
-* Delete a curve (perhaps not paid curves though?).
+* Delete a curve (perhaps not paid curves though?). Have a trash system that empties 30 days after deletion so that undos are possible.
 
 * Compress the number of readings shown - provide another page just with the readings on.
 
 * Let people email in photos of their deviation tables and we'll enter them in and create an account for them.
 
-* generate several roses into one pdf
+* generate several roses into one pdf as separate pages
 
 * store date that the deviations were collected on (can be free form text).
 
 * breadcrumbs?
 
 * require at least 3 readings before moving off reading edit page
-
-* allow users to delete curves
 
 * change rose so that the ticks are staggered away from the join - possibly have several rose designs that people can choose from
 
@@ -50,8 +50,6 @@
 * Change rows on deviation entry table to highlight when an input has focus
 
 ## maybe someday
-
-* create a mailchimp list for people to subscribe to
 
 * switch text rendering to be pango based (http://cairographics.org/pycairo_pango/)
 
