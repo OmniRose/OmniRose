@@ -17,4 +17,15 @@ body {
 
 img.img-responsive {
   box-shadow: 0 0 1px 1px #eee;
+  background-color: #fff;
+}
+
+/* Aim to get rid of this with proper product shots */
+.square-image {
+    position:relative;
+    overflow:hidden;
+    padding-bottom:100%;
+}
+.square-image img{
+    position:absolute;
 }
