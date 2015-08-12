@@ -17,9 +17,11 @@
           <div class="well">
             <h2>Deviation Tables</h2>
             <div class="square-image">
-              <img class="img-responsive square" src="{% static 'table.svg' %}">
+              <a href="{% url 'curve_home' %}">
+                <img class="img-responsive square" src="{% static 'table.png' %}">
+              </a>
             </div>
-            <p>Clean and easy to use, customized to your compass. Print out and keep onboard.</p>
+            <p>Clean and easy to use, customized to your compass. Print out and keep onboard. <a href="{% url 'curve_home' %}">Read more&hellip;</a></p>
           </div>
         </div>
 
@@ -27,9 +29,11 @@
           <div class="well">
             <h2>Conversion Rose</h2>
             <div class="square-image">
-              <img class="img-responsive" src="{% static 'rose.svg' %}">
+              <a href="{% url 'curve_home' %}">
+                <img class="img-responsive" src="{% static 'rose.png' %}">
+              </a>
             </div>
-            <p>Based on your deviation table this rose lets you instantly and accurately convert between true, magnetic and compass bearings. Print out and keep onboard.</p>
+            <p>Based on your deviation table this rose lets you instantly and accurately convert between true, magnetic and compass bearings. Print out and keep onboard. <a href="{% url 'curve_home' %}">Read more&hellip;</a></p>
           </div>
         </div>
 
