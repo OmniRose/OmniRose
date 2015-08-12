@@ -1,8 +1,10 @@
 from django.conf.urls import url, include
+from django.views.generic.base import TemplateView
 
 from . import views
 
 urlpatterns = [
+    url(r'^$', TemplateView.as_view(template_name='curve/curve_home.html'), name='curve_home'),
     url(r'^new/', views.CurveCreateView.as_view(),   name='curve_create'),
     url(r'^yours/', views.YourCurveListView.as_view(), name='curve_list'),
     url(r'^(?P<pk>\d+)/$', views.CurveView.as_view(), name='curve_detail'),

@@ -21,6 +21,8 @@
 
 ## post launch
 
+* Create a page with different ways to swing a ship.
+
 * Create a tool that for a given location determines what the variation probably is (https://pypi.python.org/pypi/geomag/).
 
 * Set up automated email to people who've created tables prompting them to buy roses. Do it about one week after they create the rose.
