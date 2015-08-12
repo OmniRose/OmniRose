@@ -346,3 +346,34 @@ samples['long_name']['readings'] = {
 }
 
 
+# From http://navyadministration.tpub.com/14067/css/14067_139.htm
+samples['navy_admin_textbook'] = {
+    "vessel": "Navy Admin Textbook Sample",
+    "note":   "http://navyadministration.tpub.com/14067/css/14067_139.htm",
+    "readings": {
+        0   : -14,
+        15  : -10,
+        30  : -5,
+        45  : 1,
+        60  : 2,
+        75  : 5,
+        90  : 7,
+        105 : 9,
+        120 : 15,
+        135 : 16,
+        150 : 12,
+        165 : 13,
+        180 : 14,
+        195 : 14,
+        210 : 12,
+        225 : 9,
+        240 : 4,
+        255 : -1,
+        270 : -7,
+        285 : -12,
+        300 : -15,
+        315 : -19,
+        330 : -19,
+        345 : -17,
+    },
+};

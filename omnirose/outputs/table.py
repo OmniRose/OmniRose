@@ -2,7 +2,7 @@
 
 import tempfile
 import os
-from math import sin, cos, radians, pi
+from math import sin, cos, radians, pi, ceil
 
 import cairocffi as cairo
 
@@ -163,13 +163,22 @@ class Table(OutputsTextMixin):
         min_dev = self.curve.min_deviation
         max_dev = self.curve.max_deviation
 
+        max_dev_degree_entries = 17
+        dev_modulus = ceil( (max_dev - min_dev) / float(max_dev_degree_entries) )
+
         for dev in range(min_dev, max_dev + 1):
+
+            show_dev_degrees = dev % dev_modulus == 0
 
             x = self.grid_x(dev)
 
             y_start = self.grid_top
             y_end   = self.grid_bottom
 
+            # If we are not showing the dev degrees then shorten the line
+            if not show_dev_degrees:
+                y_start = y_start + self.grid_bleed
+                y_end   = y_end   - self.grid_bleed
 
             with context:
                 if dev == 0:
@@ -180,16 +189,17 @@ class Table(OutputsTextMixin):
                 context.line_to(x, y_end)
                 context.stroke()
 
-                text = east_west(dev)
-                context.set_font_size(6)
+                if show_dev_degrees:
+                    text = east_west(dev)
+                    context.set_font_size(6)
 
-                (x_bearing, y_bearing, width, height, x_advance, y_advance) = context.text_extents(text)
+                    (x_bearing, y_bearing, width, height, x_advance, y_advance) = context.text_extents(text)
 
-                x = x - width/2
+                    x = x - width/2
 
-                for y in (y_start - height, y_end + height + 2):
-                    context.move_to(x,y)
-                    context.show_text(text)
+                    for y in (y_start - height, y_end + height + 2):
+                        context.move_to(x,y)
+                        context.show_text(text)
 
 
     def draw_deviation_curve(self):
