@@ -21,24 +21,27 @@ def create_curve_calculation_from_sample(sample):
 
 samples = {}
 
-samples['rya_training_almanac'] = {}
-samples['rya_training_almanac']['readings'] = {
-    0    : -4,
-    22.5 : -2,
-    45   :  0,
-    67.5 :  2,
-    90   :  4,
-    112.5:  5,
-    135  :  6,
-    157.5:  5,
-    180  :  4,
-    202.5:  2,
-    225  :  0,
-    247.5: -2,
-    270  : -4,
-    292.5: -5,
-    315  : -6,
-    337.5: -5,
+samples['rya_training_almanac'] = {
+    "vessel": "S/V Elizabeth II",
+    "note": "Starboard wheel compass",
+    'readings': {
+        0    : -4,
+        22.5 : -2,
+        45   :  0,
+        67.5 :  2,
+        90   :  4,
+        112.5:  5,
+        135  :  6,
+        157.5:  5,
+        180  :  4,
+        202.5:  2,
+        225  :  0,
+        247.5: -2,
+        270  : -4,
+        292.5: -5,
+        315  : -6,
+        337.5: -5,
+    },
 }
 
 samples['rya_training_almanac_every_45'] = {}
