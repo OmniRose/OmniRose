@@ -4,8 +4,6 @@
 
 * Set up payments for producing high quality tables and roses. Should lock the table.
 
-* Improve layout of curve detail page
-
 * Add instructions for converting between True and Compass to the deviation table print out. Also put in a sales pitch for purchasing an OmniRose.
 
 * Google Analytics

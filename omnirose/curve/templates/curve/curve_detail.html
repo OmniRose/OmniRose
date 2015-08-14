@@ -7,20 +7,66 @@
 
 <div class="row">
   <div class="col-sm-12 text-center">
-    <h1>
-      {{ object.vessel }}<br>
-      <small>{{ object.note }}</small><br>
-      <small><a href="{% url 'curve_edit_details' object.id %}">edit</a></small><br>
-    </h1>
+    <h1>{{ object.vessel }}</h1>
+    <h2>
+      {{ object.note }}
+      <small>
+        <a id="curve_edit_link" href="{% url 'curve_edit_details' object.id %}">
+          <span class="glyphicon glyphicon-pencil">edit</span>
+        </a>
+      </small>
+    </h2>
   </div>
 </div>
 
 <div class="row">
+
+
+<div class="col-sm-4 text-center">
+  <h3>Conversion Rose</h3>
+
+  <p>Low-res sample for {{ -7|east_west }} variation.</p>
+
+  <p>Full resolution requires payment.</p>
+
+  {% if object.can_calculate_curve %}
+    <img class="img-responsive" style="border: 1px solid #eee" src="{% url 'curve_rose_png' pk=object.id %}">
+  {% else %}
+    <p class="text-warning">Preview cannot be generated as there are too few deviation readings.</p>
+    <p class="text-warning">Please <a href="{% url 'curve_readings' pk=object.id %}">enter some</a>.</p>
+  {% endif %}
+</div>
+
+
+<div class="col-sm-4 text-center">
+  <h3>Deviation Table</h3>
+
+  <p>
+    <a href="{% url 'curve_equation' pk=object.pk %}">Choose a different curve equation</a>
+  </p>
+
+  <p>
+    <a href="{% url 'curve_table_pdf' pk=object.pk %}">
+      <span class="glyphicon glyphicon-download"></span>
+      Download as PDF
+    </a>
+  </p>
+
+  {% if object.can_calculate_curve %}
+    <img class="img-responsive" style="border: 1px solid #eee" src="{% url 'curve_table_png' pk=object.id %}">
+  {% else %}
+    <p class="text-warning">Preview cannot be generated as there are too few deviation readings.</p>
+    <p class="text-warning">Please <a href="{% url 'curve_readings' pk=object.id %}">enter some</a>.</p>
+  {% endif %}
+
+</div>
+
+
 <div class="col-sm-4 text-center">
 
   <h3>Readings</h3>
 
-  <p><a href="{% url 'curve_readings' pk=object.id %}">Edit readings</a></p>
+  <p>These are the readings you provided that the deviation table and conversion rose are created from. <a href="{% url 'curve_readings' pk=object.id %}"><span class="glyphicon glyphicon-pencil">edit</a></span></p>
 
   <table class="table table-striped table-bordered table-condensed">
 
@@ -48,41 +94,6 @@
 
 </div>
 
-
-<div class="col-sm-4 text-center">
-  <h3>Deviation Table</h3>
-
-  <p>
-    <a href="{% url 'curve_equation' pk=object.pk %}">Choose a different curve equation</a>
-    <br>
-    <a href="{% url 'curve_table_pdf' pk=object.pk %}">
-      <span class="glyphicon glyphicon-download"></span>
-      Download as PDF
-    </a>
-  </p>
-
-  {% if object.can_calculate_curve %}
-    <img class="img-responsive" style="border: 1px solid #eee" src="{% url 'curve_table_png' pk=object.id %}">
-  {% else %}
-    <p class="text-warning">Preview cannot be generated as there are too few deviation readings.</p>
-    <p class="text-warning">Please <a href="{% url 'curve_readings' pk=object.id %}">enter some</a>.</p>
-  {% endif %}
-
-</div>
-
-
-<div class="col-sm-4 text-center">
-  <h3>OmniRose</h3>
-
-  <p>Low-res sample for {{ -7|east_west }} variation.</p>
-
-  {% if object.can_calculate_curve %}
-    <img class="img-responsive" style="border: 1px solid #eee" src="{% url 'curve_rose_png' pk=object.id %}">
-  {% else %}
-    <p class="text-warning">Preview cannot be generated as there are too few deviation readings.</p>
-    <p class="text-warning">Please <a href="{% url 'curve_readings' pk=object.id %}">enter some</a>.</p>
-  {% endif %}
-</div>
 
 </div>
 {% endblock %}

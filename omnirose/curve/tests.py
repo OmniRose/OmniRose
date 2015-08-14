@@ -311,7 +311,7 @@ class CurveLiveTests(OmniRoseSeleniumTestCase):
 
         sel.find_element_by_link_text('Your deviation tables').click()
         sel.find_element_by_partial_link_text('Gypsy Moth').click()
-        sel.find_element_by_link_text('edit').click()
+        sel.find_element_by_id('curve_edit_link').click()
 
         # update the values
         vessel_input = sel.find_element_by_css_selector('input[name=vessel]')
@@ -325,7 +325,7 @@ class CurveLiveTests(OmniRoseSeleniumTestCase):
         update.perform()
 
         # check values updated correctly
-        sel.find_element_by_link_text('edit').click()
+        sel.find_element_by_id('curve_edit_link').click()
         self.assertEqual(
             sel.find_element_by_css_selector('input[name=vessel]').get_attribute("value"),
             "New Name"
