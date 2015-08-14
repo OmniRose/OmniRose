@@ -2,8 +2,6 @@
 
 ## launch
 
-* Improve flow from home page to create a new curve. For example if not logged in gather the user's email address as part of process. Or better put both login and create account forms on the same page.
-
 * Set up payments for producing high quality tables and roses. Should lock the table.
 
 * Improve layout of curve detail page

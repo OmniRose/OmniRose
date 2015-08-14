@@ -202,6 +202,107 @@ class CurveLiveTests(OmniRoseSeleniumTestCase):
         curve = Curve.objects.get(id=curve.id)
         self.assertEqual(curve.equation_slug, "trig_5")
 
+    def test_create_curve_having_account(self):
+        sel = self.selenium
+
+        # go to the create new curve page
+        self.get_home()
+
+        sel.find_element_by_partial_link_text('Read more').click()
+        sel.find_element_by_link_text('Create your deviation table.').click()
+
+        # check we are on the enter page
+        self.assertRegexpMatches(sel.current_url, r'/accounts/enter/')
+
+        # check that the info is displayed correctly
+        self.assertRegexpMatches(
+            sel.find_element_by_css_selector('div.alert-info').text,
+            r'save the data and let you access it again'
+        )
+
+        # Login using form
+        login = ActionChains(sel)
+        login.send_keys('bob@test.com')
+        login.send_keys(Keys.TAB)
+        login.send_keys('secret')
+        login.send_keys(Keys.RETURN)
+        login.perform()
+
+        # check we are on the create page
+        self.assertRegexpMatches(sel.current_url, r'/deviation_tables/new/$')
+
+
+    def test_create_curve_creating_account(self):
+        sel = self.selenium
+
+        # go to the create new curve page
+        self.get_home()
+
+        sel.find_element_by_partial_link_text('Read more').click()
+        sel.find_element_by_link_text('Create your deviation table.').click()
+
+        # check we are on the enter page
+        self.assertRegexpMatches(sel.current_url, r'/accounts/enter/')
+
+        # check that the info is displayed correctly
+        self.assertRegexpMatches(
+            sel.find_element_by_css_selector('div.alert-info').text,
+            r'save the data and let you access it again'
+        )
+
+        # Focus on the create account form email field
+        sel.find_element_by_css_selector('#register-form input[name=email]').click()
+
+        # create account using form
+        login = ActionChains(sel)
+        login.send_keys('not-bob@test.com')
+        login.send_keys(Keys.TAB)
+        login.send_keys(Keys.RETURN)
+        login.perform()
+
+        # check we are on the create page
+        self.assertRegexpMatches(sel.current_url, r'/deviation_tables/new/$')
+
+        # Test that it also works when we enter an email address that can't be used.
+        self.logout()
+
+        self.get_home()
+
+        sel.find_element_by_partial_link_text('Read more').click()
+        sel.find_element_by_link_text('Create your deviation table.').click()
+
+        # check we are on the enter page
+        self.assertRegexpMatches(sel.current_url, r'/accounts/enter/')
+
+        # check that the info is displayed correctly
+        self.assertRegexpMatches(
+            sel.find_element_by_css_selector('div.alert-info').text,
+            r'save the data and let you access it again'
+        )
+
+        # Focus on the create account form email field
+        sel.find_element_by_css_selector('#register-form input[name=email]').click()
+
+        # create account using form but email that already exists
+        login = ActionChains(sel)
+        login.send_keys('not-bob@test.com')
+        login.send_keys(Keys.TAB)
+        login.send_keys(Keys.RETURN)
+        login.perform()
+
+        # check we are on the register page
+        self.assertRegexpMatches(sel.current_url, r'/accounts/register/')
+
+        # create account using form but email that already exists
+        login = ActionChains(sel)
+        login.send_keys('really-') # the "not-bob@test.com" is already in the field
+        login.send_keys(Keys.TAB)
+        login.send_keys(Keys.RETURN)
+        login.perform()
+
+        # check we are on the create page
+        self.assertRegexpMatches(sel.current_url, r'/deviation_tables/new/$')
+
     def test_edit_curve_details(self):
         sel = self.selenium
 

@@ -1,7 +1,7 @@
 <form id="login-form" class="form-signin well" method="post" action="{% url 'login' %}">
 
   {% csrf_token %}
-  <input type="hidden" name="next" value="{{ next }}" />
+  <input type="hidden" name="next" value="{% firstof next '' %}" />
 
   <h2 class="form-signin-heading">Sign in</h2>
 

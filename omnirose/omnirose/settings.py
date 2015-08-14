@@ -28,6 +28,7 @@ ALLOWED_HOSTS = []
 
 AUTH_USER_MODEL = "accounts.User"
 LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = '/accounts/enter/'
 
 # Application definition
 
