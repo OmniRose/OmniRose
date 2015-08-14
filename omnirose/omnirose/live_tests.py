@@ -36,7 +36,7 @@ class OmniRoseSeleniumTestCase(StaticLiveServerTestCase):
         sel = self.selenium
 
         self.get_home()
-        sel.find_element_by_link_text('log in').click()
+        sel.find_element_by_link_text('log in or sign up').click()
 
         login = ActionChains(sel)
         login.send_keys(email)

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load firstof from future %}
+
+{% block title %}Log in or sign up{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-sm-12 text-center">
+      <h1>Log in or sign up</h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6 text-center">
+
+      {% include "accounts/login_form.html" %}
+
+      <p class="text-info">
+        <a href="{% url 'password_reset' %}">Forgotten your password?</a>
+      </p>
+
+
+    </div>
+
+
+    <div class="col-sm-6 text-center">
+
+      {% include "accounts/register_form.html" %}
+
+    </div>
+
+</div>
+
+
+{% endblock %}
+
+
+
+
+

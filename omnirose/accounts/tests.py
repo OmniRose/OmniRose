@@ -16,7 +16,10 @@ class AccountLiveTests(OmniRoseSeleniumTestCase):
         sel = self.selenium
 
         self.get_home()
-        sel.find_element_by_link_text('create account').click()
+        sel.find_element_by_link_text('log in or sign up').click()
+
+        # Focus on the create account form email field
+        sel.find_element_by_css_selector('#register-form input[name=email]').click()
 
         # Enter the email address
         email = 'joe@test.com'
@@ -50,7 +53,7 @@ class AccountLiveTests(OmniRoseSeleniumTestCase):
 
         # go to forgotten password page
         self.get_home()
-        sel.find_element_by_link_text('log in').click()
+        sel.find_element_by_link_text('log in or sign up').click()
         sel.find_element_by_link_text('Forgotten your password?').click()
 
         # enter email address
