@@ -16,6 +16,7 @@ urlpatterns = [
 
     url(r'^(?P<pk>\d+)/rose_png/$', views.CurveRosePngView.as_view(), name='curve_rose_png'),
     url(r'^(?P<pk>\d+)/rose_purchase/$', views.CurveRosesPurchase.as_view(), name='curve_rose_purchase'),
+    url(r'^(?P<pk>\d+)/rose_purchase_failed/$', views.CurveRosesPurchaseFailed.as_view(), name='curve_rose_purchase_failed'),
     url(r'^(?P<pk>\d+)/rose_select/$', views.CurveRosesSelect.as_view(), name='curve_rose_select'),
 
     url(r'^(?P<pk>\d+)/readings/$', views.CurveReadingEditView.as_view(), name='curve_readings'),

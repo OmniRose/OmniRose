@@ -380,7 +380,7 @@ class CurveLiveTests(OmniRoseSeleniumTestCase):
         sel.find_element_by_link_text('Your deviation tables').click()
         sel.find_element_by_partial_link_text('Gypsy Moth').click()
 
-        pdf_url = sel.find_element_by_partial_link_text('Download as PDF').get_attribute("href")
+        pdf_url = sel.find_element_by_partial_link_text('Download table as PDF').get_attribute("href")
         # print pdf_url
 
         # check that we can't get PDF without cookie
@@ -403,3 +403,74 @@ class CurveLiveTests(OmniRoseSeleniumTestCase):
 
         # Final call from selenium so that the shutdown process goes smoothly
         self.get_home()
+
+
+    def do_stripe_payment(self, card_name="good_visa", exp_mmyy="1234", cvc="123"):
+        sel = self.selenium
+
+        cards = {
+            "good_visa": "4242424242424242",
+            "decline_on_server": "4000000000000341",
+        }
+        card_number = cards[card_name]
+
+        stripe_button = sel.find_element_by_css_selector("button.stripe-button-el")
+        stripe_button.click()
+        sleep(2)
+
+        # See https://gist.github.com/josephmosby/ae7ca6d8128f02e306db for
+        # useful code to copy
+
+        sel.switch_to.frame('stripe_checkout_app')
+
+        # Enter credit card number
+        card_input = sel.find_element_by_css_selector('#card_number')
+        for chunk in [card_number[x:x+4] for x in xrange(0,16,4)]:
+            card_input.send_keys(chunk)
+            sleep(0.25)
+
+        # Enter expiry date
+        exp_input = sel.find_element_by_css_selector('#cc-exp')
+        for chunk in [exp_mmyy[x:x+2] for x in xrange(0,4,2)]:
+            exp_input.send_keys(chunk)
+            sleep(0.25)
+
+        # Enter CVC check number
+        csc_input = sel.find_element_by_css_selector('#cc-csc')
+        csc_input.send_keys(cvc)
+
+        submit_button = sel.find_element_by_css_selector('#submitButton')
+        submit_button.click()
+
+        # The part where we're redirected, sleep is here to allow the redirect
+        # to catch up
+        sel.switch_to_default_content()
+        sleep(6)
+
+        return None
+
+
+    def test_curve_purchasing(self):
+        sel = self.selenium
+
+        self.get_home()
+
+        # Log in as valid user, get url to the curve
+        self.login('bob@test.com')
+        sel.find_element_by_link_text('Your deviation tables').click()
+        sel.find_element_by_partial_link_text('Gypsy Moth').click()
+        sel.find_element_by_partial_link_text('Download rose as PDF(s)').click()
+
+        # check that we are on purchase page
+        self.assertRegexpMatches(sel.current_url, r'/rose_purchase/$')
+
+        # Check we stay on this page if declined
+        self.do_stripe_payment("decline_on_server")
+        self.assertRegexpMatches(sel.current_url, r'/rose_purchase_failed/')
+        self.assertEqual(sel.find_element_by_id('stripe_error_message').text, "Your card was declined.")
+
+        # Check we stay on this page if declined
+        sel.find_element_by_partial_link_text('Please try again').click()
+        self.do_stripe_payment("good_visa")
+        self.assertRegexpMatches(sel.current_url, r'/rose_select/$')
+

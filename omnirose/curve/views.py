@@ -10,6 +10,7 @@ from django.core.urlresolvers import reverse
 
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.utils.http import urlencode
 from django.utils.text import slugify
 from django.conf import settings
 from django.http import HttpResponse, FileResponse, Http404
@@ -260,6 +261,16 @@ class CurveRosesSelect(CurvePermissionMixin, MayDownloadRoseMixin, CurveSetObjec
     template_name = "curve/roses_select.html"
 
 
+class CurveRosesPurchaseFailed(CurvePermissionMixin, CurveSetObjectMixin, TemplateView):
+    model = Curve
+    template_name = "curve/roses_purchase_failed.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(CurveRosesPurchaseFailed, self).get_context_data(**kwargs)
+        context['message'] = self.request.GET.get('message')
+        return context
+
+
 class CurveRosesPurchase(CurvePermissionMixin, CurveSetObjectMixin, FormView):
     model = Curve
     template_name = "curve/roses_purchase.html"
@@ -276,7 +287,7 @@ class CurveRosesPurchase(CurvePermissionMixin, CurveSetObjectMixin, FormView):
 
         curve = self.object
 
-        print form.cleaned_data
+        # print form.cleaned_data
 
         # Set your secret key: remember to change this to your live secret key in production
         # See your keys here https://dashboard.stripe.com/account/apikeys
@@ -301,4 +312,9 @@ class CurveRosesPurchase(CurvePermissionMixin, CurveSetObjectMixin, FormView):
             # There has been some error, tell the user.
             body = e.json_body
             err  = body['error']
-            return render_to_response(self.template_name, {"error_message":err['message']})
+            message =  err['message']
+
+            failure_url = reverse('curve_rose_purchase_failed', kwargs={'pk':curve.id})
+            failure_url = failure_url + '?' + urlencode({'message':message})
+
+            return redirect(failure_url)
