@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
+import local_settings
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
@@ -20,9 +21,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = 'sytf576bw)&f45=u*z8%in71o(lsywtuvg@x4g@2v0l$qxtj0a'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-TEMPLATE_DEBUG = True
+DEBUG = local_settings.DEBUG
+TEMPLATE_DEBUG = local_settings.DEBUG
 
 ALLOWED_HOSTS = []
 
@@ -96,4 +96,12 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
+# Stripe related
+STRIPE_SECRET_KEY=local_settings.STRIPE_SECRET_KEY
+STRIPE_PUBLIC_KEY=local_settings.STRIPE_PUBLIC_KEY
+
+
+
 
