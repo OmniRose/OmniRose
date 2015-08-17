@@ -44,3 +44,5 @@ class EquationChoiceForm(forms.Form):
         self.fields['equation'] = forms.ChoiceField(choices=equation_choices, initial=equation_initial)
 
 
+class StripeForm(forms.Form):
+    stripeToken = forms.CharField()

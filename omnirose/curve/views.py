@@ -1,19 +1,22 @@
+import stripe
+
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, FormView, UpdateView
 from django.views.generic.detail import DetailView, SingleObjectMixin
+from django.views.generic.base import TemplateView
 
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render_to_response
 from django.core.urlresolvers import reverse
 
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.utils.text import slugify
-
+from django.conf import settings
 from django.http import HttpResponse, FileResponse, Http404
 
 
 from .models import Curve, Reading
-from .forms import ReadingForm, ReadingFormSet, EquationChoiceForm
+from .forms import ReadingForm, ReadingFormSet, EquationChoiceForm, StripeForm
 
 from outputs.models import Rose, Table
 
@@ -32,9 +35,20 @@ class CurvePermissionMixin(object):
         return super(CurvePermissionMixin, self).dispatch(*args, **kwargs)
 
 
-class CurveView(CurvePermissionMixin, DetailView):
+class MayDownloadRoseMixin(object):
 
-    # FIXME - add logic to check that user owns this curve or it is public
+    def dispatch(self, *args, **kwargs):
+
+        curve = self.get_object()
+
+        # Check that rose downloads have been paid for.
+        if not curve.may_download_roses:
+            return redirect('curve_rose_purchase', pk=curve.pk)
+
+        return super(MayDownloadRoseMixin, self).dispatch(*args, **kwargs)
+
+
+class CurveView(CurvePermissionMixin, DetailView):
 
     model = Curve
 
@@ -240,3 +254,51 @@ class CurveReadingEditView(CurvePermissionMixin, CurveSetObjectMixin, FormView):
         else:
             return super(CurveReadingEditView, self).get_success_url()
 
+
+class CurveRosesSelect(CurvePermissionMixin, MayDownloadRoseMixin, CurveSetObjectMixin, TemplateView):
+    model = Curve
+    template_name = "curve/roses_select.html"
+
+
+class CurveRosesPurchase(CurvePermissionMixin, CurveSetObjectMixin, FormView):
+    model = Curve
+    template_name = "curve/roses_purchase.html"
+    form_class = StripeForm
+
+    def get_context_data(self, **kwargs):
+        context = super(CurveRosesPurchase, self).get_context_data(**kwargs)
+        context['STRIPE_PUBLIC_KEY'] = settings.STRIPE_PUBLIC_KEY
+        context['ROSE_CURRENCY'] = settings.ROSE_CURRENCY
+        context['ROSE_PRICE']    = settings.ROSE_PRICE
+        return context
+
+    def form_valid(self, form):
+
+        curve = self.object
+
+        print form.cleaned_data
+
+        # Set your secret key: remember to change this to your live secret key in production
+        # See your keys here https://dashboard.stripe.com/account/apikeys
+        stripe.api_key = settings.STRIPE_SECRET_KEY
+        stripe_token = form.cleaned_data['stripeToken']
+
+        # Create the charge on Stripe's servers - this will charge the user's card
+        try:
+            charge = stripe.Charge.create(
+              source               = stripe_token,
+              receipt_email        = self.request.user.email,
+              statement_descriptor = "conversion rose " + str(curve.id),
+              amount               = settings.ROSE_PRICE,
+              currency             = settings.ROSE_CURRENCY,
+              description          = "Conversion roses for " + curve.vessel,
+            )
+            curve.set_roses_paid_to_now()
+            curve.save()
+            return redirect('curve_rose_select', pk=curve.id)
+
+        except stripe.error.CardError, e:
+            # There has been some error, tell the user.
+            body = e.json_body
+            err  = body['error']
+            return render_to_response(self.template_name, {"error_message":err['message']})

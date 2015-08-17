@@ -7,3 +7,4 @@ django-template-email
 django-bootstrap-form
 selenium
 requests
+stripe

@@ -102,6 +102,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 STRIPE_SECRET_KEY=local_settings.STRIPE_SECRET_KEY
 STRIPE_PUBLIC_KEY=local_settings.STRIPE_PUBLIC_KEY
 
-
-
+# Rose purchasing
+ROSE_CURRENCY = "USD"
+ROSE_PRICE    = 800 # $8
 

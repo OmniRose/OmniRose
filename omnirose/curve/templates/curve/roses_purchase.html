@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load omnirose_tags %}
+{% load static %}
+
+{% block title %}{{ object.vessel }}{% endblock %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-sm-12 text-center">
+    <h1>{{ object.vessel }}</h1>
+    <h2>Purchase conversion roses</h2>
+  </div>
+</div>
+
+{% if error_message %}
+<div class="row">
+  <div class="col-sm-8 col-sm-offset-2 text-center alert alert-danger" role="alert">
+    {{ error_message }}
+  </div>
+</div>
+{% endif %}
+
+<div class="row">
+  <div class="col-sm-4 text-center">
+    <p>
+      <form action="" method="POST">
+        {% csrf_token %}
+
+        <script
+          src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+          data-key="{{ STRIPE_PUBLIC_KEY }}"
+          data-image="{% static 'rose_cropped.png' %}"
+          data-name="OmniRose"
+          data-description="Conversion roses for {{ object.vessel }}"
+          data-currency="{{ ROSE_CURRENCY }}"
+          data-amount="{{ ROSE_PRICE }}"
+          data-label="Purchase Hi-Res Conversion Roses"
+          data-email="{{ user.email }}"
+        >
+        </script>
+      </form>
+    </p>
+  </div>
+</div>
+
+
+{% endblock %}

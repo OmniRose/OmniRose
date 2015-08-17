@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load omnirose_tags %}
+{% load static %}
 
 {% block title %}{{ object.vessel }}{% endblock %}
 
@@ -27,16 +28,23 @@
 
   <p>Low-res sample for {{ -7|east_west }} variation.</p>
 
-  <p>Full resolution requires payment.</p>
-
   {% if object.can_calculate_curve %}
-    <img class="img-responsive" style="border: 1px solid #eee" src="{% url 'curve_rose_png' pk=object.id %}">
+    <a href="{% url 'curve_rose_select' pk=object.pk %}">
+      <img class="img-responsive" style="border: 1px solid #eee" src="{% url 'curve_rose_png' pk=object.id %}">
+    </a>
+    <p>
+      <a href="{% url 'curve_rose_select' pk=object.pk %}">
+        <span class="glyphicon glyphicon-download"></span>
+        Download as PDF(s)
+      </a>
+    </p>
   {% else %}
     <p class="text-warning">Preview cannot be generated as there are too few deviation readings.</p>
     <p class="text-warning">Please <a href="{% url 'curve_readings' pk=object.id %}">enter some</a>.</p>
   {% endif %}
 </div>
 
+{# -------------------------------------------------------------- #}
 
 <div class="col-sm-4 text-center">
   <h3>Deviation Table</h3>
@@ -45,15 +53,16 @@
     <a href="{% url 'curve_equation' pk=object.pk %}">Choose a different curve equation</a>
   </p>
 
-  <p>
-    <a href="{% url 'curve_table_pdf' pk=object.pk %}">
-      <span class="glyphicon glyphicon-download"></span>
-      Download as PDF
-    </a>
-  </p>
-
   {% if object.can_calculate_curve %}
-    <img class="img-responsive" style="border: 1px solid #eee" src="{% url 'curve_table_png' pk=object.id %}">
+    <a href="{% url 'curve_table_pdf' pk=object.pk %}">
+      <img class="img-responsive" style="border: 1px solid #eee" src="{% url 'curve_table_png' pk=object.id %}">
+    </a>
+    <p>
+      <a href="{% url 'curve_table_pdf' pk=object.pk %}">
+        <span class="glyphicon glyphicon-download"></span>
+        Download as PDF
+      </a>
+    </p>
   {% else %}
     <p class="text-warning">Preview cannot be generated as there are too few deviation readings.</p>
     <p class="text-warning">Please <a href="{% url 'curve_readings' pk=object.id %}">enter some</a>.</p>
@@ -61,6 +70,7 @@
 
 </div>
 
+{# -------------------------------------------------------------- #}
 
 <div class="col-sm-4 text-center">
 
