@@ -1,7 +1,8 @@
 from django.db import models
 from django.db.models import Max, Min
 from django.core.urlresolvers import reverse
-from  django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator
+from django.utils import timezone
 
 import warnings
 
@@ -174,6 +175,8 @@ class Curve(CurveCalculations, models.Model):
         blank=True
     )
 
+    roses_paid = models.DateTimeField(editable=False, blank=True, null=True)
+
     created = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
@@ -201,6 +204,14 @@ class Curve(CurveCalculations, models.Model):
         # If we could not find one then let the code find the best one
         return super(Curve, self).choose_equation()
 
+
+    def set_roses_paid_to_now(self):
+        self.roses_paid = timezone.now()
+        return None
+
+    @property
+    def may_download_roses(self):
+        return bool(self.roses_paid)
 
 
 class Reading(models.Model):

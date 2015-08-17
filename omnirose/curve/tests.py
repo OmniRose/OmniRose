@@ -1,4 +1,5 @@
 from time import sleep
+from datetime import datetime
 import re
 import requests
 
@@ -12,6 +13,20 @@ from selenium.webdriver.common.action_chains import ActionChains
 from .models import Curve, Reading, ErrorNoSuitableEquationAvailable
 from .equations import all_equations
 from .samples import create_database_curve_from_sample, create_curve_calculation_from_sample, samples
+
+
+class CurveBasicTests(TestCase):
+    def test_roses_paid(self):
+        curve = Curve()
+
+        # by default should not be paid
+        self.assertEqual(curve.roses_paid, None)
+        self.assertFalse(curve.may_download_roses)
+
+        # mark as paid, see what happens
+        curve.set_roses_paid_to_now()
+        self.assertTrue(curve.may_download_roses)
+
 
 class DeviationTestBase(object):
 
