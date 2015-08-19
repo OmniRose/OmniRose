@@ -13,7 +13,7 @@
     <div class="well">
       <h1>Purchase conversion roses.</h1>
 
-      <p>For <strong>{{ ROSE_FORMATTED_PRICE }}</strong> you can download hi-res and ready to print PDFs of conversion roses for {{ object.vessel }}.</p>
+      <p>For <strong>{{ settings.ROSE_FORMATTED_PRICE }}</strong> you can download hi-res and ready to print PDFs of conversion roses for {{ object.vessel }}.</p>
 
       <p>
         <form action="" method="POST">
@@ -22,13 +22,13 @@
           <script
             src="https://checkout.stripe.com/checkout.js"
             class="stripe-button"
-            data-key="{{ STRIPE_PUBLIC_KEY }}"
+            data-key="{{ settings.STRIPE_PUBLIC_KEY }}"
             data-image="{% static 'rose_cropped.png' %}"
             data-name="OmniRose"
             data-description="Conversion roses for {{ object.vessel }}"
-            data-currency="{{ ROSE_CURRENCY }}"
-            data-amount="{{ ROSE_PRICE }}"
-            data-label="Pay {{ ROSE_FORMATTED_PRICE }} to download"
+            data-currency="{{ settings.ROSE_CURRENCY }}"
+            data-amount="{{ settings.ROSE_PRICE }}"
+            data-label="Pay {{ settings.ROSE_FORMATTED_PRICE }} to download"
             data-email="{{ user.email }}"
           >
           </script>

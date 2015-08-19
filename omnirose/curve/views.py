@@ -324,14 +324,6 @@ class CurveRosesPurchase(CurvePermissionMixin, CurveSetObjectMixin, FormView):
     template_name = "curve/roses_purchase.html"
     form_class = StripeForm
 
-    def get_context_data(self, **kwargs):
-        context = super(CurveRosesPurchase, self).get_context_data(**kwargs)
-        context['STRIPE_PUBLIC_KEY'] = settings.STRIPE_PUBLIC_KEY
-        context['ROSE_CURRENCY'] = settings.ROSE_CURRENCY
-        context['ROSE_PRICE']    = settings.ROSE_PRICE
-        context['ROSE_FORMATTED_PRICE'] = settings.ROSE_FORMATTED_PRICE
-        return context
-
     def form_valid(self, form):
 
         curve = self.object

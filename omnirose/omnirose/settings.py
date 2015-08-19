@@ -78,6 +78,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django_settings_export.settings_export',
             ],
         },
     },
@@ -126,3 +127,11 @@ STRIPE_PUBLIC_KEY=local_settings.STRIPE_PUBLIC_KEY
 ROSE_CURRENCY = "USD"
 ROSE_PRICE    = 800 # $8
 ROSE_FORMATTED_PRICE = "$8"
+
+SETTINGS_EXPORT = [
+    'STRIPE_PUBLIC_KEY',
+    'ROSE_CURRENCY',
+    'ROSE_PRICE',
+    'ROSE_FORMATTED_PRICE',
+]
+
