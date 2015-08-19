@@ -19,6 +19,8 @@ from django.http import HttpResponse, FileResponse, Http404
 from .models import Curve, Reading
 from .forms import ReadingForm, ReadingFormSet, EquationChoiceForm, StripeForm, RoseDownloadForm
 
+from omnirose.templatetags.omnirose_tags import east_west
+
 from outputs.models import Rose, Table
 
 
@@ -64,6 +66,12 @@ class CurveVisualisationBaseView(CurvePermissionMixin, DetailView):
     def alter_curve(self, curve):
         pass
 
+    @property
+    def downloaded_name(self):
+        curve = self.get_object()
+        return slugify(curve.vessel) + "-table.pdf"
+
+
     def get(self, request, *args, **kwargs):
         curve = self.get_object()
         self.alter_curve(curve)
@@ -91,8 +99,7 @@ class CurveVisualisationBaseView(CurvePermissionMixin, DetailView):
                 content_type='application/pdf'
             )
 
-            downloaded_name = slugify(curve.vessel) + "-table.pdf"
-            response['Content-Disposition'] = "attachment; filename='" + downloaded_name + "'"
+            response['Content-Disposition'] = "attachment; filename='" + self.downloaded_name + "'"
 
             return response
         else:
@@ -128,6 +135,16 @@ class CurveRosePngView(CurveVisualisationBaseView):
 class CurveRosePdfView(MayDownloadRoseMixin, CurveVisualisationBaseView):
     visualisation_class = Rose
     output='pdf'
+
+    @property
+    def downloaded_name(self):
+        curve = self.get_object()
+
+        var_min = east_west(int(self.kwargs['var_min']))
+        var_max = east_west(int(self.kwargs['var_max']))
+
+        name = "%s-roses-%s-%s" % (curve.vessel, var_min, var_max)
+        return slugify(name) + ".pdf"
 
     def get_visualisation_args(self):
         var_min = int(self.kwargs['var_min'])
@@ -269,10 +286,16 @@ class CurveReadingEditView(CurvePermissionMixin, CurveSetObjectMixin, FormView):
             return super(CurveReadingEditView, self).get_success_url()
 
 
+from .regions import regions
 class CurveRosesSelect(CurvePermissionMixin, MayDownloadRoseMixin, CurveSetObjectMixin, FormView):
     model = Curve
     template_name = "curve/roses_select.html"
     form_class = RoseDownloadForm
+
+    def get_context_data(self, **kwargs):
+        context = super(CurveRosesSelect, self).get_context_data(**kwargs)
+        context['regions'] = regions
+        return context
 
     def form_valid(self, form):
         curve = self.object

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django import forms
 from django.forms.models import formset_factory, BaseModelFormSet
 from django.forms.widgets import NumberInput
@@ -48,5 +50,16 @@ class StripeForm(forms.Form):
     stripeToken = forms.CharField()
 
 class RoseDownloadForm(forms.Form):
-    from_variation = forms.IntegerField(min_value=-179, max_value=180)
-    to_variation   = forms.IntegerField(min_value=-179, max_value=180)
+    from_variation = forms.IntegerField(
+        initial=0,
+        min_value=-179,
+        max_value=180,
+        label="Start variation",
+        help_text="eg: '-7' for 7°W or '3' for 3°E"
+    )
+    to_variation = forms.IntegerField(
+        initial=0,
+        min_value=-179,
+        max_value=180,
+        label="End variation"
+    )
