@@ -2,13 +2,10 @@
 
 ## launch
 
-* Should lock the deviation table after paying for the rose.
-
 * Add instructions for converting between True and Compass to the deviation table print out. Also put in a sales pitch for purchasing an OmniRose.
 
 * Google Analytics
 
-* create a script to generate decent sample table and rose.
 
 ### deployment related issues
 
@@ -16,14 +13,16 @@
 
 * configure email sending
 
-* extract some things into a local_settings.py
-
 
 ## post launch
+
+* Should lock the deviation table after paying for the rose.
 
 * Create a page with different ways to swing a ship.
 
 * Create a tool that for a given location determines what the variation probably is (https://pypi.python.org/pypi/geomag/).
+
+* Link to apps that can tell you the local variation (CrowdMag on iOS and Android)
 
 * Set up automated email to people who've created tables prompting them to buy roses. Do it about one week after they create the rose.
 
@@ -32,8 +31,6 @@
 * Compress the number of readings shown - provide another page just with the readings on.
 
 * Let people email in photos of their deviation tables and we'll enter them in and create an account for them.
-
-* generate several roses into one pdf as separate pages
 
 * store date that the deviations were collected on (can be free form text).
 
