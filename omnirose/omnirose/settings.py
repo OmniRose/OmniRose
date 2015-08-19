@@ -18,7 +18,7 @@ import local_settings
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'sytf576bw)&f45=u*z8%in71o(lsywtuvg@x4g@2v0l$qxtj0a'
+SECRET_KEY = local_settings.SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = local_settings.DEBUG

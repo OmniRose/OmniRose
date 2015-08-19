@@ -1,5 +1,7 @@
 # Local settings
 
+SECRET_KEY = 'something_secure'
+
 DEBUG=True
 
 # https://dashboard.stripe.com/account/apikeys
