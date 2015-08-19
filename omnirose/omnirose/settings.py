@@ -119,6 +119,9 @@ STATIC_URL = '/static/'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 
+# Google Analytics
+GOOGLE_ANALYTICS_TRACKING_CODE = local_settings.GOOGLE_ANALYTICS_TRACKING_CODE
+
 # Stripe related
 STRIPE_SECRET_KEY=local_settings.STRIPE_SECRET_KEY
 STRIPE_PUBLIC_KEY=local_settings.STRIPE_PUBLIC_KEY
@@ -129,6 +132,7 @@ ROSE_PRICE    = 800 # $8
 ROSE_FORMATTED_PRICE = "$8"
 
 SETTINGS_EXPORT = [
+    'GOOGLE_ANALYTICS_TRACKING_CODE',
     'STRIPE_PUBLIC_KEY',
     'ROSE_CURRENCY',
     'ROSE_PRICE',
