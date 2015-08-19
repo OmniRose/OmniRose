@@ -18,6 +18,17 @@ class RoseTestCase(TestCase):
             os.rename(rose.filename, "test_output/rose_%s.pdf" % name)
             self.assertTrue(True)
 
+    def test_multiple_rose_creation(self):
+        name = 'rya_training_almanac'
+        sample = samples[name]
+
+        curve = create_database_curve_from_sample(sample)
+
+        rose = Rose(variation=-1, variation_max=1, curve=curve)
+        rose.draw()
+        os.rename(rose.filename, "test_output/rose_%s_multiple.pdf" % name)
+        self.assertTrue(True)
+
 
 class TableTestCase(TestCase):
     def test_table_creation(self):

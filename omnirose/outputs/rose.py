@@ -13,7 +13,7 @@ from .base import OutputsTextMixin
 class Rose(OutputsTextMixin):
 
 
-    def __init__(self, variation, curve=None):
+    def __init__(self, variation, variation_max=None, curve=None):
         self.SURFACE_HEIGHT = 790.
         self.SURFACE_WIDTH  = 590.
 
@@ -40,8 +40,14 @@ class Rose(OutputsTextMixin):
 
         self.surface = cairo.PDFSurface(self.filename, self.SURFACE_WIDTH, self.SURFACE_HEIGHT)
         self.context = cairo.Context(self.surface)
-        self.variation = variation
         self.curve = curve
+
+        self.variation = variation
+
+        if variation_max is None:
+            self.variation_max = variation
+        else:
+            self.variation_max = variation_max
 
         self.magnetic_background_colour_rgba  = (1, 0.95, 0.95, 1)
         self.magnetic_text_colour_rgba = (0.2, 0, 0, 1)
@@ -62,6 +68,17 @@ class Rose(OutputsTextMixin):
 
 
     def draw(self):
+        page_number = 0
+        for variation in range(self.variation, self.variation_max + 1):
+
+            # We need to start on a new page if this is not the first page.
+            if page_number > 0:
+                self.surface.show_page()
+            page_number = page_number + 1
+
+            self.draw_page(variation)
+
+    def draw_page(self, variation):
         magnetic_rose_width = self.rose_width * 1
         true_rose_width     = self.rose_width * 1.2
         compass_rose_width  = self.rose_width * 1
@@ -73,7 +90,7 @@ class Rose(OutputsTextMixin):
 
         # Draw the magnetic rose
         self.draw_ring(
-            magnetic_rose_radius, magnetic_rose_width, 'M', self.variation, None,
+            magnetic_rose_radius, magnetic_rose_width, 'M', variation, None,
             background_colour_rgba=self.magnetic_background_colour_rgba,
             text_colour_rgba=self.magnetic_text_colour_rgba,
         )
@@ -87,13 +104,13 @@ class Rose(OutputsTextMixin):
 
         # Draw the adjusted compass rose
         self.draw_ring(
-            compass_rose_radius, compass_rose_width, 'C', self.variation, self.curve,
+            compass_rose_radius, compass_rose_width, 'C', variation, self.curve,
             background_colour_rgba=self.compass_background_colour_rgba,
             text_colour_rgba=self.compass_text_colour_rgba,
         )
 
         # Draw the variation
-        self.draw_variation()
+        self.draw_variation(variation)
 
         # Draw the blurb
         self.draw_titles()
@@ -198,8 +215,7 @@ class Rose(OutputsTextMixin):
                         context.set_font_size(superscript_font_size)
                         context.show_text(superscript)
 
-    def draw_variation(self):
-        var = self.variation
+    def draw_variation(self, var):
 
         text = east_west(var)
 
