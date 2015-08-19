@@ -4,8 +4,6 @@
 
 * Add instructions for converting between True and Compass to the deviation table print out. Also put in a sales pitch for purchasing an OmniRose.
 
-* Privacy policy etc
-
 
 ### deployment related issues
 
