@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load omnirose_tags %}
 {% load static %}
+{% load bootstrap %}
 
 {% block title %}{{ object.vessel }}{% endblock %}
 
@@ -9,12 +10,24 @@
 <div class="row">
   <div class="col-sm-12 text-center">
     <h1>{{ object.vessel }}</h1>
-    <h2>Select conversion roses to download</h2>
+    <h2>Download conversion roses</h2>
   </div>
 </div>
 
 <div class="row">
-  <div class="col-sm-4 text-center">
+  <div class="col-sm-4">
+
+    <form class="well" action="{% url 'curve_rose_select' object.id %}" method="post">
+        {% csrf_token %}
+        {{ form|bootstrap }}
+
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary">
+            Download conversion roses
+          </button>
+        </div>
+
+    </form>
 
   </div>
 </div>

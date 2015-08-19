@@ -17,7 +17,7 @@ from django.http import HttpResponse, FileResponse, Http404
 
 
 from .models import Curve, Reading
-from .forms import ReadingForm, ReadingFormSet, EquationChoiceForm, StripeForm
+from .forms import ReadingForm, ReadingFormSet, EquationChoiceForm, StripeForm, RoseDownloadForm
 
 from outputs.models import Rose, Table
 
@@ -125,8 +125,21 @@ class CurveRosePngView(CurveVisualisationBaseView):
         return {'variation': -7}
 
 
-class YourCurveListView(ListView):
+class CurveRosePdfView(MayDownloadRoseMixin, CurveVisualisationBaseView):
+    visualisation_class = Rose
+    output='pdf'
 
+    def get_visualisation_args(self):
+        var_min = int(self.kwargs['var_min'])
+        var_max = int(self.kwargs['var_max'])
+
+        if var_min < -179 or var_min > 180 or var_max < -179 or var_max > 180 or var_max < var_min:
+            raise Http404("Bad arguments for variation.")
+
+        return {'variation': var_min, 'variation_max': var_max}
+
+
+class YourCurveListView(ListView):
     model = Curve
     template_name = "curve/your_curve_list.html"
 
@@ -256,9 +269,21 @@ class CurveReadingEditView(CurvePermissionMixin, CurveSetObjectMixin, FormView):
             return super(CurveReadingEditView, self).get_success_url()
 
 
-class CurveRosesSelect(CurvePermissionMixin, MayDownloadRoseMixin, CurveSetObjectMixin, TemplateView):
+class CurveRosesSelect(CurvePermissionMixin, MayDownloadRoseMixin, CurveSetObjectMixin, FormView):
     model = Curve
     template_name = "curve/roses_select.html"
+    form_class = RoseDownloadForm
+
+    def form_valid(self, form):
+        curve = self.object
+        var_min = form.cleaned_data['from_variation']
+        var_max = form.cleaned_data['to_variation']
+
+        # swap them over if are the wrong way round
+        if var_min > var_max:
+            var_min, var_max = var_max, var_min
+
+        return redirect('curve_rose_pdf', pk=curve.id, var_min=var_min, var_max=var_max)
 
 
 class CurveRosesPurchaseFailed(CurvePermissionMixin, CurveSetObjectMixin, TemplateView):

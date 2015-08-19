@@ -46,3 +46,7 @@ class EquationChoiceForm(forms.Form):
 
 class StripeForm(forms.Form):
     stripeToken = forms.CharField()
+
+class RoseDownloadForm(forms.Form):
+    from_variation = forms.IntegerField(min_value=-179, max_value=180)
+    to_variation   = forms.IntegerField(min_value=-179, max_value=180)
