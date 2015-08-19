@@ -6,35 +6,65 @@
 
 {% block content %}
 
+
 <div class="row">
-  <div class="col-sm-12 text-center">
-    <h1>{{ object.vessel }}</h1>
-    <h2>Purchase conversion roses</h2>
+  <div class="col-sm-12">
+
+    <div class="well">
+      <h1>Purchase conversion roses.</h1>
+
+      <p>For <strong>{{ ROSE_FORMATTED_PRICE }}</strong> you can download hi-res and ready to print PDFs of conversion roses for {{ object.vessel }}.</p>
+
+      <p>
+        <form action="" method="POST">
+          {% csrf_token %}
+
+          <script
+            src="https://checkout.stripe.com/checkout.js"
+            class="stripe-button"
+            data-key="{{ STRIPE_PUBLIC_KEY }}"
+            data-image="{% static 'rose_cropped.png' %}"
+            data-name="OmniRose"
+            data-description="Conversion roses for {{ object.vessel }}"
+            data-currency="{{ ROSE_CURRENCY }}"
+            data-amount="{{ ROSE_PRICE }}"
+            data-label="Pay {{ ROSE_FORMATTED_PRICE }} to download"
+            data-email="{{ user.email }}"
+          >
+          </script>
+        </form>
+      </p>
+    </div>
   </div>
 </div>
 
 <div class="row">
-  <div class="col-sm-4 text-center">
-    <p>
-      <form action="" method="POST">
-        {% csrf_token %}
+  <div class="col-sm-8">
 
-        <script
-          src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-          data-key="{{ STRIPE_PUBLIC_KEY }}"
-          data-image="{% static 'rose_cropped.png' %}"
-          data-name="OmniRose"
-          data-description="Conversion roses for {{ object.vessel }}"
-          data-currency="{{ ROSE_CURRENCY }}"
-          data-amount="{{ ROSE_PRICE }}"
-          data-label="Purchase Hi-Res Conversion Roses"
-          data-email="{{ user.email }}"
-        >
-        </script>
-      </form>
-    </p>
+    <h3>About the downloads</h3>
+
+    <p>The downloaded PDFs are high resolution and printer ready for both A4 and Letter sized paper.</p>
+
+    <p>You select which variations you want generated depending on where globally you are.</p>
+
+    <p>PDFs can be downloaded immediately after payment.</p>
+
+
+    <h3>About conversion roses</h3>
+
+    <p>A conversion rose lets you convert between true, magnetic and compass bearings instantly and accurately without doing any calculations. For more details please see the <a href="{% url 'curve_home' %}#conversion-roses">full description</a>.</p>
+
+
   </div>
+
+  {# ------------------------------------------------------------------ #}
+
+  <div class="col-sm-4 text-center pull-right">
+        <img class="img-responsive" style="border: 1px solid #eee" src="{% url 'curve_rose_png' pk=object.id %}">
+  </div>
+
 </div>
+
 
 
 {% endblock %}

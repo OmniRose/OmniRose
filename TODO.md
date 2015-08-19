@@ -2,7 +2,7 @@
 
 ## launch
 
-* Set up payments for producing high quality tables and roses. Should lock the table.
+* Should lock the deviation table after paying for the rose.
 
 * Add instructions for converting between True and Compass to the deviation table print out. Also put in a sales pitch for purchasing an OmniRose.
 

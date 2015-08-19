@@ -281,6 +281,7 @@ class CurveRosesPurchase(CurvePermissionMixin, CurveSetObjectMixin, FormView):
         context['STRIPE_PUBLIC_KEY'] = settings.STRIPE_PUBLIC_KEY
         context['ROSE_CURRENCY'] = settings.ROSE_CURRENCY
         context['ROSE_PRICE']    = settings.ROSE_PRICE
+        context['ROSE_FORMATTED_PRICE'] = settings.ROSE_FORMATTED_PRICE
         return context
 
     def form_valid(self, form):
