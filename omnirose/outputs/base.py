@@ -1,6 +1,7 @@
 # coding=utf-8
 
 from datetime import datetime
+from math import radians
 from .helpers import split_into_lines
 
 class OutputsTextMixin:
@@ -66,3 +67,27 @@ class OutputsTextMixin:
                 y = y + self.text_line_height * height
 
         return y
+
+
+    def get_text_width_height(self, text):
+        return self.context.text_extents(text)[2:4]
+
+
+
+    def produce_rotated_text(self, string, x, y, theta=0.0):
+        # based on http://stackoverflow.com/a/17321410
+        ctx = self.context
+
+        fascent, fdescent, fheight, fxadvance, fyadvance = ctx.font_extents()
+        x_off, y_off, tw, th = ctx.text_extents(string)[:4]
+
+        nx = -tw/2.0
+        ny = fheight/2.0
+
+        ctx.translate(x,y)
+        ctx.rotate(radians(theta))
+        ctx.translate(nx, ny)
+        ctx.move_to(0,0)
+        ctx.show_text(string)
+
+

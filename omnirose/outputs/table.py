@@ -15,9 +15,13 @@ from .base import OutputsTextMixin
 # Which approximates to 590 x 790 (shrunk a bit for safety)
 
 class Table(OutputsTextMixin):
-    def __init__(self, curve=None, file_type='pdf', crop=False):
+    def __init__(self, curve=None, file_type='pdf', crop=False, heading='magnetic'):
 
         self.is_cropped = crop
+        if heading == 'magnetic':
+            self.degrees_grid_axis_label_text = "ship's heading (magnetic)"
+        else:
+            raise Exception("Unknown heading parameter '%s'" % heading)
 
         if self.is_cropped:
             self.SURFACE_HEIGHT = 540.
@@ -118,6 +122,9 @@ class Table(OutputsTextMixin):
         if not self.is_cropped:
             self.draw_titles()
             self.draw_text()
+            self.draw_degrees_grid_axis_label()
+            self.draw_deviation_grid_axis_label()
+            # self.draw_blurb()
 
     def draw_degrees_grid(self):
         context = self.context
@@ -154,8 +161,19 @@ class Table(OutputsTextMixin):
                         context.move_to(x,y)
                         context.show_text(text)
 
+    def draw_degrees_grid_axis_label(self):
+        context = self.context
+        label_text = self.degrees_grid_axis_label_text
 
+        with context:
+            context.set_font_size(10)
 
+            midpoint = self.SURFACE_WIDTH / 2
+            x = midpoint - self.grid_width / 2 - 30
+
+            y = self.grid_y(180)
+
+            self.produce_rotated_text(label_text, x, y, -90)
 
     def draw_deviation_grid(self):
         context = self.context
@@ -201,6 +219,24 @@ class Table(OutputsTextMixin):
                         context.move_to(x,y)
                         context.show_text(text)
 
+
+    def draw_deviation_grid_axis_label(self):
+        context = self.context
+        label_text = "deviation"
+
+        with context:
+            context.set_font_size(10)
+
+            width, height = self.get_text_width_height(label_text)
+
+            midpoint = self.SURFACE_WIDTH / 2
+            x = midpoint - width / 2
+
+            y = self.grid_top
+            y = y - 20
+
+            context.move_to(x,y)
+            context.show_text(label_text)
 
     def draw_deviation_curve(self):
         context = self.context
