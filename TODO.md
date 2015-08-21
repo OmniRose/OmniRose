@@ -2,6 +2,8 @@
 
 ## launch
 
+* Change purchasing roses to unlocking pro features for the table.
+
 * Add instructions for converting between True and Compass to the deviation table print out. Also put in a sales pitch for purchasing an OmniRose.
 
 
@@ -41,6 +43,7 @@
 * Allow some tables to be marked as public (and give them a memorable slug)
 
 * Change rows on deviation entry table to highlight when an input has focus
+
 
 ## maybe someday
 
