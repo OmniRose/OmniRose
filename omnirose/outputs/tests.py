@@ -15,7 +15,8 @@ class RoseTestCase(TestCase):
 
             rose = Rose(variation=0, curve=curve)
             rose.draw()
-            os.rename(rose.filename, "test_output/rose_%s.pdf" % name)
+            if sample.get('save_file_for_tests'):
+                os.rename(rose.filename, "test_output/rose_%s.pdf" % name)
             self.assertTrue(True)
 
     def test_multiple_rose_creation(self):
@@ -40,7 +41,8 @@ class TableTestCase(TestCase):
 
             table = Table(curve=curve)
             table.draw()
-            os.rename(table.filename, "test_output/table_%s.pdf" % name)
+            if sample.get('save_file_for_tests'):
+                os.rename(table.filename, "test_output/table_%s.pdf" % name)
             self.assertTrue(True)
 
 

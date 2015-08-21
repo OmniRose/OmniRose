@@ -24,6 +24,7 @@ samples = {}
 samples['rya_training_almanac'] = {
     "vessel": "S/V Elizabeth II",
     "note": "Starboard wheel compass",
+    'save_file_for_tests': True,
     'readings': {
         0    : -4,
         22.5 : -2,
@@ -68,6 +69,8 @@ samples['rya_training_almanac_every_90']['readings'] = {
 samples['astrid_1974'] = {
     "vessel": "Astrid",
     "note": "Steering compass, 1974",
+    'save_file_for_tests': True,
+
 }
 samples['astrid_1974']['readings'] = {
     0  : 2,
@@ -350,6 +353,7 @@ samples['long_name']['readings'] = {
 samples['navy_admin_textbook'] = {
     "vessel": "Navy Admin Textbook Sample",
     "note":   "http://navyadministration.tpub.com/14067/css/14067_139.htm",
+    'save_file_for_tests': True,
     "readings": {
         0   : -14,
         15  : -10,
