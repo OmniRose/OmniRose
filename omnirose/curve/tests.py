@@ -16,16 +16,16 @@ from .samples import create_database_curve_from_sample, create_curve_calculation
 
 
 class CurveBasicTests(TestCase):
-    def test_roses_paid(self):
+    def test_unlocked(self):
         curve = Curve()
 
         # by default should not be paid
-        self.assertEqual(curve.roses_paid, None)
-        self.assertFalse(curve.may_download_roses)
+        self.assertEqual(curve.unlocked, None)
+        self.assertFalse(curve.is_unlocked)
 
         # mark as paid, see what happens
-        curve.set_roses_paid_to_now()
-        self.assertTrue(curve.may_download_roses)
+        curve.set_unlocked_to_now()
+        self.assertTrue(curve.is_unlocked)
 
 
 class DeviationTestBase(object):
@@ -462,11 +462,11 @@ class CurveLiveTests(OmniRoseSeleniumTestCase):
         sel.find_element_by_partial_link_text('Download rose as PDF(s)').click()
 
         # check that we are on purchase page
-        self.assertRegexpMatches(sel.current_url, r'/rose_purchase/$')
+        self.assertRegexpMatches(sel.current_url, r'/unlock/$')
 
         # Check we stay on this page if declined
         self.do_stripe_payment("decline_on_server")
-        self.assertRegexpMatches(sel.current_url, r'/rose_purchase_failed/')
+        self.assertRegexpMatches(sel.current_url, r'/unlock_failed/')
         self.assertEqual(sel.find_element_by_id('stripe_error_message').text, "Your card was declined.")
 
         # Check we stay on this page if declined

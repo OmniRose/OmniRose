@@ -175,7 +175,7 @@ class Curve(CurveCalculations, models.Model):
         blank=True
     )
 
-    roses_paid = models.DateTimeField(editable=False, blank=True, null=True)
+    unlocked = models.DateTimeField(editable=False, blank=True, null=True)
 
     created = models.DateTimeField(auto_now_add=True)
 
@@ -205,13 +205,13 @@ class Curve(CurveCalculations, models.Model):
         return super(Curve, self).choose_equation()
 
 
-    def set_roses_paid_to_now(self):
-        self.roses_paid = timezone.now()
+    def set_unlocked_to_now(self):
+        self.unlocked = timezone.now()
         return None
 
     @property
-    def may_download_roses(self):
-        return bool(self.roses_paid)
+    def is_unlocked(self):
+        return bool(self.unlocked)
 
 
 class Reading(models.Model):

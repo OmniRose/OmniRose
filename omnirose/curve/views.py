@@ -45,8 +45,8 @@ class MayDownloadRoseMixin(object):
         curve = self.get_object()
 
         # Check that rose downloads have been paid for.
-        if not curve.may_download_roses:
-            return redirect('curve_rose_purchase', pk=curve.pk)
+        if not curve.is_unlocked:
+            return redirect('curve_unlock', pk=curve.pk)
 
         return super(MayDownloadRoseMixin, self).dispatch(*args, **kwargs)
 
@@ -309,19 +309,19 @@ class CurveRosesSelect(CurvePermissionMixin, MayDownloadRoseMixin, CurveSetObjec
         return redirect('curve_rose_pdf', pk=curve.id, var_min=var_min, var_max=var_max)
 
 
-class CurveRosesPurchaseFailed(CurvePermissionMixin, CurveSetObjectMixin, TemplateView):
+class CurveUnlockFailed(CurvePermissionMixin, CurveSetObjectMixin, TemplateView):
     model = Curve
-    template_name = "curve/roses_purchase_failed.html"
+    template_name = "curve/curve_unlock_failed.html"
 
     def get_context_data(self, **kwargs):
-        context = super(CurveRosesPurchaseFailed, self).get_context_data(**kwargs)
+        context = super(CurveUnlockFailed, self).get_context_data(**kwargs)
         context['message'] = self.request.GET.get('message')
         return context
 
 
-class CurveRosesPurchase(CurvePermissionMixin, CurveSetObjectMixin, FormView):
+class CurveUnlock(CurvePermissionMixin, CurveSetObjectMixin, FormView):
     model = Curve
-    template_name = "curve/roses_purchase.html"
+    template_name = "curve/curve_unlock.html"
     form_class = StripeForm
 
     def form_valid(self, form):
@@ -341,11 +341,11 @@ class CurveRosesPurchase(CurvePermissionMixin, CurveSetObjectMixin, FormView):
               source               = stripe_token,
               receipt_email        = self.request.user.email,
               statement_descriptor = "conversion rose " + str(curve.id),
-              amount               = settings.ROSE_PRICE,
-              currency             = settings.ROSE_CURRENCY,
+              amount               = settings.UNLOCK_CURVE_PRICE,
+              currency             = settings.UNLOCK_CURVE_CURRENCY,
               description          = "Conversion roses for " + curve.vessel,
             )
-            curve.set_roses_paid_to_now()
+            curve.set_unlocked_to_now()
             curve.save()
             return redirect('curve_rose_select', pk=curve.id)
 
@@ -355,7 +355,7 @@ class CurveRosesPurchase(CurvePermissionMixin, CurveSetObjectMixin, FormView):
             err  = body['error']
             message =  err['message']
 
-            failure_url = reverse('curve_rose_purchase_failed', kwargs={'pk':curve.id})
+            failure_url = reverse('curve_unlock_failed', kwargs={'pk':curve.id})
             failure_url = failure_url + '?' + urlencode({'message':message})
 
             return redirect(failure_url)
