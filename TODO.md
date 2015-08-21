@@ -15,9 +15,11 @@
 
 ## post launch
 
+* Create a table print out for converting from compass to magnetic (avoids having to do second round corrections). Label current table as Magnetic to Compass.
+
 * Should lock the deviation table after paying for the rose.
 
-* Create a page with different ways to swing a ship.
+* Create a page with different ways to swing a ship. Compass on beach, compass away from interference, sun dial, filming compass when spinning, building your own pelorus, transits, gps bearing output, gps beasing to waypoint.
 
 * Create a tool that for a given location determines what the variation probably is (https://pypi.python.org/pypi/geomag/).
 
