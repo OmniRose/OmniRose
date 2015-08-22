@@ -15,7 +15,7 @@
 
 ## post launch
 
-* Create a table print out for converting from compass to magnetic (avoids having to do second round corrections). Label current table as Magnetic to Compass.
+* Create a table print out for converting from compass to magnetic (avoids having to do second round corrections). Label current table as Magnetic to Compass. Perhaps do with both magnetic on left axis and compass on right axis and the compass one is adjusted so that the curve remains the same.
 
 * Should lock the deviation table after paying for the rose.
 
