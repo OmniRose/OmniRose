@@ -1,8 +1,5 @@
 # Todo items
 
-## launch
-
-* Merge all migrations.
 
 ### deployment related issues
 
