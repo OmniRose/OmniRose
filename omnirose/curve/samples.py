@@ -336,6 +336,7 @@ samples['too_few_points']['readings'] = {
 samples['long_name'] = {
     "vessel": "A Really Long Vessel Name (which is a bit of a silly thing to have, realllllly)",
     "note":   "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor",
+    'save_file_for_tests': True,
 }
 samples['long_name']['readings'] = {
     0    : -4,
