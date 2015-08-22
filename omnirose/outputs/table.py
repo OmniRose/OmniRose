@@ -6,6 +6,9 @@ from math import sin, cos, radians, pi, ceil
 
 import cairocffi as cairo
 
+from django.core.urlresolvers import reverse
+from django.conf import settings
+
 from omnirose.templatetags.omnirose_tags import east_west
 from .base import OutputsTextMixin
 
@@ -120,11 +123,11 @@ class Table(OutputsTextMixin):
         self.draw_deviation_curve()
         self.draw_readings()
         if not self.is_cropped:
-            self.draw_titles()
-            self.draw_text()
+            self.draw_titles(60)
+            self.draw_copyright_text()
             self.draw_degrees_grid_axis_label()
             self.draw_deviation_grid_axis_label()
-            # self.draw_blurb()
+            self.draw_blurb()
 
     def draw_degrees_grid(self):
         context = self.context
@@ -270,5 +273,23 @@ class Table(OutputsTextMixin):
 
 
 
-    def draw_text(self):
-        self.draw_text_block(self.copyright_string(), 8, self.SURFACE_HEIGHT - self.edge_indent)
+    def draw_copyright_text(self):
+        context = self.context
+        with context:
+            context.set_source_rgb(0.4, 0.4, 0.4)  # gray
+            self.draw_text_block(self.copyright_string(), 12, self.SURFACE_HEIGHT - self.edge_indent)
+
+    def draw_blurb(self):
+        y = self.grid_top - 8*12
+
+        url = settings.BASE_URL + reverse('curve_detail', kwargs={'pk': self.curve.id})
+
+        blurbs = [
+            "Magnetic to Compass: add easterly (subtract westerly) deviation.",
+            "Compass to Magnetic: +W (or -E) deviation. May require second round correction",
+            "*", # blank line
+            "To convert between directly between Magnetic, Compass and True download",
+            "a conversion rose from %s" % url,
+        ]
+        for blurb in blurbs:
+            y = self.draw_text_block(blurb, 8, y)

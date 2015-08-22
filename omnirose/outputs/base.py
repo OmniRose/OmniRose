@@ -9,16 +9,16 @@ class OutputsTextMixin:
     def copyright_string(self):
         return u"© %s OmniRose.com" % (datetime.now().year)
 
-    def draw_titles(self):
+    def draw_titles(self, initial_y=100):
 
         curve = self.curve
 
-        y = 100
-        y = self.draw_text_block(curve.vessel, 32, y)
-        y = self.draw_text_block(curve.note, 18, y)
+        y = initial_y
+        y = self.draw_text_block(curve.vessel, 32, y, vertical_shift='text')
+        y = self.draw_text_block(curve.note,   18, y, vertical_shift='text')
 
 
-    def draw_text_block(self, text, font_size, y, max_lines=2, max_width=None, background_colour_rgba=None):
+    def draw_text_block(self, text, font_size, y, max_lines=1, max_width=None, background_colour_rgba=None, vertical_shift='font'):
         context = self.context
         curve = self.curve
 
@@ -50,6 +50,8 @@ class OutputsTextMixin:
                 else:
                     font_size = font_size - 1
 
+            fascent, fdescent, font_height, fxadvance, fyadvance = context.font_extents()
+
             for line in lines:
                 (x_bearing, y_bearing, width, height, x_advance, y_advance) = context.text_extents(line)
                 x = self.SURFACE_WIDTH/2 - width/2
@@ -64,7 +66,14 @@ class OutputsTextMixin:
                 context.move_to(x,y)
                 context.show_text(line)
 
-                y = y + self.text_line_height * height
+                if vertical_shift == 'font':
+                    y_delta = self.text_line_height * font_height
+                elif vertical_shift == 'text':
+                    y_delta = self.text_line_height * height
+                else:
+                    raise Exception("Bad parameter vertical_shift: %s" % vertical_shift)
+
+                y = y + y_delta
 
         return y
 
