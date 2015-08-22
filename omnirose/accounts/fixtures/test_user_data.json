@@ -7,7 +7,7 @@
             "is_staff": false,
             "is_superuser": false,
             "last_login": "2015-04-29T12:24:06.199Z",
-            "password": "pbkdf2_sha256$15000$DUWklgiBF2Rp$qdKs1F6VJadVpsASFXCaWc3PD0c/X6i6kzUH+tmomYE=",
+            "password": "bcrypt_sha256$$2b$12$/x7dZnWsvknAp09C.1n2e.fXFqCAxS.Sif4vGihXsTQI64RoPwTHu",
             "user_permissions": []
         },
         "model": "accounts.user",
@@ -21,7 +21,7 @@
             "is_staff": false,
             "is_superuser": false,
             "last_login": "2015-05-17T14:13:12.453Z",
-            "password": "pbkdf2_sha256$15000$BbckYmP0VMAA$GicCjcXH4O9+MHeQlYfgox7F6Z15WKiAKuptltNrU24=",
+            "password": "bcrypt_sha256$$2b$12$/x7dZnWsvknAp09C.1n2e.fXFqCAxS.Sif4vGihXsTQI64RoPwTHu",
             "user_permissions": []
         },
         "model": "accounts.user",
