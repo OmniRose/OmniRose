@@ -1,17 +1,11 @@
-{% extends "base.html" %}
+{% extends "base_registration.html" %}
 {% load firstof from future %}
 
 {% block title %}Create account{% endblock %}
-{% block content %}
 
-<div class="row">
-    <div class="col-sm-offset-4 col-sm-4 text-center">
+{% block registration_content %}
 
       {% include "accounts/register_form.html" %}
-
-    </div>
-</div>
-
 
 {% endblock %}
 

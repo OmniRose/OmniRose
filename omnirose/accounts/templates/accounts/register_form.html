@@ -1,9 +1,9 @@
-<form id="register-form" class="form-signin well" method="post" action="{% url 'register' %}">
+<form id="register-form" class="well" method="post" action="{% url 'register' %}">
 
   {% csrf_token %}
   <input type="hidden" name="next" value="{% firstof next  '' %}" />
 
-  <h2 class="form-signin-heading">Create an account</h2>
+  <h2>Create an account</h2>
 
   {% if form.email.errors %}
       {% for error in form.email.errors %}
