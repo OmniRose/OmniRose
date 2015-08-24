@@ -1,0 +1,29 @@
+<footer class="footer">
+    <div class="container">
+
+        <div class="row">
+            <div class="col-sm-6">
+
+              <ul class="nav">
+                <li><a href="{% url 'about' %}">About us</a></li>
+                <li><a href="{% url 'privacy' %}">Privacy and Cookies</a></li>
+                <li><a href="mailto:{{ settings.HELLO_EMAIL_ADDRESS }}"><span class="glyphicon glyphicon-envelope"></span> {{ settings.HELLO_EMAIL_ADDRESS }}</a></li>
+              </ul>
+
+            </div>
+
+            <div class="col-sm-6 text-right">
+              {% include "mailchimp-subscribe-form.html" %}
+            </div>
+
+        </div>
+
+
+        <div class="row">
+            <div class="col-xs-12 text-center">
+              <p>&copy; 2015 OmniRose.com</p>
+            </div>
+        </div>
+
+      </div>
+</footer>

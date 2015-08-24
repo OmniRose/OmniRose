@@ -38,7 +38,7 @@
 
       {% block content %}
         <div class="row">
-            <div class="col-lg-12 text-center">
+            <div class="col-xs-12 text-center">
                 <h1>Content missing!</h1>
             </div>
         </div>
@@ -47,30 +47,8 @@
     </div>
     {# /.container #}
 
-    <footer class="footer">
-      <div class="container">
-        <div class="row">
+    {% include 'footer.html' %}
 
-            <div class="col-sm-4 text-muted text-center">
-                {% include "mailchimp-subscribe-form.html" %}
-            </div>
-
-            <div class="col-sm-4 text-muted text-center">
-              <a href="{% url 'privacy' %}">Privacy and Cookies</a>
-            </div>
-
-            <div class="col-sm-4  text-center text-muted">
-                <p>&copy; 2015 OmniRose.com</p>
-                <p>
-                  <a href="mailto:hello@omnirose.com">
-                    <span class="glyphicon glyphicon-envelope"></span>
-                    hello@omnirose.com
-                  </a>
-                </p>
-            </div>
-        </div>
-      </div>
-    </footer>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
@@ -82,3 +60,4 @@
 </body>
 
 </html>
+

@@ -119,6 +119,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 BASE_URL = 'http://www.omnirose.com'
+HELLO_EMAIL_ADDRESS = 'hello@omnirose.com'
 
 STATIC_URL = '/static/'
 
@@ -138,6 +139,8 @@ UNLOCK_CURVE_PRICE    = 800 # $8
 UNLOCK_CURVE_FORMATTED_PRICE = "$8"
 
 SETTINGS_EXPORT = [
+    'BASE_URL',
+    'HELLO_EMAIL_ADDRESS',
     'GOOGLE_ANALYTICS_TRACKING_CODE',
     'STRIPE_PUBLIC_KEY',
     'UNLOCK_CURVE_CURRENCY',

@@ -7,32 +7,28 @@
 
     <div class="row">
         <div class="center-block text-center">
-            <h1>Title!</h1>
-            <p class="lead">Subtitle.</p>
+            <h1>OmniRose</h1>
+            <p class="lead">Making navigation easier.</p>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-sm-4 text-center">
+        <div class="col-sm-6 col-md-5 col-md-offset-1 text-center">
           <div class="well">
             <h2>Deviation Tables</h2>
-            <div class="square-image">
-              <a href="{% url 'curve_home' %}">
-                <img class="img-responsive square" src="{% static 'table.png' %}">
-              </a>
-            </div>
+            <a href="{% url 'curve_home' %}">
+              <img class="img-responsive square" src="{% static 'table.png' %}">
+            </a>
             <p>Clean and easy to use, customized to your compass. Print out and keep onboard. <a href="{% url 'curve_home' %}">Read more&hellip;</a></p>
           </div>
         </div>
 
-        <div class="col-sm-4 text-center">
+        <div class="col-sm-6 col-md-5 text-center">
           <div class="well">
-            <h2>Conversion Rose</h2>
-            <div class="square-image">
-              <a href="{% url 'curve_home' %}">
-                <img class="img-responsive" src="{% static 'rose.png' %}">
-              </a>
-            </div>
+            <h2>Conversion Roses</h2>
+            <a href="{% url 'curve_home' %}">
+              <img class="img-responsive" src="{% static 'rose.png' %}">
+            </a>
             <p>Based on your deviation table this rose lets you instantly and accurately convert between true, magnetic and compass bearings. Print out and keep onboard. <a href="{% url 'curve_home' %}">Read more&hellip;</a></p>
           </div>
         </div>
