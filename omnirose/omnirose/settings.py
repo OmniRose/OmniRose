@@ -97,7 +97,9 @@ WSGI_APPLICATION = 'omnirose.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'omnirose',
+        'NAME':     local_settings.DATABASE_NAME,
+        'USER':     local_settings.DATABASE_USER,
+        'PASSWORD': local_settings.DATABASE_PASSWORD,
     }
 }
 

@@ -4,6 +4,11 @@ SECRET_KEY = 'something_secure'
 
 DEBUG=True
 
+# Database connection details
+DATABASE_NAME = 'omnirose'
+DATABASE_USER = 'omnirose'
+DATABASE_PASSWORD = 'secret'
+
 # https://dashboard.stripe.com/account/apikeys
 STRIPE_SECRET_KEY = "sk_test_insert_real_token_here"
 STRIPE_PUBLIC_KEY = "pk_test_insert_real_token_here"
