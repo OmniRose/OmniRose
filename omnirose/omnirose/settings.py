@@ -12,10 +12,12 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import local_settings
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_HOST = 'omnirose.com'
+BASE_URL = 'http://www.' + BASE_HOST
 
-import local_settings
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
@@ -26,7 +28,9 @@ SECRET_KEY = local_settings.SECRET_KEY
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = local_settings.DEBUG
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '.' + BASE_HOST,
+]
 
 AUTH_USER_MODEL = "accounts.User"
 LOGIN_REDIRECT_URL = '/'
@@ -117,8 +121,6 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
-
-BASE_URL = 'http://www.omnirose.com'
 
 STATIC_URL = '/static/'
 
