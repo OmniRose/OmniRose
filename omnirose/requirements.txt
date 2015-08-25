@@ -1,5 +1,4 @@
-django>=1.8,<1.9
-django[bcrypt]
+django[bcrypt]>=1.8,<1.9
 psycopg2
 numpy
 scipy
