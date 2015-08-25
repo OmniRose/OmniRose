@@ -120,6 +120,9 @@ USE_L10N = True
 
 USE_TZ = True
 
+# Security related
+X_FRAME_OPTIONS = 'DENY'
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
