@@ -15,4 +15,7 @@ urlpatterns = patterns('',
     url(r'^deviation_tables/', include('curve.urls')),
 
     url(r'^admin/', include(admin.site.urls)),
+
+    url(r'^errors/404/', TemplateView.as_view(template_name='404.html'), name="error_404"),
+    url(r'^errors/500/', TemplateView.as_view(template_name='500.html'), name="error_500"),
 )

@@ -1,15 +1,11 @@
-{% extends "base.html" %}
+{% extends "base-blurb.html" %}
 {% load staticfiles %}
 
 {% block title %}404 Page not found{% endblock %}
 
-{% block content %}
+{% block blurb %}
 
-    <div class="row">
-        <div class="col-sm-12 text-center">
-            <h1>404 - Page not found</h1>
-            <p class="lead">The page you are looking for could not be found. Sorry.</p>
-        </div>
-    </div>
+  <h1>404 - Page not found</h1>
+  <p class="lead">The page you are looking for could not be found. Sorry.</p>
 
 {% endblock %}
