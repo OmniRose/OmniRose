@@ -19,3 +19,8 @@ GOOGLE_ANALYTICS_TRACKING_CODE = 'UA-yours'
 # leave POSTMARK_TEST_MODE = True and you don't need to change values.
 POSTMARK_TEST_MODE   = True
 POSTMARK_API_KEY     = 'your-key-not-needed-when-in-test-mode'
+
+# List the people who should recieve emails when things go wrong.
+ADMINS = (
+    # ('Bob', 'bob@test.com'),
+)
