@@ -5,8 +5,9 @@ from time import sleep
 from omnirose.live_tests import OmniRoseSeleniumTestCase, LoginFailedException
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
-from django.core import mail
 
+from django.core import mail
+from django.conf import settings
 
 class AccountLiveTests(OmniRoseSeleniumTestCase):
 
@@ -35,6 +36,10 @@ class AccountLiveTests(OmniRoseSeleniumTestCase):
         self.assertEqual(len(mail.outbox), 1)
         password = re.search(r'password: (\S+)', mail.outbox[0].body).group(1)
         self.assertTrue(password)
+
+        # Check that the login link is correct
+        login_link = re.search(r'(\S+/accounts/login/)', mail.outbox[0].body).group(1)
+        self.assertEqual(login_link, settings.BASE_URL + "/accounts/login/")
 
         # Log out and check that we can log in with the new password
         self.logout()

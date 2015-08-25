@@ -10,7 +10,7 @@ Your account details are:
 username: {{ user.email }}
 password: {{ password }}
 
-You can log in at http://www.omnirose.com{% url 'login' %}
+You can log in at {{ BASE_URL }}{% url 'login' %}
 
 Any problems please let us know.
 

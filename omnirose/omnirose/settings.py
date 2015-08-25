@@ -119,12 +119,21 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 BASE_URL = 'http://www.omnirose.com'
-HELLO_EMAIL_ADDRESS = 'hello@omnirose.com'
 
 STATIC_URL = '/static/'
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+# Email (hence Postmark) related
+EMAIL_BACKEND = 'postmark.django_backend.EmailBackend'
+
+HELLO_EMAIL_ADDRESS  = 'hello@omnirose.com'
+DEFAULT_FROM_EMAIL   = HELLO_EMAIL_ADDRESS
+SERVER_EMAIL         = HELLO_EMAIL_ADDRESS
+
+POSTMARK_API_KEY     = local_settings.POSTMARK_API_KEY
+POSTMARK_TEST_MODE   = local_settings.POSTMARK_TEST_MODE
+POSTMARK_SENDER      = HELLO_EMAIL_ADDRESS
+POSTMARK_TRACK_OPENS = True
 
 # Google Analytics
 GOOGLE_ANALYTICS_TRACKING_CODE = local_settings.GOOGLE_ANALYTICS_TRACKING_CODE
@@ -137,6 +146,7 @@ STRIPE_PUBLIC_KEY=local_settings.STRIPE_PUBLIC_KEY
 UNLOCK_CURVE_CURRENCY = "USD"
 UNLOCK_CURVE_PRICE    = 800 # $8
 UNLOCK_CURVE_FORMATTED_PRICE = "$8"
+
 
 SETTINGS_EXPORT = [
     'BASE_URL',

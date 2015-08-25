@@ -2,6 +2,7 @@ from django.shortcuts import redirect
 from django.views.generic import CreateView
 from django.views.generic.base import TemplateView
 from django.contrib.auth import authenticate, login
+from django.conf import settings
 
 from template_email import TemplateEmail
 
@@ -40,7 +41,7 @@ class RegistrationView(CreateView):
         email = TemplateEmail(
             to=[user.email],
             template='accounts/new_user_email.txt',
-            context={ 'user': user, 'password': password }
+            context={ 'user': user, 'password': password, 'BASE_URL': settings.BASE_URL }
         )
         email.send()
 

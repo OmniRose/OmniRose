@@ -9,3 +9,4 @@ selenium
 requests
 stripe
 django-settings-export
+python-postmark
