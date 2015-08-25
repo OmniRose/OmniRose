@@ -4,9 +4,11 @@
         <div class="row">
             <div class="col-sm-6">
 
-              <ul class="nav">
+              <ul class="nav nav-pills nav-stacked">
                 <li><a href="{% url 'about' %}">About us</a></li>
-                <li><a href="{% url 'privacy' %}">Privacy and Cookies</a></li>
+                <li><a href="{% url 'privacy' %}">Privacy, cookies, etc.</a></li>
+                <li><a href="https://github.com/OmniRose/OmniRose/issues">Report a bug</a></li>
+                <li><a href="https://github.com/OmniRose/OmniRose">Open source code</a></li>
                 <li><a href="mailto:{{ settings.HELLO_EMAIL_ADDRESS }}"><span class="glyphicon glyphicon-envelope"></span> {{ settings.HELLO_EMAIL_ADDRESS }}</a></li>
               </ul>
 
