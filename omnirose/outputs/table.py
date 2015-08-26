@@ -288,7 +288,7 @@ class Table(OutputsTextMixin):
             "Magnetic to Compass: add easterly (subtract westerly) deviation.",
             "Compass to Magnetic: +W (or -E) deviation. May require second round correction",
             "*", # blank line
-            "To convert between directly between Magnetic, Compass and True download",
+            "To convert directly between Magnetic, Compass and True bearings download",
             "a conversion rose from %s" % url,
         ]
         for blurb in blurbs:
