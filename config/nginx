@@ -15,7 +15,10 @@ server {
     # }
 
     location /static {
-        alias /home/omnirose/OmniRose/omnirose/collected_static;
+      access_log /var/log/nginx/omnirose_access_static.log;
+      expires 1d;
+      add_header Cache-Control "public";
+      alias /home/omnirose/OmniRose/omnirose/collected_static;
     }
 
     # Finally, send all non-media requests to the Django server.
