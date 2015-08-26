@@ -1,6 +1,12 @@
 server {
+        listen 80;
+        server_name .omnirose.com;
+        return 301 $scheme://www.omnirose.com$request_uri;
+}
+
+server {
     listen      80;
-    server_name .omnirose.com;
+    server_name www.omnirose.com;
     charset     utf-8;
 
     error_log  /var/log/nginx/omnirose_error.log warn;
