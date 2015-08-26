@@ -1,0 +1,26 @@
+server {
+    listen      80;
+    server_name .omnirose.com;
+    charset     utf-8;
+
+    error_log  /var/log/nginx/omnirose_error.log warn;
+    access_log /var/log/nginx/omnirose_access.log;
+
+    # max upload size
+    # client_max_body_size 75M;
+
+    # Django media
+    # location /media  {
+    #     alias /home/omnirose/OmniRose/omnirose/media;
+    # }
+
+    location /static {
+        alias /home/omnirose/OmniRose/omnirose/collected_static;
+    }
+
+    # Finally, send all non-media requests to the Django server.
+    location / {
+        include     /etc/nginx/uwsgi_params;
+        uwsgi_pass  unix:///home/omnirose/omnirose_nginx.sock;
+    }
+}

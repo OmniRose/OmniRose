@@ -1,2 +1,3 @@
 local_settings.py
 collected_static
+local_settings_production.py

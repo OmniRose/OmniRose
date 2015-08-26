@@ -1,4 +1,5 @@
 django[bcrypt]>=1.8,<1.9
+bcrypt
 psycopg2
 numpy
 scipy
