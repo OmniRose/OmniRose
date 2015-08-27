@@ -18,13 +18,12 @@ from .base import OutputsTextMixin
 # Which approximates to 590 x 790 (shrunk a bit for safety)
 
 class Table(OutputsTextMixin):
-    def __init__(self, curve=None, file_type='pdf', crop=False, left='magnetic', right='magnetic'):
+    def __init__(self, curve=None, file_type='pdf', crop=False, right='magnetic'):
 
         self.is_cropped = crop
 
-        assert(left  in ('magnetic', 'compass'))
         assert(right in ('magnetic', 'compass'))
-        self.left = left
+        self.left  = 'magnetic'
         self.right = right
 
         self.degrees_grid_axis_label_text = {
@@ -329,12 +328,23 @@ class Table(OutputsTextMixin):
 
         url = settings.BASE_URL + reverse('curve_detail', kwargs={'pk': self.curve.id})
 
-        blurbs = [
-            "Magnetic to Compass: add easterly (subtract westerly) deviation.",
-            "Compass to Magnetic: +W (or -E) deviation. May require second round correction",
+        left_right = self.left + '-' + self.right
+
+        if left_right == 'magnetic-magnetic':
+            prelude = (
+                "Magnetic to Compass: +W (or -W) deviation.",
+                "Compass to Magnetic: +E (or -W) deviation. May require second round correction",
+            )
+        elif left_right == 'magnetic-compass':
+            prelude = (
+                "Magnetic to Compass: +W (or -E) deviation. Use left axis.",
+                "Compass to Magnetic: +E (or -W) deviation. Use right axis",
+            )
+
+        blurbs = prelude + (
             "*", # blank line
             "To convert directly between Magnetic, Compass and True bearings download",
             "a conversion rose from %s" % url,
-        ]
+        )
         for blurb in blurbs:
             y = self.draw_text_block(blurb, 8, y)
