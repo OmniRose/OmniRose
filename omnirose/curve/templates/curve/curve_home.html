@@ -34,14 +34,21 @@
 
     <div class="row">
 
-        <div class="col-xs-6 text-center">
+        <div class="col-xs-4 text-center">
           <figure>
             <img class="img-responsive square" src="{% static 'table.png' %}">
             <figcaption>Deviation table</figcaption>
           </figure>
         </div>
 
-        <div class="col-xs-6 text-center">
+        <div class="col-xs-4 text-center">
+          <figure>
+            <img class="img-responsive square" src="{% static 'table_compass.png' %}">
+            <figcaption>Combined table</figcaption>
+          </figure>
+        </div>
+
+        <div class="col-xs-4 text-center">
           <figure>
             <img class="img-responsive square" src="{% static 'rose.png' %}">
             <figcaption>Conversion rose</figcaption>
@@ -71,6 +78,29 @@
             <p>The line in the deviation tables does not always go through all the dots. We use a mathematical formula to generate the line and fit it as best as possible. As there is an inherent error in taking the deviations they may not always fit perfectly.</p>
 
             <p>When navigating the deviation table can then be used to convert between magnetic and compass bearings. The easiest and most reliable way to do this is to use a conversion rose as explained below.</p>
+
+            <div class="clearfix"></div>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-xs-12">
+
+            <h2 id="combined-tables">Combined Tables</h2>
+
+            <div class="text-center pull-right" style="margin: 0 0 1em 1em">
+              <figure>
+                <img width=200 height=200 src="{% static 'table_compass_cropped.png' %}">
+                <figcaption>Combined table closeup</figcaption>
+              </figure>
+            </div>
+
+            <p>The combined table is very similar to the deviation table. The left side is the same, but the grid on the right is altered so that it matches the compass heading of the boat.</p>
+
+            <p>You can use this table to accurately find the deviation from both magnetic and compass bearings. On a normal deviation table it is not possible to accurately get the deviation for a compass bearing without doing second round corrections.</p>
+
+            <p>Another benefit of this combined layout is that you can easily convert between compass and magnetic by just seeing where the grid lines meet by the curve. However it is easier to use a conversion rose as explained below as that will account for the variation too.</p>
 
             <div class="clearfix"></div>
         </div>

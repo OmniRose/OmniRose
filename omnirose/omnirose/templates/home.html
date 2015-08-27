@@ -13,7 +13,8 @@
     </div>
 
     <div class="row">
-        <div class="col-sm-6 col-md-5 col-md-offset-1 text-center">
+
+        <div class="col-sm-4 text-center">
           <div class="well">
             <h2>Deviation Tables</h2>
             <a href="{% url 'curve_home' %}">
@@ -23,7 +24,17 @@
           </div>
         </div>
 
-        <div class="col-sm-6 col-md-5 text-center">
+        <div class="col-sm-4 text-center">
+          <div class="well">
+            <h2>Combined Tables</h2>
+            <a href="{% url 'curve_home' %}">
+              <img class="img-responsive square" src="{% static 'table_compass.png' %}">
+            </a>
+            <p>Similar to the deviation tables but with compass heading on too to avoid needing to do second round corrections when converting from compass to magnetic. <a href="{% url 'curve_home' %}#combined-tables">Read more&hellip;</a></p>
+          </div>
+        </div>
+
+        <div class="col-sm-4 text-center">
           <div class="well">
             <h2>Conversion Roses</h2>
             <a href="{% url 'curve_home' %}#conversion-roses">

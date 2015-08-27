@@ -15,8 +15,8 @@ class Command(BaseCommand):
         sample = samples['rya_training_almanac']
         curve = create_database_curve_from_sample(sample)
 
-        self.draw(Table(curve=curve), 'table', x=150, y=540)
-        self.draw(Table(curve=curve, right='compass'), 'table_compass', x=150, y=540)
+        self.draw(Table(curve=curve), 'table', x=160, y=530)
+        self.draw(Table(curve=curve, right='compass'), 'table_compass', x=250, y=530)
         self.draw(Rose(curve=curve, variation=-7), 'rose', x=269, y=520)
 
 

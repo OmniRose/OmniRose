@@ -49,7 +49,7 @@
     <img
       id="table_preview"
       style="border: 1px solid #eee; max-width: 100%"
-      src="{% url 'curve_table_png' pk=object.id %}?crop=1"
+      src="{% url 'curve_table_png' pk=object.id right='magnetic' %}?crop=1"
     >
   {% else %}
     <p class="text-warning">Preview cannot be generated as there are too few deviation readings.</p>

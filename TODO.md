@@ -6,6 +6,7 @@
 * send files using https://github.com/johnsensible/django-sendfile
 
 * Create a table print out for converting from compass to magnetic (avoids having to do second round corrections). Label current table as Magnetic to Compass. Perhaps do with both magnetic on left axis and compass on right axis and the compass one is adjusted so that the curve remains the same.
+* provide zoom plugin for images on the homepage (http://www.elevateweb.co.uk/image-zoom/examples perhaps) and reduce the size of the initially loaded image.
 
 * Should lock the deviation table after paying for the rose.
 

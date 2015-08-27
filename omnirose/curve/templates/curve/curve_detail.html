@@ -22,6 +22,59 @@
 
 <div class="row">
 
+<div class="col-sm-4 text-center">
+  <h3>Deviation Table</h3>
+
+  <p>
+    <a href="{% url 'curve_equation' pk=object.pk %}">Choose a different curve equation</a>
+  </p>
+
+  {% if object.can_calculate_curve %}
+    {% url 'curve_table_pdf' pk=object.pk right='magnetic' as pdf_url%}
+    <a href="{{ pdf_url }}">
+      <img class="img-responsive" style="border: 1px solid #eee" src="{% url 'curve_table_png' pk=object.id right='magnetic' %}">
+    </a>
+    <p>
+      <a href="{{ pdf_url }}">
+        <span class="glyphicon glyphicon-cloud-download"></span>
+        Download table as PDF
+      </a>
+    </p>
+  {% else %}
+    <p class="text-warning">Preview cannot be generated as there are too few deviation readings.</p>
+    <p class="text-warning">Please <a href="{% url 'curve_readings' pk=object.id %}">enter some</a>.</p>
+  {% endif %}
+
+</div>
+
+{# -------------------------------------------------------------- #}
+
+<div class="col-sm-4 text-center">
+  <h3>Combined Table</h3>
+
+  <p>
+    Low res sample.
+  </p>
+
+  {% if object.can_calculate_curve %}
+    {% url 'curve_table_pdf' pk=object.pk right='compass' as pdf_url%}
+    <a href="{{ pdf_url }}">
+      <img class="img-responsive" style="border: 1px solid #eee" src="{% url 'curve_table_png' pk=object.id right='compass' %}">
+    </a>
+    <p>
+      <a href="{{ pdf_url }}">
+        <span class="glyphicon glyphicon-cloud-download"></span>
+        Download table as PDF
+      </a>
+    </p>
+  {% else %}
+    <p class="text-warning">Preview cannot be generated as there are too few deviation readings.</p>
+    <p class="text-warning">Please <a href="{% url 'curve_readings' pk=object.id %}">enter some</a>.</p>
+  {% endif %}
+
+</div>
+
+{# -------------------------------------------------------------- #}
 
 <div class="col-sm-4 text-center">
   <h3>Conversion Rose</h3>
@@ -42,32 +95,6 @@
     <p class="text-warning">Preview cannot be generated as there are too few deviation readings.</p>
     <p class="text-warning">Please <a href="{% url 'curve_readings' pk=object.id %}">enter some</a>.</p>
   {% endif %}
-</div>
-
-{# -------------------------------------------------------------- #}
-
-<div class="col-sm-4 text-center">
-  <h3>Deviation Table</h3>
-
-  <p>
-    <a href="{% url 'curve_equation' pk=object.pk %}">Choose a different curve equation</a>
-  </p>
-
-  {% if object.can_calculate_curve %}
-    <a href="{% url 'curve_table_pdf' pk=object.pk %}">
-      <img class="img-responsive" style="border: 1px solid #eee" src="{% url 'curve_table_png' pk=object.id %}">
-    </a>
-    <p>
-      <a href="{% url 'curve_table_pdf' pk=object.pk %}">
-        <span class="glyphicon glyphicon-cloud-download"></span>
-        Download table as PDF
-      </a>
-    </p>
-  {% else %}
-    <p class="text-warning">Preview cannot be generated as there are too few deviation readings.</p>
-    <p class="text-warning">Please <a href="{% url 'curve_readings' pk=object.id %}">enter some</a>.</p>
-  {% endif %}
-
 </div>
 
 {# -------------------------------------------------------------- #}

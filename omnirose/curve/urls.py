@@ -11,8 +11,8 @@ urlpatterns = [
 
     url(r'^(?P<pk>\d+)/$', views.CurveView.as_view(), name='curve_detail'),
 
-    url(r'^(?P<pk>\d+)/table_png/$', views.CurveTablePngView.as_view(), name='curve_table_png'),
-    url(r'^(?P<pk>\d+)/table_pdf/$', views.CurveTablePdfView.as_view(), name='curve_table_pdf'),
+    url(r'^(?P<pk>\d+)/table_png/(?P<right>magnetic|compass)/$', views.CurveTablePngView.as_view(), name='curve_table_png'),
+    url(r'^(?P<pk>\d+)/table_pdf/(?P<right>magnetic|compass)/$', views.CurveTablePdfView.as_view(), name='curve_table_pdf'),
 
     url(r'^(?P<pk>\d+)/rose_select/$', views.CurveRosesSelect.as_view(), name='curve_rose_select'),
     url(r'^(?P<pk>\d+)/rose_png/$', views.CurveRosePngView.as_view(), name='curve_rose_png'),

@@ -66,12 +66,6 @@ class CurveVisualisationBaseView(CurvePermissionMixin, DetailView):
     def alter_curve(self, curve):
         pass
 
-    @property
-    def downloaded_name(self):
-        curve = self.get_object()
-        return slugify(curve.vessel) + "-table.pdf"
-
-
     def get(self, request, *args, **kwargs):
         curve = self.get_object()
         self.alter_curve(curve)
@@ -110,10 +104,10 @@ class CurveTablePngView(CurveVisualisationBaseView):
     visualisation_class = Table
 
     def get_visualisation_args(self):
+        args = { 'right': self.kwargs['right'] }
         if self.request.GET.get('crop', None):
-            return { 'crop': True }
-        else:
-            return {}
+            args['crop'] = True
+        return args
 
     def alter_curve(self, curve):
         equation_slug = self.request.GET.get('equation', None)
@@ -124,6 +118,15 @@ class CurveTablePngView(CurveVisualisationBaseView):
 class CurveTablePdfView(CurveVisualisationBaseView):
     visualisation_class = Table
     output = 'pdf'
+
+    def get_visualisation_args(self):
+        return { 'right': self.kwargs['right'] }
+
+    @property
+    def downloaded_name(self):
+        curve = self.get_object()
+        return slugify(curve.vessel) + "-table-" + self.kwargs['right'] + ".pdf"
+
 
 class CurveRosePngView(CurveVisualisationBaseView):
     visualisation_class = Rose
