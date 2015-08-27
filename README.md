@@ -10,7 +10,7 @@ The OmniRose website lets you create a deviation table for your compass by enter
 
 We've made our code open source as we believe it is the right thing to do, and to enable the community to help make it better. We're certainly not the smartest people out there.
 
-Contributions are very welcome. The code is hosted on GitHub as [OmniRose/OmniRose](https://github.com/OmniRose/OmniRose). We are happy to accept any bug reports as [issues on GitHub](https://github.com/OmniRose/OmniRose/issues) or even better fixes as [pull requests](https://github.com/OmniRose/OmniRose/pulls).
+Contributions are very welcome. The code is hosted on GitHub as [OmniRose/omnirose-website](https://github.com/OmniRose/omnirose-website). We are happy to accept any bug reports as [issues on GitHub](https://github.com/OmniRose/omnirose-website/issues) or even better fixes as [pull requests](https://github.com/OmniRose/omnirose-website/pulls).
 
 To work on the code you'll need to be familiar with Python and setting a unix like environment. For the browser based tests in the test suite you'll need to install FireFox.
 
