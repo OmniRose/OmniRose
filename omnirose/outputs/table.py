@@ -118,7 +118,8 @@ class Table(OutputsTextMixin):
         return self.grid_content_right - dev_interval * (max_dev - deviation)
 
     def draw(self):
-        self.draw_degrees_grid()
+        self.draw_degrees_grid(side='left',  heading_type='magnetic')
+        self.draw_degrees_grid(side='right', heading_type='magnetic')
         self.draw_deviation_grid()
         self.draw_deviation_curve()
         self.draw_readings()
@@ -129,15 +130,31 @@ class Table(OutputsTextMixin):
             self.draw_deviation_grid_axis_label()
             self.draw_blurb()
 
-    def draw_degrees_grid(self):
+    def draw_degrees_grid(self, side, heading_type):
         context = self.context
+        curve = self.curve
+
+        assert( side in ('left', 'right') )
+        assert( heading_type in ('magnetic', 'compass') )
 
         midpoint = self.SURFACE_WIDTH / 2
-        x_start = midpoint - self.grid_width / 2
-        x_end   = midpoint + self.grid_width / 2
 
         for degree in range(0, 361, 10):
+
+            if heading_type == 'magnetic':
+                deviation = curve.deviation_at(degree)
+            else:
+                raise('not coded yet')
+
+            if side == 'left':
+                x_start = midpoint - self.grid_width / 2
+                x_end   = self.grid_x(deviation)
+            else:
+                x_start = self.grid_x(deviation)
+                x_end   = midpoint + self.grid_width / 2
+
             y = self.grid_y(degree)
+
             with context:
                 if not degree % 90:
                     context.set_line_width(self.width_cardinal)
@@ -156,13 +173,17 @@ class Table(OutputsTextMixin):
                     text = unicode(degree) + u'°'
                     context.set_font_size(6)
 
-                    (x_bearing, y_bearing, width, height, x_advance, y_advance) = context.text_extents(text)
+                    width, height = self.get_text_width_height(text)
 
                     y = y + height / 2
 
-                    for x in (x_start - width - 2, x_end + 2):
-                        context.move_to(x,y)
-                        context.show_text(text)
+                    if side == 'left':
+                        x = x_start - width - 2
+                    else:
+                        x = x_end + 2
+
+                    context.move_to(x,y)
+                    context.show_text(text)
 
     def draw_degrees_grid_axis_label(self):
         context = self.context
