@@ -18,9 +18,11 @@ from .base import OutputsTextMixin
 # Which approximates to 590 x 790 (shrunk a bit for safety)
 
 class Table(OutputsTextMixin):
-    def __init__(self, curve=None, file_type='pdf', crop=False, right='magnetic'):
+    def __init__(self, curve=None, file_type='pdf', crop=False, right='magnetic', url_pk=None):
 
         self.is_cropped = crop
+
+        self.url_pk = url_pk or curve.pk
 
         assert(right in ('magnetic', 'compass'))
         self.left  = 'magnetic'
@@ -326,7 +328,7 @@ class Table(OutputsTextMixin):
     def draw_blurb(self):
         y = self.grid_top - 8*12
 
-        url = settings.BASE_URL + reverse('curve_detail', kwargs={'pk': self.curve.id})
+        url = settings.BASE_URL + reverse('curve_detail', kwargs={'pk': self.url_pk})
 
         left_right = self.left + '-' + self.right
 

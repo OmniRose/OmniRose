@@ -45,7 +45,7 @@ class TableTestCase(TestCase):
                 continue
 
             for heading_type in ('magnetic','compass'):
-                table = Table(curve=curve, right=heading_type)
+                table = Table(curve=curve, right=heading_type, url_pk=12345)
                 table.draw()
                 os.rename(table.filename, "test_output/table_%s_%s.pdf" % (name, heading_type))
                 self.assertTrue(True)
