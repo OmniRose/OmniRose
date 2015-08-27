@@ -213,25 +213,25 @@ class CurveLiveTests(OmniRoseSeleniumTestCase):
 
         self.assertEqual(
             preview_image.get_attribute('src'),
-            curve_url + "table_png/?crop=1"
+            curve_url + "table_png/magnetic/?crop=1"
         )
 
         simpler_button.click()
         self.assertEqual(
             preview_image.get_attribute('src'),
-            curve_url + "table_png/?crop=1&equation=trig_5"
+            curve_url + "table_png/magnetic/?crop=1&equation=trig_5"
         )
 
         simpler_button.click()
         self.assertEqual(
             preview_image.get_attribute('src'),
-            curve_url + "table_png/?crop=1&equation=trig_3"
+            curve_url + "table_png/magnetic/?crop=1&equation=trig_3"
         )
 
         complex_button.click()
         self.assertEqual(
             preview_image.get_attribute('src'),
-            curve_url + "table_png/?crop=1&equation=trig_5"
+            curve_url + "table_png/magnetic/?crop=1&equation=trig_5"
         )
 
         choose_button.click()
@@ -426,7 +426,7 @@ class CurveLiveTests(OmniRoseSeleniumTestCase):
 
         self.assertEqual(r.url, pdf_url)
         self.assertEqual(r.status_code, 200)
-        self.assertEqual(r.headers['content-disposition'], "attachment; filename='gypsy-moth-table.pdf'")
+        self.assertEqual(r.headers['content-disposition'], "attachment; filename='gypsy-moth-table-magnetic.pdf'")
         self.assertEqual(r.headers['content-type'], 'application/pdf')
 
         # Final call from selenium so that the shutdown process goes smoothly
