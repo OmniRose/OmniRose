@@ -13,6 +13,9 @@ from accounts.models import User
 
 from .equations import all_equations
 
+def mod360(angle):
+    return angle % 360
+
 class ErrorNoSuitableEquationAvailable(Exception):
     pass
 
@@ -76,15 +79,50 @@ class CurveCalculations(object):
         return round(accurate, 3)
 
 
-    def compass_to_true(self, compass, variation=0):
+    def compass_to_magnetic(self, compass):
         magnetic = compass + self.deviation_at(compass)
+        return mod360(magnetic)
+
+    def magnetic_to_compass(self, magnetic, max_delta=0.0001, round_ndigits=3, max_iterations=50):
+
+        iteration_count = 0
+        compass = magnetic
+
+        while True:
+            reverse_mag = self.compass_to_magnetic(compass)
+            delta = (reverse_mag - magnetic)
+
+            # Are we accurate enough?
+            if abs(delta) < max_delta:
+                break
+
+            # check that we've not gone too long
+            if iteration_count > max_iterations:
+                break
+            iteration_count = iteration_count + 1
+
+            compass = (compass - delta * 0.9) % 360
+
+        rounded = round(compass, round_ndigits)
+        return mod360(rounded)
+
+    def magnetic_to_true(self, magnetic, variation=0):
         true = magnetic + variation
-        return true
+        return mod360(true)
 
+    def true_to_magnetic(self, true, variation=0):
+        magnetic = true - variation
+        return mod360(magnetic)
 
-    # true_to_compass:
-    #   note that this might be tricky to implement as second error correction
-    #   will be needed.
+    def compass_to_true(self, compass, variation=0):
+        magnetic = self.compass_to_magnetic(compass)
+        true = self.magnetic_to_true(magnetic, variation)
+        return mod360(true)
+
+    def true_to_compass(self, true, variation=0):
+        magnetic = self.true_to_magnetic(true, variation)
+        compass  = self.magnetic_to_compass(magnetic)
+        return mod360(compass)
 
 
     def calculate_curve_if_needed(self):

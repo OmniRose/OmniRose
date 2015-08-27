@@ -10,9 +10,20 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 
 # Create your tests here.
-from .models import Curve, Reading, ErrorNoSuitableEquationAvailable
+from .models import Curve, Reading, ErrorNoSuitableEquationAvailable, mod360
 from .equations import all_equations
 from .samples import create_database_curve_from_sample, create_curve_calculation_from_sample, samples
+
+
+class CurveMathTests(TestCase):
+    def test_mod360(self):
+        self.assertEqual(mod360(0), 0)
+        self.assertEqual(mod360(180), 180)
+        self.assertEqual(mod360(359), 359)
+        self.assertEqual(mod360(360), 0)
+        self.assertEqual(mod360(370), 10)
+        self.assertEqual(mod360(-10), 350)
+        self.assertEqual(mod360(-12.34), 347.66)
 
 
 class CurveBasicTests(TestCase):
@@ -52,10 +63,27 @@ class DeviationTestBase(object):
         self.assertEqual(handbook_curve.min_deviation, -7)
         self.assertEqual(handbook_curve.max_deviation, 6)
 
+    bearing_convert_test_values = (
+        # (compass, true)
+        (0, 356.157),
+        (2, 358.299),
+        (90, 93.843),
+        (357, 352.949),
+        (359, 355.087),
+    )
 
     def test_compass_to_true(self):
-        self.assertEqual( self.curve.compass_to_true(90), 93.843)
-        self.assertEqual( self.curve.compass_to_true(90, 10), 103.843)
+        for compass, true in self.bearing_convert_test_values:
+            self.assertAlmostEqual( self.curve.compass_to_true(compass), true)
+
+        self.assertAlmostEqual( self.curve.compass_to_true(0, 10), 6.157)
+        self.assertAlmostEqual( self.curve.compass_to_true(90, 10), 103.843)
+
+    def test_true_to_compass(self):
+        for compass, true in self.bearing_convert_test_values:
+            self.assertAlmostEqual( self.curve.true_to_compass(true), compass)
+
+        self.assertAlmostEqual( self.curve.true_to_compass(103.843, 10), 90)
 
     def test_can_calculate_curve(self):
         self.assertTrue(self.curve.can_calculate_curve)
