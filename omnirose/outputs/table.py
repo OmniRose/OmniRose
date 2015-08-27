@@ -18,13 +18,19 @@ from .base import OutputsTextMixin
 # Which approximates to 590 x 790 (shrunk a bit for safety)
 
 class Table(OutputsTextMixin):
-    def __init__(self, curve=None, file_type='pdf', crop=False, heading='magnetic'):
+    def __init__(self, curve=None, file_type='pdf', crop=False, left='magnetic', right='magnetic'):
 
         self.is_cropped = crop
-        if heading == 'magnetic':
-            self.degrees_grid_axis_label_text = "ship's heading (magnetic)"
-        else:
-            raise Exception("Unknown heading parameter '%s'" % heading)
+
+        assert(left  in ('magnetic', 'compass'))
+        assert(right in ('magnetic', 'compass'))
+        self.left = left
+        self.right = right
+
+        self.degrees_grid_axis_label_text = {
+            'magnetic': "ship's heading (magnetic)",
+            'compass':  "ship's heading (compass)",
+        }
 
         if self.is_cropped:
             self.SURFACE_HEIGHT = 540.
@@ -118,17 +124,18 @@ class Table(OutputsTextMixin):
         return self.grid_content_right - dev_interval * (max_dev - deviation)
 
     def draw(self):
-        self.draw_degrees_grid(side='left',  heading_type='magnetic')
-        self.draw_degrees_grid(side='right', heading_type='magnetic')
+        self.draw_degrees_grid(side='left',  heading_type=self.left)
+        self.draw_degrees_grid(side='right', heading_type=self.right)
         self.draw_deviation_grid()
         self.draw_deviation_curve()
         self.draw_readings()
         if not self.is_cropped:
             self.draw_titles(60)
             self.draw_copyright_text()
-            self.draw_degrees_grid_axis_label()
+            self.draw_degrees_grid_axis_labels()
             self.draw_deviation_grid_axis_label()
             self.draw_blurb()
+
 
     def draw_degrees_grid(self, side, heading_type):
         context = self.context
@@ -143,8 +150,16 @@ class Table(OutputsTextMixin):
 
             if heading_type == 'magnetic':
                 deviation = curve.deviation_at(degree)
+                y = self.grid_y(degree)
             else:
-                raise('not coded yet')
+                magnetic_degree = curve.compass_to_magnetic(degree)
+
+                # Don't print the 360 line if not exactly at bottom of page.
+                if degree == 360 and magnetic_degree != 360:
+                    break
+
+                deviation = curve.deviation_at(magnetic_degree)
+                y = self.grid_y(magnetic_degree)
 
             if side == 'left':
                 x_start = midpoint - self.grid_width / 2
@@ -152,8 +167,6 @@ class Table(OutputsTextMixin):
             else:
                 x_start = self.grid_x(deviation)
                 x_end   = midpoint + self.grid_width / 2
-
-            y = self.grid_y(degree)
 
             with context:
                 if not degree % 90:
@@ -185,19 +198,30 @@ class Table(OutputsTextMixin):
                     context.move_to(x,y)
                     context.show_text(text)
 
-    def draw_degrees_grid_axis_label(self):
+    def draw_degrees_grid_axis_labels(self):
+        self.draw_degrees_grid_axis_label('left', self.left)
+        self.draw_degrees_grid_axis_label('right', self.right)
+
+    def draw_degrees_grid_axis_label(self, side, heading_type):
         context = self.context
-        label_text = self.degrees_grid_axis_label_text
+        label_text = self.degrees_grid_axis_label_text[heading_type]
 
         with context:
             context.set_font_size(10)
 
             midpoint = self.SURFACE_WIDTH / 2
-            x = midpoint - self.grid_width / 2 - 30
+            offset = self.grid_width / 2 + 30
+
+            if side == 'left':
+                x = midpoint - offset
+                angle = -90
+            else:
+                x = midpoint + offset
+                angle = 90
 
             y = self.grid_y(180)
 
-            self.produce_rotated_text(label_text, x, y, -90)
+            self.produce_rotated_text(label_text, x, y, angle)
 
     def draw_deviation_grid(self):
         context = self.context
