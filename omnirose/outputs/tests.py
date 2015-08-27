@@ -39,11 +39,12 @@ class TableTestCase(TestCase):
             if not curve.can_calculate_curve:
                 continue
 
-            table = Table(curve=curve)
-            table.draw()
-            if sample.get('save_file_for_tests'):
-                os.rename(table.filename, "test_output/table_%s.pdf" % name)
-            self.assertTrue(True)
+            for heading_type in ('magnetic','compass'):
+                table = Table(curve=curve, right=heading_type)
+                table.draw()
+                if sample.get('save_file_for_tests'):
+                    os.rename(table.filename, "test_output/table_%s_%s.pdf" % (name, heading_type))
+                self.assertTrue(True)
 
 
     def test_split_lines(self):
