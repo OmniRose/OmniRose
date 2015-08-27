@@ -13,10 +13,12 @@ class RoseTestCase(TestCase):
             if not curve.can_calculate_curve:
                 continue
 
+            if not sample.get('save_file_for_tests'):
+                continue
+
             rose = Rose(variation=0, curve=curve)
             rose.draw()
-            if sample.get('save_file_for_tests'):
-                os.rename(rose.filename, "test_output/rose_%s.pdf" % name)
+            os.rename(rose.filename, "test_output/rose_%s.pdf" % name)
             self.assertTrue(True)
 
     def test_multiple_rose_creation(self):
@@ -39,11 +41,13 @@ class TableTestCase(TestCase):
             if not curve.can_calculate_curve:
                 continue
 
+            if not sample.get('save_file_for_tests'):
+                continue
+
             for heading_type in ('magnetic','compass'):
                 table = Table(curve=curve, right=heading_type)
                 table.draw()
-                if sample.get('save_file_for_tests'):
-                    os.rename(table.filename, "test_output/table_%s_%s.pdf" % (name, heading_type))
+                os.rename(table.filename, "test_output/table_%s_%s.pdf" % (name, heading_type))
                 self.assertTrue(True)
 
 
