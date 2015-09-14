@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Swinging Demo{% endblock %}
+
+{% block content %}
+
+  <h1>Swinging Demo</h1>
+
+  <p>This is only demo code, not ready for production yet.</p>
+
+  <input id="file_input" type="file" accept="video/*"/>
+
+  <video controls></video>
+
+
+
+{% endblock %}
+
+{% block javascript %}
+  <script>
+
+  jQuery(function ($) {
+    console.log('starting');
+
+    var $input = $("#file_input");
+    var video = $("video")[0];
+
+    $input.on('change', function (event) {
+      var file = this.files[0];
+      console.debug(file, file.type);
+
+      // check that we can play this sort of file
+      if (video.canPlayType(file.type)) {
+        console.log('can play video');
+        var fileURL = URL.createObjectURL(file);
+        video.src = fileURL;
+      } else {
+        alert("can't play this kind of video");
+      }
+
+    });
+
+  });
+
+  </script>
+{% endblock %}
