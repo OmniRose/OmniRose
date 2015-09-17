@@ -11,10 +11,9 @@ urlpatterns = patterns('',
     url(r'about/', TemplateView.as_view(template_name='about.html'), name='about'),
     url(r'privacy/', TemplateView.as_view(template_name='privacy.html'), name='privacy'),
 
-    url(r'swinging_demo/', TemplateView.as_view(template_name='swinging_demo.html'), name='swinging'),
-
     url(r'^accounts/', include('accounts.urls')),
     url(r'^deviation_tables/', include('curve.urls')),
+    url(r'^swing/', include('swing.urls')),
 
     url(r'^admin/', include(admin.site.urls)),
 
