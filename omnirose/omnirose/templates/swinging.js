@@ -66,6 +66,7 @@ jQuery(function ($) {
       var delta = video_time - last_recorded_time;
       var new_time = video_time + delta;
 
+      // animate to the new position
       var number_of_steps = 5;
       var animation_duration = 0.5; // seconds
       var time_delta_per_step = delta / number_of_steps;
@@ -75,6 +76,8 @@ jQuery(function ($) {
         if (video.currentTime < new_time) {
           video.currentTime = video.currentTime + time_delta_per_step;
           setTimeout(animate_step_forwards, animate_interval);
+        } else {
+          video.currentTime = new_time;
         }
       };
       animate_step_forwards();
