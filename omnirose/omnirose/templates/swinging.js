@@ -9,7 +9,10 @@ jQuery(function ($) {
   var $step_backward_btn = $('#step_backward_btn');
   var $record_position_btn = $('#record_position_btn');
 
-  var step_increment = 0.04;
+  // The amount of time to move forwards and backwards in the video. Slightly
+  // less than what is needed to see every frame in a 30fps video.
+  var step_increment = 0.03;
+
   var last_recorded_degree = null;
   var last_recorded_time   = null;
 
