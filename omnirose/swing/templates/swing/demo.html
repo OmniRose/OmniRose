@@ -1,4 +1,9 @@
 {% extends "base.html" %}
+{% load staticfiles %}
+
+{% block javascript %}
+  <script src="{% static 'swing/demo.js' %}" type="text/javascript" charset="utf-8"></script>
+{% endblock %}
 
 {% block title %}Swinging Demo{% endblock %}
 
@@ -26,10 +31,4 @@
   <ul id="data"></ul>
 
 
-{% endblock %}
-
-{% block javascript %}
-  <script>
-  {% include "swing/demo.js" %}
-  </script>
 {% endblock %}
