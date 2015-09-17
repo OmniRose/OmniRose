@@ -77,11 +77,15 @@ jQuery(function ($) {
       var animate_interval = animation_duration / number_of_steps * 1000; // ms
 
       var animate_step_forwards = function () {
-        if (video.currentTime < new_time) {
-          video.currentTime = video.currentTime + time_delta_per_step;
-          setTimeout(animate_step_forwards, animate_interval);
-        } else {
+        // console.log(video.currentTime, new_time);
+        var next_step_time = video.currentTime + time_delta_per_step;
+        if ( next_step_time > new_time) {
+          // Video would step beyond where we want to be. Set video precisely
+          // and stop.
           video.currentTime = new_time;
+        } else {
+          video.currentTime = next_step_time;
+          setTimeout(animate_step_forwards, animate_interval);
         }
       };
       animate_step_forwards();
