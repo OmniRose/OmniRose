@@ -66,6 +66,10 @@ jQuery(function ($) {
       var delta = video_time - last_recorded_time;
       var new_time = video_time + delta;
 
+      // Check we are not about to try to go beyond the end of the video.
+      if (new_time > video.duration) { new_time = video.duration; }
+      if (new_time < 0) { new_time = 0; }
+
       // animate to the new position
       var number_of_steps = 5;
       var animation_duration = 0.5; // seconds
