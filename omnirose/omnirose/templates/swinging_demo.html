@@ -47,7 +47,7 @@
     var last_recorded_time   = null;
 
     var norm_degrees = function (degree) {
-      return degree % 360;
+      return (degree + 360) % 360;
     };
 
     $file_input.on('change', function (event) {
