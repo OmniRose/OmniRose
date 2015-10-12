@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block javascript %}
+  <script src="{% static 'swing/sun.js' %}" type="text/javascript" charset="utf-8"></script>
+{% endblock %}
+
+{% block title %}Sun Swinging Demo{% endblock %}
+
+{% block content %}
+
+  <h1>Sun Swinging Demo</h1>
+
+  <p>This is only demo code, not ready for production yet. To use you need two videos  - one of the compass and one of the sun on a special sun shadow card we produce - the sun pelorus.</p>
+
+  <div>
+    compass:
+    <input id="compass_input" type="file" accept="video/*"/>
+
+    shadow:
+    <input id="shadow_input" type="file" accept="video/*"/>
+
+  </div>
+
+  <div>
+    <span id="video_current_time">-</span>
+  </div>
+
+  <div>
+    <video id="compass_video" height="200" muted></video>
+    <video id="shadow_video"  height="200" muted></video>
+  </div>
+
+  <ul id="data"></ul>
+
+
+{% endblock %}
