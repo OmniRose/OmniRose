@@ -13,22 +13,56 @@
 
   <p>This is only demo code, not ready for production yet. To use you need two videos  - one of the compass and one of the sun on a special sun shadow card we produce - the sun pelorus.</p>
 
-  <div>
-    compass:
-    <input id="compass_input" type="file" accept="video/*"/>
 
-    shadow:
-    <input id="shadow_input" type="file" accept="video/*"/>
+  <div class="row">
+    <div class="col-sm-6">
+      <h3>Compass <small id="compass_video_current_time">-</small></h3>
+      <input id="compass_input" type="file" accept="video/*"/>
+      <video id="compass_video" class="img img-responsive" muted></video>
 
+      <div class="btn-toolbar" role="toolbar">
+        <div class="btn-group" role="group">
+          <button class="btn compass_step_button" data-steps="-5">
+            <span class="glyphicon glyphicon-backward"></span>
+            <span class="glyphicon glyphicon-backward"></span>
+          </button>
+          <button class="btn compass_step_button" data-steps="-1">
+            <span class="glyphicon glyphicon-backward"></span>
+          </button>
+          <button class="btn compass_step_button" data-steps="-0.03125">
+            <span class="glyphicon glyphicon-step-backward"></span>
+          </button>
+        </div>
+
+        <div class="btn-group" role="group">
+          <button class="btn btn-default" id="compass_play_button">
+            <span class="glyphicon glyphicon-play"></span>
+          </button>
+        </div>
+
+        <div class="btn-group" role="group">
+          <button class="btn compass_step_button" data-steps="0.03125">
+            <span class="glyphicon glyphicon-step-forward"></span>
+          </button>
+          <button class="btn compass_step_button" data-steps="1">
+            <span class="glyphicon glyphicon-forward"></span>
+          </button>
+          <button class="btn compass_step_button" data-steps="5">
+            <span class="glyphicon glyphicon-forward"></span>
+            <span class="glyphicon glyphicon-forward"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6">
+      <h3>shadow</h3>
+      <input id="shadow_input" type="file" accept="video/*"/>
+      <video id="shadow_video" class="img img-responsive" muted></video>
+    </div>
   </div>
 
   <div>
-    <span id="video_current_time">-</span>
-  </div>
-
-  <div>
-    <video id="compass_video" height="200" muted></video>
-    <video id="shadow_video"  height="200" muted></video>
   </div>
 
   <ul id="data"></ul>

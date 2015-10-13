@@ -2,28 +2,20 @@ jQuery(function ($) {
   console.log('starting');
 
   var $compass_input = $("#compass_input");
-  var $shadow_input = $("#shadow_input");
+  var $shadow_input  = $("#shadow_input");
+
+  var $compass_current_time = $("#compass_video_current_time");
+  var $shadow_current_time  = $("#shadow_video_current_time");
 
   var compass_video = $("#compass_video")[0];
   var shadow_video  = $("#shadow_video")[0];
 
-  // var $step_forward_btn  = $('#step_forward_btn');
-  // var $step_backward_btn = $('#step_backward_btn');
-  // var $record_position_btn = $('#record_position_btn');
-  //
-  // // The amount of time to move forwards and backwards in the video. Slightly
-  // // less than what is needed to see every frame in a 30fps video.
-  // var step_increment = 0.03;
-  //
-  // var last_recorded_degree = null;
-  // var last_recorded_time   = null;
-  //
-  // var norm_degrees = function (degree) {
-  //   return (degree + 360) % 360;
-  // };
-  //
+  var $compass_video_current_time = $("#compass_video_current_time");
 
-  function setup_video_capture ($input, video) {
+  var $compass_play_button  = $("#compass_play_button");
+  var $compass_step_buttons = $(".compass_step_button");
+
+  function setup_video_capture ($input, video, $timer) {
     $input.on('change', function (event) {
       var file = this.files[0];
       console.debug(file, file.type);
@@ -33,19 +25,53 @@ jQuery(function ($) {
         console.log('can play video');
         var fileURL = URL.createObjectURL(file);
         video.src = fileURL;
+
+        $timer.text("0");
+
+        $(video).on('timeupdate', function () {
+          $timer.text(video.currentTime);
+        });
+
+        $input.hide();
       } else {
         alert("can't play this kind of video");
       }
     });
   }
 
-  setup_video_capture($compass_input, compass_video);
+  setup_video_capture($compass_input, compass_video, $compass_video_current_time);
   setup_video_capture($shadow_input,  shadow_video);
 
-  // $(video).on('timeupdate', function () {
-  //   $('#video_current_time').html(video.currentTime);
-  // });
-  //
+
+  $compass_play_button.on('click', function () {
+    var $spans = $('span', this);
+
+    if (compass_video.paused) {
+      compass_video.play();
+      $spans.removeClass("glyphicon-play");
+      $spans.addClass("glyphicon-pause");
+    } else {
+      compass_video.pause();
+      $spans.addClass("glyphicon-play");
+      $spans.removeClass("glyphicon-pause");
+    }
+  });
+
+  $compass_step_buttons.on("click", function () {
+    var $button = $(this);
+    var step_amount = $button.data('steps');
+    console.debug(step_amount);
+
+    // pause video if it is playing
+    if (!compass_video.paused) {
+      $compass_play_button.click();
+    }
+
+    var new_time = compass_video.currentTime + step_amount;
+    compass_video.currentTime = new_time;
+  });
+
+  // $step_backward_btn.on('click', function () {  //
   // $step_forward_btn.on('click', function () {
   //   video.currentTime = video.currentTime + step_increment;
   // });
