@@ -1,21 +1,17 @@
 jQuery(function ($) {
   console.log('starting');
 
-  var $compass_input = $("#compass_input");
-  var $shadow_input  = $("#shadow_input");
 
-  var $compass_current_time = $("#compass_video_current_time");
-  var $shadow_current_time  = $("#shadow_video_current_time");
+  var $compass_video_container = $("#compass_video_container");
 
-  var compass_video = $("#compass_video")[0];
-  var shadow_video  = $("#shadow_video")[0];
 
-  var $compass_video_current_time = $("#compass_video_current_time");
+  function setup_video_in_container($video_container) {
+    var $input = $video_container.find("input");
+    var video = $video_container.find("video")[0];
+    var $video_current_time = $video_container.find(".current_time");
+    var $play_button  = $video_container.find(".play_button");
+    var $step_buttons = $video_container.find(".step_button");
 
-  var $compass_play_button  = $("#compass_play_button");
-  var $compass_step_buttons = $(".compass_step_button");
-
-  function setup_video_capture ($input, video, $timer) {
     $input.on('change', function (event) {
       var file = this.files[0];
       console.debug(file, file.type);
@@ -37,39 +33,38 @@ jQuery(function ($) {
         alert("can't play this kind of video");
       }
     });
+
+    $play_button.on('click', function () {
+      var $spans = $('span', this);
+
+      if (video.paused) {
+        video.play();
+        $spans.removeClass("glyphicon-play");
+        $spans.addClass("glyphicon-pause");
+      } else {
+        video.pause();
+        $spans.addClass("glyphicon-play");
+        $spans.removeClass("glyphicon-pause");
+      }
+    });
+
+    $step_buttons.on("click", function () {
+      var $button = $(this);
+      var step_amount = $button.data('steps');
+      console.debug(step_amount);
+
+      // pause video if it is playing
+      if (!video.paused) {
+        $play_button.click();
+      }
+
+      video.currentTime = video.currentTime + step_amount;
+    });
   }
 
-  setup_video_capture($compass_input, compass_video, $compass_video_current_time);
-  setup_video_capture($shadow_input,  shadow_video);
+  setup_video_in_container($compass_video_container);
 
 
-  $compass_play_button.on('click', function () {
-    var $spans = $('span', this);
-
-    if (compass_video.paused) {
-      compass_video.play();
-      $spans.removeClass("glyphicon-play");
-      $spans.addClass("glyphicon-pause");
-    } else {
-      compass_video.pause();
-      $spans.addClass("glyphicon-play");
-      $spans.removeClass("glyphicon-pause");
-    }
-  });
-
-  $compass_step_buttons.on("click", function () {
-    var $button = $(this);
-    var step_amount = $button.data('steps');
-    console.debug(step_amount);
-
-    // pause video if it is playing
-    if (!compass_video.paused) {
-      $compass_play_button.click();
-    }
-
-    var new_time = compass_video.currentTime + step_amount;
-    compass_video.currentTime = new_time;
-  });
 
   // $step_backward_btn.on('click', function () {  //
   // $step_forward_btn.on('click', function () {

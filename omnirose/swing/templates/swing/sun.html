@@ -15,50 +15,54 @@
 
 
   <div class="row">
-    <div class="col-sm-6">
-      <h3>Compass <small id="compass_video_current_time">-</small></h3>
-      <input id="compass_input" type="file" accept="video/*"/>
-      <video id="compass_video" class="img img-responsive" muted></video>
+    <div id="compass_video_container" class="col-sm-6">
+
+      <h3>Compass <small class="current_time">-</small></h3>
+
+      <input type="file" accept="video/*"/>
+
+      <video class="img img-responsive" muted></video>
 
       <div class="btn-toolbar" role="toolbar">
         <div class="btn-group" role="group">
-          <button class="btn compass_step_button" data-steps="-5">
+          <button class="btn step_button" data-steps="-5">
             <span class="glyphicon glyphicon-backward"></span>
             <span class="glyphicon glyphicon-backward"></span>
           </button>
-          <button class="btn compass_step_button" data-steps="-1">
+          <button class="btn step_button" data-steps="-1">
             <span class="glyphicon glyphicon-backward"></span>
           </button>
-          <button class="btn compass_step_button" data-steps="-0.03125">
+          <button class="btn step_button" data-steps="-0.03125">
             <span class="glyphicon glyphicon-step-backward"></span>
           </button>
         </div>
 
         <div class="btn-group" role="group">
-          <button class="btn btn-default" id="compass_play_button">
+          <button class="btn btn-default play_button">
             <span class="glyphicon glyphicon-play"></span>
           </button>
         </div>
 
         <div class="btn-group" role="group">
-          <button class="btn compass_step_button" data-steps="0.03125">
+          <button class="btn step_button" data-steps="0.03125">
             <span class="glyphicon glyphicon-step-forward"></span>
           </button>
-          <button class="btn compass_step_button" data-steps="1">
+          <button class="btn step_button" data-steps="1">
             <span class="glyphicon glyphicon-forward"></span>
           </button>
-          <button class="btn compass_step_button" data-steps="5">
+          <button class="btn step_button" data-steps="5">
             <span class="glyphicon glyphicon-forward"></span>
             <span class="glyphicon glyphicon-forward"></span>
           </button>
         </div>
       </div>
+
     </div>
 
     <div class="col-sm-6">
       <h3>shadow</h3>
-      <input id="shadow_input" type="file" accept="video/*"/>
-      <video id="shadow_video" class="img img-responsive" muted></video>
+      {# <input id="shadow_input" type="file" accept="video/*"/> #}
+      {# <video id="shadow_video" class="img img-responsive" muted></video> #}
     </div>
   </div>
 
