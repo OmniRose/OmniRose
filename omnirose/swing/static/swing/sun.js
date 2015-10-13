@@ -3,6 +3,7 @@ jQuery(function ($) {
 
 
   var $compass_video_container = $("#compass_video_container");
+  var $shadow_video_container  = $("#shadow_video_container");
 
 
   function setup_video_in_container($video_container) {
@@ -62,6 +63,7 @@ jQuery(function ($) {
   }
 
   setup_video_in_container($compass_video_container);
+  setup_video_in_container($shadow_video_container);
 
 
 
