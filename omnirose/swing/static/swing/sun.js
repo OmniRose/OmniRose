@@ -22,10 +22,10 @@ jQuery(function ($) {
         var fileURL = URL.createObjectURL(file);
         video.src = fileURL;
 
-        $timer.text("0");
+        $video_current_time.text("0");
 
         $(video).on('timeupdate', function () {
-          $timer.text(video.currentTime);
+          $video_current_time.text(video.currentTime);
         });
 
         $input.hide();
@@ -51,7 +51,6 @@ jQuery(function ($) {
     $step_buttons.on("click", function () {
       var $button = $(this);
       var step_amount = $button.data('steps');
-      console.debug(step_amount);
 
       // pause video if it is playing
       if (!video.paused) {
