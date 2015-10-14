@@ -2,6 +2,7 @@
 {% load staticfiles %}
 
 {% block javascript %}
+  <script src="{% static 'swing/jquery.panzoom.v2.0.5.min.js' %}" type="text/javascript" charset="utf-8"></script>
   <script src="{% static 'swing/sun.js' %}" type="text/javascript" charset="utf-8"></script>
 {% endblock %}
 
@@ -16,7 +17,6 @@
   <h2>Todo list:</h2>
 
   <ul>
-    <li>Add controls to zoom in on parts of the video</li>
     <li>Add code to record the point at which the two videos are synced</li>
     <li>Add controls that play/pause etc the two videos at the same time</li>
     <li>Add code to record the current true time GMT and geolocation</li>

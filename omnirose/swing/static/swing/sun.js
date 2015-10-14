@@ -9,9 +9,11 @@ jQuery(function ($) {
   function setup_video_in_container($video_container) {
     var $input = $video_container.find("input");
     var video = $video_container.find("video")[0];
+    var $video = $(video);
     var $video_current_time = $video_container.find(".current_time");
     var $play_button  = $video_container.find(".play_button");
     var $step_buttons = $video_container.find(".step_button");
+    var $zoom_buttons = $video_container.find(".panzoom_button");
 
     $input.on('change', function (event) {
       var file = this.files[0];
@@ -25,11 +27,39 @@ jQuery(function ($) {
 
         $video_current_time.text("0");
 
-        $(video).on('timeupdate', function () {
+        $video.on('timeupdate', function () {
           $video_current_time.text(video.currentTime);
         });
 
         $input.hide();
+
+        $video.panzoom({
+          // See https://github.com/timmywil/jquery.panzoom#options for details
+          increment: 0.5,
+          minScale: 1,
+          maxScale: 8,
+          contain: false
+        });
+
+        $zoom_buttons.on("click", function( e ) {
+          e.preventDefault();
+
+          var action = $(this).data("action");
+
+          switch (action) {
+            case 'zoomIn':
+              $video.panzoom("zoom", false);
+              break;
+            case 'zoomOut':
+              $video.panzoom("zoom", true);
+              break;
+            default:
+              $video.panzoom(action);
+          }
+
+        });
+
+
       } else {
         alert("can't play this kind of video");
       }
