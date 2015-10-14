@@ -5,6 +5,10 @@ jQuery(function ($) {
   var $compass_video_container = $("#compass_video_container");
   var $shadow_video_container  = $("#shadow_video_container");
 
+  var compass_video = $compass_video_container.find("video")[0];
+  var shadow_video  = $shadow_video_container.find("video")[0];
+
+  var $synchronise_videos_button = $("#synchronise_videos");
 
   function setup_video_in_container($video_container) {
     var $input = $video_container.find("input");
@@ -95,7 +99,30 @@ jQuery(function ($) {
   setup_video_in_container($compass_video_container);
   setup_video_in_container($shadow_video_container);
 
+  $synchronise_videos_button.on('click', function (e) {
+    e.preventDefault();
 
+    // Make sure both videos are not playing
+    compass_video.pause();
+    shadow_video.pause();
+
+    var video_delta = compass_video.currentTime - shadow_video.currentTime;
+    console.log(video_delta);
+
+    // Add a bit of code to keep the two videos in sync
+    $(compass_video).on('timeupdate', function () {
+      var new_time = compass_video.currentTime - video_delta;
+      shadow_video.currentTime = new_time;
+    });
+
+    // disable the shadow video controls
+    $shadow_video_container.find(".play_button").prop('disabled', true);
+    $shadow_video_container.find(".step_button").prop('disabled', true);
+
+    // Our work is done!
+    $(this).parent().remove();
+
+  });
 
   // $step_backward_btn.on('click', function () {  //
   // $step_forward_btn.on('click', function () {

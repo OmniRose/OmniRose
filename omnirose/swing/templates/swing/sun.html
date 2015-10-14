@@ -17,8 +17,6 @@
   <h2>Todo list:</h2>
 
   <ul>
-    <li>Add code to record the point at which the two videos are synced</li>
-    <li>Add controls that play/pause etc the two videos at the same time</li>
     <li>Add code to record the current true time GMT and geolocation</li>
     <li>Add code to return the current solar azimuth for a given time</li>
     <li>Add code to store the pelorus correction angle</li>
@@ -33,7 +31,10 @@
     {% include "swing/video_container.html" with heading="Shadow"  id="shadow_video_container"  %}
   </div>
 
-  <div>
+  <div class="row">
+    <div class="col-sm-12">
+      <button id="synchronise_videos">Synchronise videos!</button>
+    </div>
   </div>
 
   <ul id="data"></ul>
