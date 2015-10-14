@@ -10,6 +10,12 @@ jQuery(function ($) {
 
   var $synchronise_videos_button = $("#synchronise_videos");
 
+  function seconds_to_hhssmmm (seconds) {
+    var date = new Date(null);
+    date.setMilliseconds(seconds * 1000);
+    return date.toISOString().substr(14, 9);
+  }
+
   function setup_video_in_container($video_container) {
     var $input = $video_container.find("input");
     var video = $video_container.find("video")[0];
@@ -29,10 +35,10 @@ jQuery(function ($) {
         var fileURL = URL.createObjectURL(file);
         video.src = fileURL;
 
-        $video_current_time.text("0");
+        $video_current_time.text(seconds_to_hhssmmm(0));
 
         $video.on('timeupdate', function () {
-          $video_current_time.text(video.currentTime);
+          $video_current_time.text(seconds_to_hhssmmm(video.currentTime));
         });
 
         $input.hide();
