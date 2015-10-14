@@ -10,6 +10,12 @@ jQuery(function ($) {
 
   var $synchronise_videos_button = $("#synchronise_videos");
 
+  function pause_video_and_correct_time (video) {
+    video.pause();
+    var new_time = video.currentTime - video.currentTime % 0.03125;
+    video.currentTime = new_time;
+  }
+
   function seconds_to_hhssmmm (seconds) {
     var date = new Date(null);
     date.setMilliseconds(seconds * 1000);
@@ -83,7 +89,7 @@ jQuery(function ($) {
         $spans.removeClass("glyphicon-play");
         $spans.addClass("glyphicon-pause");
       } else {
-        video.pause();
+        pause_video_and_correct_time(video);
         $spans.addClass("glyphicon-play");
         $spans.removeClass("glyphicon-pause");
       }
@@ -109,11 +115,11 @@ jQuery(function ($) {
     e.preventDefault();
 
     // Make sure both videos are not playing
-    compass_video.pause();
-    shadow_video.pause();
+    pause_video_and_correct_time(compass_video);
+    pause_video_and_correct_time(shadow_video);
 
     var video_delta = compass_video.currentTime - shadow_video.currentTime;
-    console.log(video_delta);
+    console.log("video delta:", video_delta);
 
     // Add a bit of code to keep the two videos in sync
     $(compass_video).on('timeupdate', function () {
