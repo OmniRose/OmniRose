@@ -19,7 +19,6 @@
 
   <ul>
     <li>Add code to return the current solar azimuth for a given time</li>
-    <li>Add code to store the pelorus correction angle</li>
     <li>Add steps that guide the user through the various things they need to do</li>
     <li>Record and compute the various readings of the deviation</li>
     <li>Store these readings to create a deviation table</li>
@@ -74,6 +73,35 @@
         <div class="form-group">
           <div class="col-sm-offset-2 col-sm-4">
             <input type="submit" class="btn btn-default" value="Set date and location">
+          </div>
+          <div class="col-sm-4">
+            <span class="where_when_input_parsed">&nbsp;</span>
+          </div>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <h3>What is the Azimuth Correction?</h3>
+
+      <p>FIXME - explain to the user how to find the azimuth correction.</p>
+
+      <form class="form-horizontal" id="azimuth_correction_form">
+        <div class="form-group">
+          <label for="where_when_datetime" class="col-sm-2 control-label">Correction</label>
+          <div class="col-sm-4">
+            <input type="text" class="form-control" name="correction">
+          </div>
+          <div class="col-sm-4">
+            <span class="where_when_input_parsed">&hellip;</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-4">
+            <input type="submit" class="btn btn-default" value="Store Correction">
           </div>
           <div class="col-sm-4">
             <span class="where_when_input_parsed">&nbsp;</span>

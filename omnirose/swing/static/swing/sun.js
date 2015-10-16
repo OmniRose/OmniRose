@@ -224,5 +224,38 @@ jQuery(function ($) {
     });
   })();
 
+  (function () {
+    var $correction_form  = $("#azimuth_correction_form");
+    var $correction_input  = $correction_form.find("input[name='correction']");
+
+    function parse_float_from_input ($input) {
+      var value = $input.val();
+      var float = parseFloat(value);
+      if ( float ) {
+        return float;
+      } else {
+        return null;
+      }
+    }
+
+    $correction_form.on("submit", function (e) {
+      e.preventDefault();
+
+      var $form = $(this);
+      var correction = parse_float_from_input($correction_input);
+
+      console.log(correction);
+
+      if (correction) {
+        stored_data.azimuth_correction = correction;
+        console.log(stored_data);
+        $form.closest(".row").remove();
+
+      } else {
+        display_message_for_input($correction_input, "We require a value...");
+      }
+
+    });
+  })();
 
 });
