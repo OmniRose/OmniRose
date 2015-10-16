@@ -12,6 +12,15 @@ jQuery(function ($) {
 
   var stored_data = {};
 
+  // hide all but the first user steps
+  $(".user_step").not(":first").hide();
+  function go_to_next_user_step () {
+    var $current_step = $(".user_step").filter(":visible");
+    $current_step.hide();
+    $current_step.next().show();
+
+  }
+
   function pause_video_and_correct_time (video) {
     video.pause();
     var new_time = video.currentTime - video.currentTime % 0.03125;
@@ -134,8 +143,7 @@ jQuery(function ($) {
     $shadow_video_container.find(".step_button").prop('disabled', true);
 
     // Our work is done!
-    $(this).parent().remove();
-
+    go_to_next_user_step();
   });
 
 
@@ -215,7 +223,7 @@ jQuery(function ($) {
         stored_data.longitude = lon;
         stored_data.compass_video_start_time = date.getTime() / 1000 - compass_video.currentTime;
         console.log(stored_data);
-        $form.closest(".row").remove();
+        go_to_next_user_step();
 
       } else {
         display_message_for_input($where_when_submit, "Please ensure all of the above are filled in correctly.");
@@ -249,7 +257,8 @@ jQuery(function ($) {
       if (correction) {
         stored_data.azimuth_correction = correction;
         console.log(stored_data);
-        $form.closest(".row").remove();
+        go_to_next_user_step();
+
 
       } else {
         display_message_for_input($correction_input, "We require a value...");
