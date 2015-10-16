@@ -32,83 +32,105 @@
 
   <div class="row">
     <div class="col-sm-12">
-      <button id="synchronise_videos">Synchronise videos!</button>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Synchronise the videos</h3>
+        </div>
+        <div class="panel-body">
+
+          <p>To compare the readings on the compass to the readings on the shadow pelorus we need to sync the two videos. FIXME blah blah.</p>
+
+          <button id="synchronise_videos">Synchronise videos!</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Set time and location</h3>
+        </div>
+        <div class="panel-body">
+          <p>To calculate accurately what angle the sun is at we need to know when and where the film was made. Get the picture of the time and coordinates onto one of the films above and then enter the details below.</p>
+
+          <form class="form-horizontal" id="where_when_form">
+            <div class="form-group">
+              <label for="where_when_datetime" class="col-sm-2 control-label">Date and time in GMT</label>
+              <div class="col-sm-4">
+                <input type="text" class="form-control" name="datetime" placeholder="yyyy/mm/dd hh:mm:ss GMT">
+              </div>
+              <div class="col-sm-4">
+                <span class="where_when_input_parsed">&hellip;</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="where_when_latitude" class="col-sm-2 control-label">Latitude</label>
+              <div class="col-sm-4">
+                <input type="text" class="form-control" name="latitude" placeholder="'DD MM.mmm' or 'DD MM SS.sss'">
+              </div>
+              <div class="col-sm-4">
+                <span class="where_when_input_parsed">&hellip;</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="where_when_longitude" class="col-sm-2 control-label">Longitude</label>
+              <div class="col-sm-4">
+                <input type="text" class="form-control" name="longitude" placeholder="'DD MM.mmm' or 'DD MM SS.sss'">
+              </div>
+              <div class="col-sm-4">
+                <span class="where_when_input_parsed">&hellip;</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-offset-2 col-sm-4">
+                <input type="submit" class="btn btn-default" value="Set date and location">
+              </div>
+              <div class="col-sm-4">
+                <span class="where_when_input_parsed">&nbsp;</span>
+              </div>
+            </div>
+          </form>
+
+        </div>
+      </div>
     </div>
   </div>
 
   <div class="row">
     <div class="col-sm-12">
-      <h3>Set time and location</h3>
-
-      <p>To calculate accurately what angle the sun is at we need to know when and where the film was made. Get the picture of the time and coordinates onto one of the films above and then enter the details below.</p>
-
-      <form class="form-horizontal" id="where_when_form">
-        <div class="form-group">
-          <label for="where_when_datetime" class="col-sm-2 control-label">Date and time in GMT</label>
-          <div class="col-sm-4">
-            <input type="text" class="form-control" name="datetime" placeholder="yyyy/mm/dd hh:mm:ss GMT">
-          </div>
-          <div class="col-sm-4">
-            <span class="where_when_input_parsed">&hellip;</span>
-          </div>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">What is the Azimuth Correction?</h3>
         </div>
-        <div class="form-group">
-          <label for="where_when_latitude" class="col-sm-2 control-label">Latitude</label>
-          <div class="col-sm-4">
-            <input type="text" class="form-control" name="latitude" placeholder="'DD MM.mmm' or 'DD MM SS.sss'">
-          </div>
-          <div class="col-sm-4">
-            <span class="where_when_input_parsed">&hellip;</span>
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="where_when_longitude" class="col-sm-2 control-label">Longitude</label>
-          <div class="col-sm-4">
-            <input type="text" class="form-control" name="longitude" placeholder="'DD MM.mmm' or 'DD MM SS.sss'">
-          </div>
-          <div class="col-sm-4">
-            <span class="where_when_input_parsed">&hellip;</span>
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-sm-offset-2 col-sm-4">
-            <input type="submit" class="btn btn-default" value="Set date and location">
-          </div>
-          <div class="col-sm-4">
-            <span class="where_when_input_parsed">&nbsp;</span>
-          </div>
-        </div>
-      </form>
+        <div class="panel-body">
 
-    </div>
-  </div>
+          <p>FIXME - explain to the user how to find the azimuth correction.</p>
 
-  <div class="row">
-    <div class="col-sm-12">
-      <h3>What is the Azimuth Correction?</h3>
+          <form class="form-horizontal" id="azimuth_correction_form">
+            <div class="form-group">
+              <label for="where_when_datetime" class="col-sm-2 control-label">Correction</label>
+              <div class="col-sm-4">
+                <input type="text" class="form-control" name="correction">
+              </div>
+              <div class="col-sm-4">
+                <span class="where_when_input_parsed">&hellip;</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-offset-2 col-sm-4">
+                <input type="submit" class="btn btn-default" value="Store Correction">
+              </div>
+              <div class="col-sm-4">
+                <span class="where_when_input_parsed">&nbsp;</span>
+              </div>
+            </div>
+          </form>
 
-      <p>FIXME - explain to the user how to find the azimuth correction.</p>
-
-      <form class="form-horizontal" id="azimuth_correction_form">
-        <div class="form-group">
-          <label for="where_when_datetime" class="col-sm-2 control-label">Correction</label>
-          <div class="col-sm-4">
-            <input type="text" class="form-control" name="correction">
-          </div>
-          <div class="col-sm-4">
-            <span class="where_when_input_parsed">&hellip;</span>
-          </div>
         </div>
-        <div class="form-group">
-          <div class="col-sm-offset-2 col-sm-4">
-            <input type="submit" class="btn btn-default" value="Store Correction">
-          </div>
-          <div class="col-sm-4">
-            <span class="where_when_input_parsed">&nbsp;</span>
-          </div>
-        </div>
-      </form>
-
+      </div>
     </div>
   </div>
 
