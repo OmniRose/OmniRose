@@ -3,6 +3,7 @@
 
 {% block javascript %}
   <script src="{% static 'swing/jquery.panzoom.v2.0.5.min.js' %}" type="text/javascript" charset="utf-8"></script>
+  <script src="{% static 'swing/magellan-v1.0.6.js' %}" type="text/javascript" charset="utf-8"></script>
   <script src="{% static 'swing/sun.js' %}" type="text/javascript" charset="utf-8"></script>
 {% endblock %}
 
@@ -17,7 +18,6 @@
   <h2>Todo list:</h2>
 
   <ul>
-    <li>Add code to record the current true time GMT and geolocation</li>
     <li>Add code to return the current solar azimuth for a given time</li>
     <li>Add code to store the pelorus correction angle</li>
     <li>Add steps that guide the user through the various things they need to do</li>
@@ -34,6 +34,53 @@
   <div class="row">
     <div class="col-sm-12">
       <button id="synchronise_videos">Synchronise videos!</button>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <h3>Set time and location</h3>
+
+      <p>To calculate accurately what angle the sun is at we need to know when and where the film was made. Get the picture of the time and coordinates onto one of the films above and then enter the details below.</p>
+
+      <form class="form-horizontal" id="where_when_form">
+        <div class="form-group">
+          <label for="where_when_datetime" class="col-sm-2 control-label">Date and time in GMT</label>
+          <div class="col-sm-4">
+            <input type="text" class="form-control" name="datetime" placeholder="yyyy/mm/dd hh:mm:ss GMT">
+          </div>
+          <div class="col-sm-4">
+            <span class="where_when_input_parsed">&hellip;</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="where_when_latitude" class="col-sm-2 control-label">Latitude</label>
+          <div class="col-sm-4">
+            <input type="text" class="form-control" name="latitude" placeholder="'DD MM.mmm' or 'DD MM SS.sss'">
+          </div>
+          <div class="col-sm-4">
+            <span class="where_when_input_parsed">&hellip;</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="where_when_longitude" class="col-sm-2 control-label">Longitude</label>
+          <div class="col-sm-4">
+            <input type="text" class="form-control" name="longitude" placeholder="'DD MM.mmm' or 'DD MM SS.sss'">
+          </div>
+          <div class="col-sm-4">
+            <span class="where_when_input_parsed">&hellip;</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-4">
+            <input type="submit" class="btn btn-default" value="Set date and location">
+          </div>
+          <div class="col-sm-4">
+            <span class="where_when_input_parsed">&nbsp;</span>
+          </div>
+        </div>
+      </form>
+
     </div>
   </div>
 

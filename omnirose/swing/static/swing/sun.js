@@ -10,6 +10,8 @@ jQuery(function ($) {
 
   var $synchronise_videos_button = $("#synchronise_videos");
 
+  var stored_data = {};
+
   function pause_video_and_correct_time (video) {
     video.pause();
     var new_time = video.currentTime - video.currentTime % 0.03125;
@@ -133,6 +135,89 @@ jQuery(function ($) {
 
     // Our work is done!
     $(this).parent().remove();
+
+  });
+
+  var $where_when_form = $("#where_when_form");
+  var $where_when_datetime    = $where_when_form.find("input[name='datetime']");
+  var $where_when_submit      = $where_when_form.find("input[type='submit']");
+  var $where_when_latitude    = $where_when_form.find("input[name='latitude']");
+  var $where_when_longitude   = $where_when_form.find("input[name='longitude']");
+  var $where_when_coordinates = $where_when_latitude.add( $where_when_longitude );
+
+  function parse_datetime_from_input ($input) {
+    var millis = Date.parse($input.val());
+    var $span = $("#where_when_datetime_parsed");
+    if ( millis ) {
+      return new Date(millis);
+    } else {
+      return null;
+    }
+  }
+
+  function parse_coordinate_from_input ($input) {
+    var parsed = magellan($input.val());
+    var valid = parsed[$input.prop("name")]();
+    return valid;
+  }
+
+  function parse_dd_from_input ($input) {
+    var coordinate = parse_coordinate_from_input($input);
+    if (coordinate) {
+      return parseFloat(coordinate.toDD());
+    } else {
+      return null;
+    }
+  }
+
+  function display_message_for_input ($input, message) {
+    $input
+      .closest(".form-group")
+      .find(".where_when_input_parsed")
+      .text(message);
+  }
+
+  $where_when_datetime.on('input', function (e) {
+    var $input = $(this);
+    var date = parse_datetime_from_input($input);
+    if ( date ) {
+      display_message_for_input($input, date.toUTCString());
+    } else {
+      display_message_for_input($input, 'Could not parse date - try format "yyyy/mm/dd hh:mm:ss GMT"');
+    }
+  });
+
+  // When entering the lat and long give the user a running conversion
+  $where_when_coordinates.on('input', function (e) {
+    var $input = $(this);
+    var valid = parse_coordinate_from_input($input);
+
+    if (valid) {
+      display_message_for_input($input, valid.toDM(" ") + ' or ' + valid.toDMS(" "));
+    } else {
+      display_message_for_input($input, "Could not parse the coordinate - try 'DD MM.mmm' or 'DD MM SS.sss'");
+    }
+  });
+
+  $where_when_form.on("submit", function (e) {
+    e.preventDefault();
+
+    var $form = $(this);
+    var date = parse_datetime_from_input($where_when_datetime);
+    var lat  = parse_dd_from_input($where_when_latitude);
+    var lon  = parse_dd_from_input($where_when_longitude);
+
+    console.log(date, lat, lon);
+    if (date && lat && lon) {
+      stored_data.latitude = lat;
+      stored_data.longitude = lon;
+      stored_data.compass_video_start_time = date.getTime() / 1000 - compass_video.currentTime;
+      console.log(stored_data);
+      $form.closest(".row").remove();
+
+    } else {
+      display_message_for_input($where_when_submit, "Please ensure all of the above are filled in correctly.");
+    }
 
   });
 
