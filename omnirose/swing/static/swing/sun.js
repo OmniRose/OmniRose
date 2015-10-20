@@ -308,7 +308,6 @@ jQuery(function ($) {
       };
 
       // store the reading
-      console.log(reading);
       readings.push(reading);
 
       // clear the form and focus on the first field
@@ -320,9 +319,10 @@ jQuery(function ($) {
         var last_readings = readings.slice(-2).map(function (i) {return parseFloat(i.compass);});
         var delta = last_readings[1] - last_readings[0];
         var next = (last_readings[1] + delta + 360) % 360;
-        console.log(last_readings, delta, next);
-        $compass_input.val(next);
-        $shadow_input.focus();
+        if (!isNaN(next)) {
+          $compass_input.val(next);
+          $shadow_input.focus();
+        }
       }
 
       // display the reading in the table
