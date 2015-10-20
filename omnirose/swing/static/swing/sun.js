@@ -21,26 +21,30 @@ jQuery(function ($) {
 
   }
 
-  function pause_video_and_correct_time (video) {
-    video.pause();
-    var new_time = video.currentTime - video.currentTime % 0.03125;
-    video.currentTime = new_time;
-  }
-
   function seconds_to_hhssmmm (seconds) {
     var date = new Date(null);
     date.setMilliseconds(seconds * 1000);
     return date.toISOString().substr(14, 9);
   }
 
-  function setup_video_in_container($video_container) {
+  function pause_video_and_correct_time (video) {
+    video.pause();
+    var correction = video.currentTime % 0.03125;
+    video.currentTime -= correction;
+  }
+
+  function setup_video($video_container, controls_class) {
     var $input = $video_container.find("input");
     var video = $video_container.find("video")[0];
     var $video = $(video);
     var $video_current_time = $video_container.find(".current_time");
-    var $play_button  = $video_container.find(".play_button");
-    var $step_buttons = $video_container.find(".step_button");
-    var $zoom_buttons = $video_container.find(".panzoom_button");
+
+    var $video_controls = $("div." + controls_class);
+    var $play_buttons = $video_controls.find(".play_button");
+    var $step_buttons = $video_controls.find(".step_button");
+    var $zoom_buttons = $video_controls.find(".panzoom_button");
+    var $play_buttons_glyph_span = $play_buttons.find("span.glyphicon");
+;
 
     $input.on('change', function (event) {
       var file = this.files[0];
@@ -52,57 +56,59 @@ jQuery(function ($) {
         var fileURL = URL.createObjectURL(file);
         video.src = fileURL;
 
-        $video_current_time.text(seconds_to_hhssmmm(0));
-
-        $video.on('timeupdate', function () {
-          $video_current_time.text(seconds_to_hhssmmm(video.currentTime));
-        });
-
         $input.hide();
-
-        $video.panzoom({
-          // See https://github.com/timmywil/jquery.panzoom#options for details
-          increment: 0.5,
-          minScale: 1,
-          maxScale: 8,
-          contain: false
-        });
-
-        $zoom_buttons.on("click", function( e ) {
-          e.preventDefault();
-
-          var action = $(this).data("action");
-
-          switch (action) {
-            case 'zoomIn':
-              $video.panzoom("zoom", false);
-              break;
-            case 'zoomOut':
-              $video.panzoom("zoom", true);
-              break;
-            default:
-              $video.panzoom(action);
-          }
-
-        });
-
 
       } else {
         alert("can't play this kind of video");
       }
     });
 
-    $play_button.on('click', function () {
-      var $spans = $('span', this);
+    $video_current_time.text(seconds_to_hhssmmm(0));
+    $video.on('timeupdate', function () {
+      $video_current_time.text(seconds_to_hhssmmm(video.currentTime));
+    });
 
+    $video.on('play', function () {
+      $play_buttons_glyph_span.removeClass("glyphicon-play");
+      $play_buttons_glyph_span.addClass("glyphicon-pause");
+    });
+
+    $video.on('pause', function () {
+      $play_buttons_glyph_span.addClass("glyphicon-play");
+      $play_buttons_glyph_span.removeClass("glyphicon-pause");
+    });
+
+    $video.panzoom({
+      // See https://github.com/timmywil/jquery.panzoom#options for details
+      increment: 0.5,
+      minScale: 1,
+      maxScale: 8,
+      contain: false
+    });
+
+    $zoom_buttons.on("click", function( e ) {
+      e.preventDefault();
+
+      var action = $(this).data("action");
+
+      switch (action) {
+        case 'zoomIn':
+          $video.panzoom("zoom", false);
+          break;
+        case 'zoomOut':
+          $video.panzoom("zoom", true);
+          break;
+        default:
+          $video.panzoom(action);
+      }
+
+    });
+
+    $play_buttons.on('click', function () {
       if (video.paused) {
         video.play();
-        $spans.removeClass("glyphicon-play");
-        $spans.addClass("glyphicon-pause");
       } else {
         pause_video_and_correct_time(video);
-        $spans.addClass("glyphicon-play");
-        $spans.removeClass("glyphicon-pause");
       }
     });
 
@@ -110,17 +116,13 @@ jQuery(function ($) {
       var $button = $(this);
       var step_amount = $button.data('steps');
 
-      // pause video if it is playing
-      if (!video.paused) {
-        $play_button.click();
-      }
-
+      pause_video_and_correct_time(video);
       video.currentTime = video.currentTime + step_amount;
     });
   }
 
-  setup_video_in_container($compass_video_container);
-  setup_video_in_container($shadow_video_container);
+  setup_video($compass_video_container, "compass_video_controls");
+  setup_video($shadow_video_container,  "shadow_video_controls");
 
   $synchronise_videos_button.on('click', function (e) {
     e.preventDefault();
