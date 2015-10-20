@@ -275,8 +275,24 @@ jQuery(function ($) {
     var $form = $("#reading_enter_form");
     var $table_body = $("#reading_enter_table").find("tbody");
 
+    var $inputs = $form.find('input');
     var $compass_input = $form.find('input[name="compass"]');
     var $shadow_input  = $form.find('input[name="shadow"]');
+
+    var $control_buttons = $form.find(".compass_video_controls");
+
+    $inputs.on("keypress", function (e) {
+      if (e.which == 13) { // return key pressed
+        e.preventDefault();
+        $form.submit();
+      }
+    });
+
+    $control_buttons.on("click", function (e) {
+      e.preventDefault();
+      // focus on suitable field
+      $compass_input.val() ? $shadow_input.focus() : $compass_input.focus();
+    });
 
     $form.on('submit', function (e) {
       e.preventDefault();
