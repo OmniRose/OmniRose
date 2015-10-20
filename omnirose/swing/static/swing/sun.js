@@ -10,7 +10,12 @@ jQuery(function ($) {
 
   var $synchronise_videos_button = $("#synchronise_videos");
 
-  var stored_data = {};
+  var stored_data = {
+    "readings": [],
+    "latitude": undefined,
+    "longitude": undefined,
+    "compass_video_start_time": undefined
+  };
 
   // hide all but the first user steps
   $(".user_step").not(":first").hide();
@@ -270,8 +275,9 @@ jQuery(function ($) {
   })();
 
 
-  var readings = [];
   (function () {
+    var readings = stored_data.readings;
+
     var $form = $("#reading_enter_form");
     var $table_body = $("#reading_enter_table").find("tbody");
 
@@ -280,6 +286,7 @@ jQuery(function ($) {
     var $shadow_input  = $form.find('input[name="shadow"]');
 
     var $control_buttons = $form.find(".compass_video_controls");
+
 
     $inputs.on("keypress", function (e) {
       if (e.which == 13) { // return key pressed
@@ -336,11 +343,28 @@ jQuery(function ($) {
     });
 
 
-    $(compass_video).on('timeupdate', function () {
-      $("#video_current_time").text(seconds_to_hhssmmm(compass_video.currentTime));
-    });
 
   })();
+
+
+
+  $("#all_readings_entered").on("click", function (e) {
+    e.preventDefault();
+
+    var $button = $(this);
+
+    $.ajax({
+      type: "POST",
+      url: $button.data("postUrl"),
+      data: JSON.stringify(stored_data),
+      success: function (data) { console.log("response: ", data); },
+      // dataType: "json",
+      beforeSend: function(xhr) {
+        xhr.setRequestHeader("X-CSRFToken", $button.data("csrfToken"));
+      }
+    });
+  });
+
 
 
 });

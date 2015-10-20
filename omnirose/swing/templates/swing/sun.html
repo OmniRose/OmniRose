@@ -202,9 +202,11 @@
   </div>
 
 
-
-
-  <ul id="data"></ul>
-
+  <button
+    id="all_readings_entered"
+    class="btn btn-default"
+    data-csrf-token="{{ csrf_token }}"
+    data-post-url="{% url 'sun_json' %}"
+  >All readings have been entered.</button>
 
 {% endblock %}
