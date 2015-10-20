@@ -273,11 +273,14 @@ jQuery(function ($) {
     var $form = $("#reading_enter_form");
     var $table_body = $("#reading_enter_table").find("tbody");
 
+    var $compass_input = $form.find('input[name="compass"]');
+    var $shadow_input  = $form.find('input[name="shadow"]');
+
     $form.on('submit', function (e) {
       e.preventDefault();
 
-      compass_reading = $form.find('input[name="compass"]').val();
-      shadow_reading  = $form.find('input[name="shadow"]').val();
+      compass_reading = $compass_input.val();
+      shadow_reading  = $shadow_input.val();
       video_time = compass_video.currentTime;
 
       var reading = {
@@ -286,12 +289,25 @@ jQuery(function ($) {
         "time": video_time,
       };
 
+      // store the reading
       console.log(reading);
       readings.push(reading);
 
-      $form.find("input").val("");
-      $form.find("input").first().focus();
+      // clear the form and focus on the first field
+      $compass_input.val("").focus();
+      $shadow_input.val("");
 
+      // if possible guess the next compass value
+      if (readings.length >= 2) {
+        var last_readings = readings.slice(-2).map(function (i) {return parseFloat(i.compass);});
+        var delta = last_readings[1] - last_readings[0];
+        var next = (last_readings[1] + delta + 360) % 360;
+        console.log(last_readings, delta, next);
+        $compass_input.val(next);
+        $shadow_input.focus();
+      }
+
+      // display the reading in the table
       var $row = $("<tr />");
       $("<td />").text(seconds_to_hhssmmm(video_time)).appendTo($row);
       $("<td />").text(compass_reading + '°').appendTo($row);
