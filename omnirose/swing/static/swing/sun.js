@@ -304,8 +304,8 @@ jQuery(function ($) {
     $form.on('submit', function (e) {
       e.preventDefault();
 
-      compass_reading = $compass_input.val();
-      shadow_reading  = $shadow_input.val();
+      compass_reading = parseFloat($compass_input.val());
+      shadow_reading  = parseFloat($shadow_input.val());
       video_time = compass_video.currentTime;
 
       var reading = {
