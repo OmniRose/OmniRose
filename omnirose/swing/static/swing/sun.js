@@ -267,4 +267,46 @@ jQuery(function ($) {
     });
   })();
 
+
+  var readings = [];
+  (function () {
+    var $form = $("#reading_enter_form");
+    var $table_body = $("#reading_enter_table").find("tbody");
+
+    $form.on('submit', function (e) {
+      e.preventDefault();
+
+      compass_reading = $form.find('input[name="compass"]').val();
+      shadow_reading  = $form.find('input[name="shadow"]').val();
+      video_time = compass_video.currentTime;
+
+      var reading = {
+        "compass": compass_reading,
+        "shadow":  shadow_reading,
+        "time": video_time,
+      };
+
+      console.log(reading);
+      readings.push(reading);
+
+      $form.find("input").val("");
+      $form.find("input").first().focus();
+
+      var $row = $("<tr />");
+      $("<td />").text(seconds_to_hhssmmm(video_time)).appendTo($row);
+      $("<td />").text(compass_reading + '°').appendTo($row);
+      $("<td />").text(shadow_reading + '°').appendTo($row);
+      $("<td />").text('').appendTo($row);
+      $table_body.prepend($row);
+
+    });
+
+
+    $(compass_video).on('timeupdate', function () {
+      $("#video_current_time").text(seconds_to_hhssmmm(compass_video.currentTime));
+    });
+
+  })();
+
+
 });

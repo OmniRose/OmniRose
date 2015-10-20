@@ -29,6 +29,7 @@
     {% include "swing/video_container.html" with heading="Shadow"  id="shadow_video_container"  %}
   </div>
 
+
   <div class="row user_step">
     <div class="col-sm-12">
       <div class="panel panel-default">
@@ -40,6 +41,47 @@
           <p>To compare the readings on the compass to the readings on the shadow pelorus we need to sync the two videos. FIXME blah blah.</p>
 
           <button id="synchronise_videos">Synchronise videos!</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row user_step">
+    <div class="col-sm-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Enter the compass and shadow readings.</h3>
+        </div>
+        <div class="panel-body">
+
+          <p>FIXME - explain to the user what to do.</p>
+
+          <form id="reading_enter_form">
+
+            <table id="reading_enter_table" class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Timestamp</th>
+                  <th>Compass</th>
+                  <th>Shadow</th>
+                  <th>&nbsp;</th>
+                </tr>
+
+                <tr>
+                  <td><p id="video_current_time" class="form-control-static">&nbsp;</p></td>
+                  <td><input type="text" class="form-control" name="compass" placeholder="compass reading"></td>
+                  <td><input type="text" class="form-control" name="shadow" placeholder="shadow reading"></td>
+                  <td><button type="submit" class="btn btn-default">Save reading</button></td>
+                </tr>
+
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+
+          </form>
+
         </div>
       </div>
     </div>
@@ -132,6 +174,8 @@
       </div>
     </div>
   </div>
+
+
 
   <ul id="data"></ul>
 
