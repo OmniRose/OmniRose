@@ -55,9 +55,32 @@ test_data = {
     ]
 }
 
-class ModelTests(TestCase):
+class SunSwingTestsBase(object):
     fixtures = ['test_user_data']
 
+    def test_swing_and_readings(self):
+        swing = self.swing
+
+        # Test that the variation has been correctly filled in
+        self.assertEqual(swing.variation, 6.02)
+
+        self.assertEqual(swing.reading_set.all().count(), len(test_data["readings"]))
+
+        south = swing.reading_set.filter(compass_reading=180)[0]
+
+        # test against known good values
+        self.assertEqual(south.utc_datetime, datetime(2015, 10, 12, 10, 15, 15, 500000, tzinfo=pytz.utc))
+        self.assertAlmostEqual(south.solar_azimuth, 175.63660700)
+        self.assertAlmostEqual(south.angle_to_sun, 335)
+        self.assertAlmostEqual(south.true_bearing, 200.63660700)
+        self.assertAlmostEqual(south.magnetic_bearing, 194.616607)
+        self.assertAlmostEqual(south.deviation, 14.616607)
+
+        # for r in swing.reading_set.all():
+        #     print r.true_bearing, "," , r.deviation
+
+
+class ModelTests(SunSwingTestsBase, TestCase):
     def setUp(self):
         swing = SunSwing.objects.create(
             user=User.objects.get(pk=1),
@@ -79,36 +102,11 @@ class ModelTests(TestCase):
         self.swing = swing
 
 
-    def test_swing(self):
-        swing = self.swing
-        # Test that the variation has been correctly filled in
-        self.assertEqual(swing.variation, 6.02)
-
-    def test_readings(self):
-        swing = self.swing
-
-        self.assertEqual(swing.reading_set.all().count(), len(test_data["readings"]))
-
-        south = swing.reading_set.filter(compass_reading=180)[0]
-
-        # test against known good values
-        self.assertEqual(south.utc_datetime, datetime(2015, 10, 12, 10, 15, 15, 500000, tzinfo=pytz.utc))
-        self.assertAlmostEqual(south.solar_azimuth, 175.63660700)
-        self.assertAlmostEqual(south.angle_to_sun, 335)
-        self.assertAlmostEqual(south.true_bearing, 200.63660700)
-        self.assertAlmostEqual(south.magnetic_bearing, 194.616607)
-        self.assertAlmostEqual(south.deviation, 14.616607)
-
-        # for r in swing.reading_set.all():
-        #     print r.true_bearing, "," , r.deviation
-
-
-class JsonPostTests(TestCase):
-
-
-
-    def test_post(self):
-        c = Client()
-        response = c.post('/swing/sun_json/', content_type='application/json', data=json.dumps(test_data) )
-        print response
-
+# class JsonPostTests(SunSwingTestsBase, TestCase):
+#
+#     def setUp(self):
+#         c = Client()
+#         response = c.post('/swing/sun_json/', content_type='application/json', data=json.dumps(test_data) )
+#
+#         swing = SunSwing.objects.all()[0]
+#         self.swing = swing
