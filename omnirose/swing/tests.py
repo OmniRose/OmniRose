@@ -102,11 +102,22 @@ class ModelTests(SunSwingTestsBase, TestCase):
         self.swing = swing
 
 
-# class JsonPostTests(SunSwingTestsBase, TestCase):
-#
-#     def setUp(self):
-#         c = Client()
-#         response = c.post('/swing/sun_json/', content_type='application/json', data=json.dumps(test_data) )
-#
-#         swing = SunSwing.objects.all()[0]
-#         self.swing = swing
+class JsonPostTests(SunSwingTestsBase, TestCase):
+
+    def setUp(self):
+        c = Client()
+
+        self.assertTrue(c.login(username="bob@test.com", password="secret"))
+
+        self.response = c.post('/swing/sun_json/', content_type='application/json', data=json.dumps(test_data) )
+        self.assertEqual(self.response.status_code, 200)
+
+        self.swing = SunSwing.objects.all()[0]
+
+
+
+
+
+
+
+
