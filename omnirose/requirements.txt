@@ -14,3 +14,6 @@ scipy==0.16.0
 selenium==2.47.1
 six==1.9.0
 stripe==1.25.0
+pytz
+geomag
+astral
