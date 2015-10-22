@@ -22,7 +22,7 @@ class Migration(migrations.Migration):
                 ('video_start_time', models.DateTimeField()),
                 ('latitude', models.FloatField(validators=[django.core.validators.MinValueValidator(-90), django.core.validators.MaxValueValidator(90)])),
                 ('longitude', models.FloatField(validators=[django.core.validators.MinValueValidator(-180), django.core.validators.MaxValueValidator(180)])),
-                ('azimuth_correction', models.FloatField(validators=[django.core.validators.MinValueValidator(-180), django.core.validators.MaxValueValidator(180)])),
+                ('pelorus_correction', models.FloatField(validators=[django.core.validators.MinValueValidator(-180), django.core.validators.MaxValueValidator(180)])),
                 ('variation', models.FloatField(validators=[django.core.validators.MinValueValidator(-180), django.core.validators.MaxValueValidator(180)])),
                 ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],

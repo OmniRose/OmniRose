@@ -33,7 +33,7 @@ class SunSwing(models.Model):
     latitude  = models.FloatField(validators=[MinValueValidator(-90),  MaxValueValidator(90)])
     longitude = models.FloatField(validators=[MinValueValidator(-180), MaxValueValidator(180)])
 
-    azimuth_correction = models.FloatField(validators=[MinValueValidator(-180), MaxValueValidator(180)])
+    pelorus_correction = models.FloatField(validators=[MinValueValidator(-180), MaxValueValidator(180)])
 
     variation = models.FloatField(validators=[MinValueValidator(-180), MaxValueValidator(180)])
 
@@ -72,7 +72,7 @@ class SunSwingReading(models.Model):
 
     @property
     def angle_to_sun(self):
-        return norm360(self.shadow_reading - self.sun_swing.azimuth_correction)
+        return norm360(self.shadow_reading - self.sun_swing.pelorus_correction)
 
     @property
     def true_bearing(self):

@@ -9,7 +9,7 @@ from accounts.models import User
 
 test_data = {
     # Real data from the first test swing of Olga
-    "azimuth_correction": 156,
+    "pelorus_correction": 156,
     "compass_video_start_time": 1444644781.875,
     # 2015-10-12 10:13:01.875000+00:00
     "latitude": 59.270133,
@@ -66,7 +66,7 @@ class ModelTests(TestCase):
             video_start_time=datetime.fromtimestamp(test_data["compass_video_start_time"], pytz.utc),
             latitude=test_data["latitude"],
             longitude=test_data["longitude"],
-            azimuth_correction=test_data["azimuth_correction"],
+            pelorus_correction=test_data["pelorus_correction"],
         )
 
         for reading in test_data['readings']:

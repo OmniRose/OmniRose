@@ -240,7 +240,7 @@ jQuery(function ($) {
   })();
 
   (function () {
-    var $correction_form  = $("#azimuth_correction_form");
+    var $correction_form  = $("#pelorus_correction_form");
     var $correction_input  = $correction_form.find("input[name='correction']");
 
     function parse_float_from_input ($input) {
@@ -262,7 +262,7 @@ jQuery(function ($) {
       console.log(correction);
 
       if (correction) {
-        stored_data.azimuth_correction = correction;
+        stored_data.pelorus_correction = correction;
         console.log(stored_data);
         go_to_next_user_step();
 
