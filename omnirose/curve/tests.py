@@ -1,18 +1,20 @@
+import json
+import pytz
 from time import sleep
-from datetime import datetime
+from datetime import datetime, timedelta
 import re
 import requests
 
-from django.test import TestCase
+from django.test import TestCase, Client
 from omnirose.live_tests import OmniRoseSeleniumTestCase, LoginFailedException
 
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 
-# Create your tests here.
-from .models import Curve, Reading, ErrorNoSuitableEquationAvailable, mod360
+from .models import Curve, Reading, ErrorNoSuitableEquationAvailable, mod360, SunSwingReading
 from .equations import all_equations
 from .samples import create_database_curve_from_sample, create_curve_calculation_from_sample, samples
+from accounts.models import User
 
 
 class CurveMathTests(TestCase):
@@ -164,6 +166,138 @@ class DeviationCalculationTestCase(DeviationTestBase, TestCase):
     def test_readings_as_expected(self):
         """All reading included and correct accuracy"""
         self.assertEqual(self.curve.readings_as_dict, samples['rya_training_almanac']['readings'])
+
+
+class SunSwingTestsBase(object):
+    fixtures = ['test_user_data']
+
+    sun_swing_test_data = {
+        # Real data from the first test swing of Olga
+        "pelorus_correction": 156,
+        "compass_video_start_time": 1444644781.875,
+        # 2015-10-12 10:13:01.875000+00:00
+        "latitude": 59.270133,
+        "longitude": 18.790867,
+        "readings": [
+            { "compass": 20,    "shadow": 307.5,    "time": 70.6875   },
+            { "compass": 30,    "shadow": 296,      "time": 74.9375   },
+            { "compass": 40,    "shadow": 285.5,    "time": 78.46875  },
+            { "compass": 50,    "shadow": 271,      "time": 83.46875  },
+            { "compass": 60,    "shadow": 259,      "time": 87.75     },
+            { "compass": 70,    "shadow": 246,      "time": 92.03125  },
+            { "compass": 80,    "shadow": 235.5,    "time": 95.40625  },
+            { "compass": 90,    "shadow": 224,      "time": 99.40625  },
+            { "compass": 100,   "shadow": 213.5,    "time": 103.40625 },
+            { "compass": 110,   "shadow": 203,      "time": 106.4375  },
+            { "compass": 120,   "shadow": 191,      "time": 110.6875  },
+            { "compass": 130,   "shadow": 179.5,    "time": 114.6875  },
+            { "compass": 140,   "shadow": 168,      "time": 119.875   },
+            { "compass": 150,   "shadow": 159.5,    "time": 122.5625  },
+            { "compass": 160,   "shadow": 149,      "time": 126.9375  },
+            { "compass": 170,   "shadow": 140.5,    "time": 129.78125 },
+            { "compass": 180,   "shadow": 131,      "time": 133.625   },
+            { "compass": 190,   "shadow": 124,      "time": 137.28125 },
+            { "compass": 200,   "shadow": 115,      "time": 140.5625  },
+            { "compass": 210,   "shadow": 104,      "time": 145.875   },
+            { "compass": 220,   "shadow": 93,       "time": 151.15625 },
+            { "compass": 230,   "shadow": 83,       "time": 156.28125 },
+            { "compass": 240,   "shadow": 74.5,     "time": 161.09375 },
+            { "compass": 250,   "shadow": 66,       "time": 165.46875 },
+            { "compass": 260,   "shadow": 54,       "time": 170.71875 },
+            { "compass": 280,   "shadow": 37.5,     "time": 177.84375 },
+            { "compass": 290,   "shadow": 29.5,     "time": 181.53125 },
+            { "compass": 300,   "shadow": 18,       "time": 186.375   },
+            { "compass": 310,   "shadow": 10.5,     "time": 189.125   },
+            { "compass": 320,   "shadow": 2,        "time": 192.625   },
+            { "compass": 330,   "shadow": 354.5,    "time": 195.125   },
+            { "compass": 340,   "shadow": 342.5,    "time": 198.96875 },
+            { "compass": 350,   "shadow": 333.5,    "time": 202.78125 },
+            { "compass": 0,     "shadow": 323,      "time": 206.5     },
+            { "compass": 10,    "shadow": 312,      "time": 211.125   },
+            { "compass": 20,    "shadow": 302.5,    "time": 215.28125 },
+            { "compass": 30,    "shadow": 294,      "time": 218.25    },
+        ]
+    }
+
+    def test_curve_and_readings(self):
+        curve = self.curve
+        test_data = self.sun_swing_test_data
+
+        self.assertEqual(curve.reading_set.all().count(), len(test_data["readings"]))
+
+        south_reading = curve.reading_set.filter(sunswingreading__compass_reading=180)[0]
+        south = south_reading.sunswingreading
+
+        # test against known good values
+        self.assertAlmostEqual(south_reading.deviation, 14.616607)
+        self.assertAlmostEqual(south_reading.ships_head, 194.616607)
+        self.assertAlmostEqual(south.deviation, 14.616607)
+        self.assertAlmostEqual(south.ships_head, 194.616607)
+
+        self.assertEqual(south.utc_datetime, datetime(2015, 10, 12, 10, 15, 15, 500000, tzinfo=pytz.utc))
+        self.assertEqual(south.variation, 6.02)
+        self.assertAlmostEqual(south.solar_azimuth, 175.63660700)
+        self.assertAlmostEqual(south.angle_to_sun, 335)
+        self.assertAlmostEqual(south.true_bearing, 200.63660700)
+        self.assertAlmostEqual(south.magnetic_bearing, 194.616607)
+        self.assertAlmostEqual(south.calculated_deviation, 14.616607)
+
+
+class SunSwingModelTests(SunSwingTestsBase, TestCase):
+    def setUp(self):
+        test_data = self.sun_swing_test_data
+
+        curve = Curve.objects.create(
+            user=User.objects.get(pk=1),
+            vessel="Test",
+            note="test",
+        )
+
+        start_utc_datetime = datetime.fromtimestamp(test_data["compass_video_start_time"], pytz.utc)
+
+        latitude=test_data["latitude"]
+        longitude=test_data["longitude"]
+
+        pelorus_correction=test_data["pelorus_correction"]
+
+        variation = 6.02 # declination(dlat=latitude, dlon=longitude, time=start_utc_datetime)
+
+        for reading in test_data['readings']:
+            sun_swing_reading = SunSwingReading(
+                curve=curve,
+                compass_reading=reading["compass"],
+                shadow_reading=reading["shadow"],
+                utc_datetime=start_utc_datetime + timedelta(seconds=reading["time"]),
+                latitude=latitude,
+                longitude=longitude,
+                pelorus_correction=pelorus_correction,
+            )
+
+            sun_swing_reading.save()
+
+        self.curve = curve
+
+
+class SunSwingJsonPostTests(SunSwingTestsBase, TestCase):
+
+    def setUp(self):
+        c = Client()
+
+        self.assertTrue(c.login(username="bob@test.com", password="secret"))
+
+        self.response = c.post('/swing/sun_json/', content_type='application/json', data=json.dumps(test_data) )
+        self.assertEqual(self.response.status_code, 200)
+
+        self.curve = SunSwing.objects.all()[0]
+
+
+
+
+
+
+
+
+
 
 
 
@@ -501,4 +635,9 @@ class CurveLiveTests(OmniRoseSeleniumTestCase):
         sel.find_element_by_partial_link_text('Please try again').click()
         self.do_stripe_payment("good_visa")
         self.assertRegexpMatches(sel.current_url, r'/rose_select/$')
+
+
+
+
+
 

@@ -6,6 +6,10 @@ from django.utils import timezone
 
 import warnings
 
+from datetime import datetime, timedelta
+from astral import Astral
+from geomag import declination
+
 import numpy
 from scipy.optimize import curve_fit, OptimizeWarning
 
@@ -15,6 +19,12 @@ from .equations import all_equations
 
 def mod360(angle):
     return angle % 360
+
+def norm360(angle):
+    while angle < 0:
+        angle = angle + 360
+    return angle % 360
+
 
 class ErrorNoSuitableEquationAvailable(Exception):
     pass
@@ -264,4 +274,55 @@ class Reading(models.Model):
         return "(%g, %g)" % (self.ships_head, self.deviation)
 
 
+class SunSwingReading(Reading):
+    compass_reading = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(360)])
+    shadow_reading = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(360)])
 
+    utc_datetime = models.DateTimeField()
+    latitude  = models.FloatField(validators=[MinValueValidator(-90),  MaxValueValidator(90)])
+    longitude = models.FloatField(validators=[MinValueValidator(-180), MaxValueValidator(180)])
+
+    pelorus_correction = models.FloatField(validators=[MinValueValidator(-180), MaxValueValidator(180)])
+    variation = models.FloatField(validators=[MinValueValidator(-180), MaxValueValidator(180)])
+
+
+    def save(self, *args, **kwargs):
+
+        # Fill in any missing bits that we can calculate
+
+        if self.variation is None:
+            variation = declination(dlat=self.latitude, dlon=self.longitude, time=self.utc_datetime.date())
+            variation = float("{0:.2f}".format(variation))
+            self.variation = variation
+
+        if self.ships_head is None:
+            self.ships_head = self.magnetic_bearing
+
+        if self.deviation is None:
+            self.deviation = self.calculated_deviation
+
+        super(SunSwingReading, self).save(*args, **kwargs)
+
+
+    @property
+    def solar_azimuth(self):
+        return Astral().solar_azimuth(self.utc_datetime, self.latitude, self.longitude)
+
+    @property
+    def angle_to_sun(self):
+        return norm360(self.shadow_reading - self.pelorus_correction)
+
+    @property
+    def true_bearing(self):
+        return norm360(360 - self.angle_to_sun + self.solar_azimuth)
+
+    @property
+    def magnetic_bearing(self):
+        return norm360(self.true_bearing - self.variation)
+
+    @property
+    def calculated_deviation(self):
+        deviation = norm360(self.magnetic_bearing - self.compass_reading)
+        if deviation > 180:
+            deviation = deviation - 360
+        return deviation
