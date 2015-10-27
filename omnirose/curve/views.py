@@ -1,9 +1,12 @@
+import json
+from datetime import datetime, timedelta
+import pytz
 import stripe
 
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, FormView, UpdateView
 from django.views.generic.detail import DetailView, SingleObjectMixin
-from django.views.generic.base import TemplateView
+from django.views.generic.base import TemplateView, View
 
 from django.shortcuts import redirect, render_to_response
 from django.core.urlresolvers import reverse
@@ -13,10 +16,11 @@ from django.utils.decorators import method_decorator
 from django.utils.http import urlencode
 from django.utils.text import slugify
 from django.conf import settings
+from django import http
 from django.http import HttpResponse, FileResponse, Http404
 
 
-from .models import Curve, Reading
+from .models import Curve, Reading, SunSwingReading
 from .forms import ReadingForm, ReadingFormSet, EquationChoiceForm, StripeForm, RoseDownloadForm
 
 from accounts.views import OwnerPermissionMixin
@@ -350,3 +354,51 @@ class CurveUnlock(OwnerPermissionMixin, CurveSetObjectMixin, FormView):
             failure_url = failure_url + '?' + urlencode({'message':message})
 
             return redirect(failure_url)
+
+
+
+class SunSwingJsonPostView(View):
+
+    http_method_names = ['post']
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(SunSwingJsonPostView, self).dispatch(*args, **kwargs)
+
+    def post(self, request):
+
+        data = json.loads(request.body)
+
+        curve = Curve.objects.create(
+            user=request.user,
+            vessel="FIXME",
+            note="FIXME",
+        )
+
+        start_utc_datetime = datetime.fromtimestamp(data["compass_video_start_time"], pytz.utc)
+
+        latitude=data["latitude"]
+        longitude=data["longitude"]
+
+        pelorus_correction=data["pelorus_correction"]
+
+        for reading in data['readings']:
+
+            reading = SunSwingReading(
+                curve=curve,
+                compass_reading=reading["compass"],
+                shadow_reading=reading["shadow"],
+                utc_datetime=start_utc_datetime + timedelta(seconds=reading["time"]),
+                latitude=latitude,
+                longitude=longitude,
+                pelorus_correction=pelorus_correction,
+            )
+
+            reading.save()
+
+        return http.HttpResponse(
+            json.dumps({"pk": curve.id}),
+            content_type='application/json'
+        )
+
+

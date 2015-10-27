@@ -260,8 +260,6 @@ class SunSwingModelTests(SunSwingTestsBase, TestCase):
 
         pelorus_correction=test_data["pelorus_correction"]
 
-        variation = 6.02 # declination(dlat=latitude, dlon=longitude, time=start_utc_datetime)
-
         for reading in test_data['readings']:
             sun_swing_reading = SunSwingReading(
                 curve=curve,
@@ -281,14 +279,15 @@ class SunSwingModelTests(SunSwingTestsBase, TestCase):
 class SunSwingJsonPostTests(SunSwingTestsBase, TestCase):
 
     def setUp(self):
+        test_data = self.sun_swing_test_data
         c = Client()
 
         self.assertTrue(c.login(username="bob@test.com", password="secret"))
 
-        self.response = c.post('/swing/sun_json/', content_type='application/json', data=json.dumps(test_data) )
+        self.response = c.post('/deviation_tables/sun_swing_json/', content_type='application/json', data=json.dumps(test_data) )
         self.assertEqual(self.response.status_code, 200)
 
-        self.curve = SunSwing.objects.all()[0]
+        self.curve = Curve.objects.all()[0]
 
 
 

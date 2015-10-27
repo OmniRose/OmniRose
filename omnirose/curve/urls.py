@@ -24,5 +24,11 @@ urlpatterns = [
     url(r'^(?P<pk>\d+)/readings/$', views.CurveReadingEditView.as_view(), name='curve_readings'),
     url(r'^(?P<pk>\d+)/details/$', views.CurveDetailEditView.as_view(), name='curve_edit_details'),
     url(r'^(?P<pk>\d+)/equation/$', views.CurveEquationSelectView.as_view(), name='curve_equation'),
+
+    # Sun swing related
+    url(r'sun/',  TemplateView.as_view(template_name='curve/sun.html'), name='sun_demo'),
+    url(r'sun_swing_json/', views.SunSwingJsonPostView.as_view(), name="sun_json"),
+
 ]
+
 

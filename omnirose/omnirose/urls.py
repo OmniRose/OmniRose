@@ -13,7 +13,6 @@ urlpatterns = patterns('',
 
     url(r'^accounts/', include('accounts.urls')),
     url(r'^deviation_tables/', include('curve.urls')),
-    url(r'^swing/', include('swing.urls')),
 
     url(r'^admin/', include(admin.site.urls)),
 
