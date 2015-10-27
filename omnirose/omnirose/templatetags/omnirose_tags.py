@@ -8,6 +8,9 @@ register = template.Library()
 @register.filter
 # @stringfilter
 def east_west(degrees):
+
+    degrees = float(degrees)
+
     if degrees < 0:
         direction = "W"
     elif degrees > 0:
