@@ -2,9 +2,9 @@
 {% load staticfiles %}
 
 {% block javascript %}
-  <script src="{% static 'swing/jquery.panzoom.v2.0.5.min.js' %}" type="text/javascript" charset="utf-8"></script>
-  <script src="{% static 'swing/magellan-v1.0.6.js' %}" type="text/javascript" charset="utf-8"></script>
-  <script src="{% static 'swing/sun.js' %}" type="text/javascript" charset="utf-8"></script>
+  <script src="{% static 'curve/jquery.panzoom.v2.0.5.min.js' %}" type="text/javascript" charset="utf-8"></script>
+  <script src="{% static 'curve/magellan-v1.0.6.js' %}" type="text/javascript" charset="utf-8"></script>
+  <script src="{% static 'curve/sun.js' %}" type="text/javascript" charset="utf-8"></script>
 {% endblock %}
 
 {% block title %}Sun Swinging Demo{% endblock %}
@@ -24,8 +24,8 @@
 
 
   <div class="row">
-    {% include "swing/video_container.html" with heading="Compass" id="compass_video_container" controls_class="compass_video_controls" %}
-    {% include "swing/video_container.html" with heading="Shadow"  id="shadow_video_container"  controls_class="shadow_video_controls" %}
+    {% include "curve/video_container.html" with heading="Compass" id="compass_video_container" controls_class="compass_video_controls" %}
+    {% include "curve/video_container.html" with heading="Shadow"  id="shadow_video_container"  controls_class="shadow_video_controls" %}
   </div>
 
 
