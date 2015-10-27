@@ -60,3 +60,17 @@ class EnterView(TemplateView):
         context = super(EnterView, self).get_context_data(**kwargs)
         context['next'] = self.request.GET.get('next', None)
         return context
+
+
+class OwnerPermissionMixin(object):
+
+    def dispatch(self, *args, **kwargs):
+
+        obj = self.get_object()
+        user = self.request.user
+
+        # TODO - will need to add smarts about public curves here
+        if obj.user != user:
+            return redirect('login')
+
+        return super(OwnerPermissionMixin, self).dispatch(*args, **kwargs)

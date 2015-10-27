@@ -19,23 +19,11 @@ from django.http import HttpResponse, FileResponse, Http404
 from .models import Curve, Reading
 from .forms import ReadingForm, ReadingFormSet, EquationChoiceForm, StripeForm, RoseDownloadForm
 
+from accounts.views import OwnerPermissionMixin
+
 from omnirose.templatetags.omnirose_tags import east_west
 
 from outputs.models import Rose, Table
-
-
-class CurvePermissionMixin(object):
-
-    def dispatch(self, *args, **kwargs):
-
-        curve = self.get_object()
-        user = self.request.user
-
-        # TODO - will need to add smarts about public curves here
-        if curve.user != user:
-            return redirect('login')
-
-        return super(CurvePermissionMixin, self).dispatch(*args, **kwargs)
 
 
 class MayDownloadRoseMixin(object):
@@ -51,12 +39,12 @@ class MayDownloadRoseMixin(object):
         return super(MayDownloadRoseMixin, self).dispatch(*args, **kwargs)
 
 
-class CurveView(CurvePermissionMixin, DetailView):
+class CurveView(OwnerPermissionMixin, DetailView):
 
     model = Curve
 
 
-class CurveVisualisationBaseView(CurvePermissionMixin, DetailView):
+class CurveVisualisationBaseView(OwnerPermissionMixin, DetailView):
     model = Curve
     output = 'png'
 
@@ -204,7 +192,7 @@ class CurveSetObjectMixin(SingleObjectMixin):
         return self.get_object().get_absolute_url()
 
 
-class CurveEquationSelectView(CurvePermissionMixin, CurveSetObjectMixin, FormView):
+class CurveEquationSelectView(OwnerPermissionMixin, CurveSetObjectMixin, FormView):
     model = Curve
     template_name = "curve/equation_select.html"
     form_class = EquationChoiceForm
@@ -222,13 +210,13 @@ class CurveEquationSelectView(CurvePermissionMixin, CurveSetObjectMixin, FormVie
         return super(CurveEquationSelectView, self).form_valid(form)
 
 
-class CurveDetailEditView(CurvePermissionMixin, UpdateView):
+class CurveDetailEditView(OwnerPermissionMixin, UpdateView):
     model = Curve
     template_name = "curve/details_edit.html"
     fields = ['vessel','note']
 
 
-class CurveReadingEditView(CurvePermissionMixin, CurveSetObjectMixin, FormView):
+class CurveReadingEditView(OwnerPermissionMixin, CurveSetObjectMixin, FormView):
     model = Curve
     template_name = "curve/readings_edit.html"
 
@@ -290,7 +278,7 @@ class CurveReadingEditView(CurvePermissionMixin, CurveSetObjectMixin, FormView):
 
 
 from .regions import regions
-class CurveRosesSelect(CurvePermissionMixin, MayDownloadRoseMixin, CurveSetObjectMixin, FormView):
+class CurveRosesSelect(OwnerPermissionMixin, MayDownloadRoseMixin, CurveSetObjectMixin, FormView):
     model = Curve
     template_name = "curve/roses_select.html"
     form_class = RoseDownloadForm
@@ -312,7 +300,7 @@ class CurveRosesSelect(CurvePermissionMixin, MayDownloadRoseMixin, CurveSetObjec
         return redirect('curve_rose_pdf', pk=curve.id, var_min=var_min, var_max=var_max)
 
 
-class CurveUnlockFailed(CurvePermissionMixin, CurveSetObjectMixin, TemplateView):
+class CurveUnlockFailed(OwnerPermissionMixin, CurveSetObjectMixin, TemplateView):
     model = Curve
     template_name = "curve/curve_unlock_failed.html"
 
@@ -322,7 +310,7 @@ class CurveUnlockFailed(CurvePermissionMixin, CurveSetObjectMixin, TemplateView)
         return context
 
 
-class CurveUnlock(CurvePermissionMixin, CurveSetObjectMixin, FormView):
+class CurveUnlock(OwnerPermissionMixin, CurveSetObjectMixin, FormView):
     model = Curve
     template_name = "curve/curve_unlock.html"
     form_class = StripeForm
