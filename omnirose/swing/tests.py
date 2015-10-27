@@ -74,7 +74,7 @@ class SunSwingTestsBase(object):
         self.assertAlmostEqual(south.angle_to_sun, 335)
         self.assertAlmostEqual(south.true_bearing, 200.63660700)
         self.assertAlmostEqual(south.magnetic_bearing, 194.616607)
-        self.assertAlmostEqual(south.deviation, 14.616607)
+        self.assertAlmostEqual(south.deviation, -14.616607)
 
         # for r in swing.reading_set.all():
         #     print r.true_bearing, "," , r.deviation
