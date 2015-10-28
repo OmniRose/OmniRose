@@ -5,6 +5,7 @@ from . import views
 
 urlpatterns = [
     url(r'^$', TemplateView.as_view(template_name='swinging/home.html'), name='swinging_home'),
+    url(r'^compass_theory/$', TemplateView.as_view(template_name='swinging/compass_theory.html'), name='swinging_compass_theory'),
 ]
 
 

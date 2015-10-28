@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %}Compass Theory{% endblock %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="center-block text-center">
+            <h1>Compass Theory</h1>
+            <p class="lead">What is your compass actually doing?</p>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-sm-8 col-sm-offset-2">
+
+          <h2>Where does a compass point?</h2>
+
+          <p>A compass points north, sort of. What it is actually doing is lining up with the Earth's magnetic field. This means that it actually points at the magnetic north pole which is not in the same place as the true north pole. The difference in the bearings to the two poles changes depending on where you are in the world, and is known as the <strong>variation</strong> (or declination).</p>
+
+          <p>But the magnetic field that the compass is lining up with can be affected by other things - like electronics and bits of metal, like your engine. The way that these objects change the local magnetic field depends on many factors but most notably the direction that the boat is pointing. This is what is known as the <strong>deviation</strong>.</p>
+
+          <p>Correcting the compass reading.</p>
+
+          <p>To correct for variation is easy as it is a fixed value for your current location. It can be found on the charts or calculated.</p>
+
+          <p>Correcting for deviation is slightly trickier. You take your current compass reading and then refer to a deviation table to work out the correction to apply.</p>
+
+          <p>If you create a <a href="{% url 'curve_home'%}#conversion-roses">conversion rose</a> then it is simply a matter of reading off the correct values.</p>
+
+          FIXME - finish off this section
+
+
+        </div>
+
+    </div>
+
+
+{% endblock %}
