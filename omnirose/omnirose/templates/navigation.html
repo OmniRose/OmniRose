@@ -13,39 +13,11 @@
         </div>
 
         {# Collect the nav links, forms, and other content for toggling #}
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
 
-              {% if user.is_authenticated %}
-                <li class="dropdown">
-                  <a class="dropdown-toggle" data-toggle="dropdown" href="{% url 'curve_list' %}">
-                    Your deviation tables
-                    <span class="caret"></span>
-                  </a>
-                  <ul class="dropdown-menu">
+              {% include "chrome/curve_nav_entry.html" %}
 
-                    {% for curve in user.curve_set.all %}
-                      <li>
-                        <a href="{% url 'curve_detail' pk=curve.id %}">
-                          {{ curve }}
-                        </a>
-                      </li>
-                    {% endfor %}
-
-                    <li><a href="{% url 'curve_create' %}">
-                      <span class="glyphicon glyphicon-plus"></span>
-                      Add a new deviation table
-                    </a></li>
-
-                    <li><a href="{% url 'curve_list' %}">All deviation tables</a></li>
-
-
-                  </ul>
-                <li>
-
-              {% else %}
-                <li><a href="{% url 'curve_home' %}">Deviation Tables &amp; Roses</a></li>
-              {% endif %}
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
@@ -68,9 +40,7 @@
               {% endif %}
             </ul>
         </div>
-        {# /.navbar-collapse #}
 
     </div>
-    {# /.container #}
 
 </nav>
