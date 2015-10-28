@@ -20,7 +20,7 @@ from .equations import all_equations
 def mod360(angle):
     return angle % 360
 
-def norm360(angle):
+def mod360(angle):
     while angle < 0:
         angle = angle + 360
     return angle % 360
@@ -310,19 +310,19 @@ class SunSwingReading(Reading):
 
     @property
     def angle_to_sun(self):
-        return norm360(self.shadow_reading - self.pelorus_correction)
+        return mod360(self.shadow_reading - self.pelorus_correction)
 
     @property
     def true_bearing(self):
-        return norm360(360 - self.angle_to_sun + self.solar_azimuth)
+        return mod360(360 - self.angle_to_sun + self.solar_azimuth)
 
     @property
     def magnetic_bearing(self):
-        return norm360(self.true_bearing - self.variation)
+        return mod360(self.true_bearing - self.variation)
 
     @property
     def calculated_deviation(self):
-        deviation = norm360(self.magnetic_bearing - self.compass_reading)
+        deviation = mod360(self.magnetic_bearing - self.compass_reading)
         if deviation > 180:
             deviation = deviation - 360
         return deviation
