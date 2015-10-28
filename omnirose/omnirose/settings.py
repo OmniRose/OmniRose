@@ -52,6 +52,7 @@ INSTALLED_APPS = (
     'accounts',
     'curve',
     'outputs',
+    'swinging',
 
     # Last so that the registration templates don't override those in accounts
     'django.contrib.admin',
