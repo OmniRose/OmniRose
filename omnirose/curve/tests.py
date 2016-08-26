@@ -401,6 +401,13 @@ class CurveLiveTests(OmniRoseSeleniumTestCase):
         self.assertNotEqual(curve_url, sel.current_url)
         self.assertEqual(sel.title, "Log in :: OmniRose")
 
+        # Log out and then log in as superuser, check we can see the curve
+        self.logout()
+        self.login('superuser@test.com')
+        sel.get(curve_url)
+        self.assertEqual(curve_url, sel.current_url)
+        self.assertEqual(sel.title, "Gypsy Moth :: OmniRose")
+
     def test_table_download_as_pdf(self):
         sel = self.selenium
 
@@ -501,4 +508,3 @@ class CurveLiveTests(OmniRoseSeleniumTestCase):
         sel.find_element_by_partial_link_text('Please try again').click()
         self.do_stripe_payment("good_visa")
         self.assertRegexpMatches(sel.current_url, r'/rose_select/$')
-

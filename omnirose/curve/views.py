@@ -33,7 +33,8 @@ class CurvePermissionMixin(object):
 
         # TODO - will need to add smarts about public curves here
         if curve.user != user:
-            return redirect('login')
+            if user.is_superuser is False:
+                return redirect('login')
 
         return super(CurvePermissionMixin, self).dispatch(*args, **kwargs)
 
