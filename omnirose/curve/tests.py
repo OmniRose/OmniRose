@@ -209,7 +209,7 @@ class CurveLiveTests(OmniRoseSeleniumTestCase):
         preview_image = sel.find_element_by_id("table_preview")
 
         curve = Curve.objects.all().order_by('created').last()
-        curve_url = "http://localhost:8081/deviation_tables/" + str(curve.id) + "/"
+        curve_url = self.live_server_url + "/deviation_tables/" + str(curve.id) + "/"
 
         self.assertEqual(
             preview_image.get_attribute('src'),

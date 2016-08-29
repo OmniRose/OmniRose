@@ -1,10 +1,10 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
 from django.views.generic.base import TemplateView
 from django.contrib import admin
 
 from .views import HomePageView
 
-urlpatterns = patterns('',
+urlpatterns = [
 
     url(r'^$', HomePageView.as_view(), name='home'),
 
@@ -18,4 +18,4 @@ urlpatterns = patterns('',
 
     url(r'^errors/404/', TemplateView.as_view(template_name='404.html'), name="error_404"),
     url(r'^errors/500/', TemplateView.as_view(template_name='500.html'), name="error_500"),
-)
+]
