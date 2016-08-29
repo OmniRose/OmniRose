@@ -45,7 +45,6 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'template_email',
     'bootstrapform',
 
     'omnirose',
@@ -133,6 +132,10 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 
+# let email templates be txt files in normal template srtucture
+TEMPLATED_EMAIL_TEMPLATE_DIR = ''
+TEMPLATED_EMAIL_FILE_EXTENSION = 'txt'
+
 # Email (hence Postmark) related
 EMAIL_BACKEND = 'postmark.django_backend.EmailBackend'
 
@@ -169,4 +172,3 @@ SETTINGS_EXPORT = [
     'UNLOCK_CURVE_PRICE',
     'UNLOCK_CURVE_FORMATTED_PRICE',
 ]
-

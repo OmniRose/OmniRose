@@ -4,7 +4,7 @@ from django.views.generic.base import TemplateView
 from django.contrib.auth import authenticate, login
 from django.conf import settings
 
-from template_email import TemplateEmail
+from templated_email import send_templated_mail
 
 from .forms import RegistrationForm
 from .models import User
@@ -38,12 +38,16 @@ class RegistrationView(CreateView):
             raise Exception("Could not auth recently created user")
 
         # send password in email
-        email = TemplateEmail(
-            to=[user.email],
-            template='accounts/new_user_email.txt',
-            context={ 'user': user, 'password': password, 'BASE_URL': settings.BASE_URL }
+        send_templated_mail(
+            template_name='accounts/new_user_email',
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[user.email],
+            context = {
+                'user': user,
+                'password': password,
+                'BASE_URL': settings.BASE_URL
+            }
         )
-        email.send()
 
         # where to next? If we have a next go there, otherwise home
         next_url = self.request.POST.get('next')

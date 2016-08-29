@@ -4,7 +4,7 @@ cffi==1.7.0
 Django<1.9
 django-bootstrap-form==3.2.1
 django-settings-export==1.1.0
-django-template-email==0.1
+django-templated-email==0.5
 numpy==1.11.1
 psycopg2==2.6.2
 pycparser==2.14
